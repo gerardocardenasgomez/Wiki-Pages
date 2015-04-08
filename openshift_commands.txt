@@ -1,0 +1,15 @@
+====OpenShift====
+
+<code>
+rhc app create gcscripts python-2.7
+rhc show-app gcscripts
+</code>
+
+==Sample Code==
+
+When passing a parameter, it must be named appropriately! Otherwise there will be a server error.
+<code>
+@app.route("/status/<site>")
+def check_page(site):
+    return webstatus.check_page(site)
+</code>

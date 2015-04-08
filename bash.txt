@@ -1,0 +1,109 @@
+===BASH FAQ===
+==What is the difference between ''su'' and ''su -''?==
+
+A: ''su'' by itself will not set the target user's environment, but it will still use the environment variables that belong to the user executing the command. ''su -'' will set the environment to that of the target user, in this case root. This can be a significant difference in the event that root does an ''su'' to another user, but keeps the root $PATH variables.
+
+===Environment Variables==
+
+''printenv'' is used to print environment variables. It can list the value of a variable:
+
+<code>
+$ printenv USER
+gerardo
+</code>
+
+''env'' without any arguments will behave the same as ''printenv''. 
+
+''set'' will print both environment variables and shell variables. 
+
+===BASH Completion===
+
+$ for shell variable completion
+~ for username completion
+! for command name completion
+@ for hostname completion
+
+Hostname completion takes the hostnames from the ''/etc/hosts'' file. :?: Find a way to script this to SSH known hosts?
+
+===echo===
+
+Printing with echo can be tricky at times. One of the gotchas is that echo will remove extra whitespace when the variable it is printing is not inside quotes. Consider the following example:
+
+<code>
+$ var="one two     three    four"
+$ echo $var
+one two three four
+$ echo "$var"
+one two     three    four
+</code>
+
+This applies to script, too. When the whitespace in the variable must be preserved, inset double quotes around the variable name when printing it out.
+
+===printf===
+
+''printf'' is desirable over ''echo'' when you need more control over the output and also when you want cross-platform consistency as not all ''echo'' implementations are the same.
+
+''printf'' works just the same as the C function, including the %s, %f, and %d format specifiers. 
+
+<code>printf "%s" $HOME</code>
+
+The ''printf'' command can also be "overloaded":
+<code>printf "%s\n" This entire string will print in separate lines</code>
+
+
+
+===Some useful BASH hacks:===
+
+The following code will print all lines in the file and give the name of the file at the beginning of every line:
+<code>$ grep . *.txt</code>
+
+It can be used to search through a list of files and to print out which file the line is in, e.g.:
+<code>$ grep . *.log | grep error</code>
+
+===History expansion in aliases===
+
+Using history expansion in an alias may result in some error codes. Using ''history -p'' is required in such cases:
+
+<code>
+alias copy='echo $(history -p !!) | xclip -selection clipboard'
+</code>
+
+===Login Shell VS non-Login Shell:===
+
+You can tell if a shell is a login shell by running ''echo $0''; if the first character is a ''-'', then you're in a login shell. Checking for a login shell in a script:
+<code>
+case $- in
+ *i*) # interactive commands go here
+    command
+    --snip--
+    ;;
+ *)   # non-interactive commands go here
+    command
+    --snip-
+    ;;
+esac
+</code>
+
+A non-login shell will use ''.bashrc'' when starting up. 
+
+A login shell will go through the user's directory and look for: ''.bash_profile'', ''.bash_login'', and ''.profile''. It will stop at the first file found.
+
+===Grouping Output===
+
+Using ''{}'' and ''()'' to group output:
+<code>
+$ { cmd1; cmd2; cmd3; } > /tmp/all.out
+$ (cmd1; cmd2; cmd3) > /tmp/all.out
+</code>
+
+Using the parentheses spawns a subshell whereas using the curly braces just means grouping the commands; they are still executed in the current shell environment. Also, the last semicolon is required in the curly braces but not in the parentheses. 
+
+===Scripting a Password Change===
+
+Type the password into the file so that it is not exposed as a command line argument:
+
+<code>
+pw usermod your_user -h 0 <<EOF
+$password
+EOF
+</code>

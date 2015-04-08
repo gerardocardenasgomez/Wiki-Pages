@@ -1,0 +1,56 @@
+===Metadata===
+
+Each cookbook contains a ''metadata.rb'' file. This file will contain information about the cookbook version, its maintainer, license, recipes, supported platforms, and more. It is a requirement!
+
+Example ''metadata.rb'' file:
+<code>
+name              "postgresql"
+maintainer        "Opscode, Inc."
+maintainer_email  "cookbooks@opscode.com"
+license           "Apache 2.0"
+description       "Installs and configures PostgreSQL"
+long_description  IO.read(File.join(
+                    File.dirname(__FILE__), 'README.md'
+                  ))
+version           "3.3.4"
+recipe            "postgresql", "Includes postgresql::client"
+recipe            "postgresql::ruby", "Installs Ruby bindings"
+recipe            "postgresql::client", 
+                  "Installs client package(s)"
+recipe            "postgresql::server", "Installs server packages"
+recipe            "postgresql::server_redhat", 
+                  "Installs RedHat server packages"
+recipe            "postgresql::server_debian", 
+                  "Installs Debian server packages"
+
+%w{ubuntu debian fedora suse amazon}.each do |os|
+  supports os
+end
+
+%w{redhat centos scientific oracle}.each do |el|
+  supports el, ">= 6.0"
+end
+
+depends "apt"
+depends "build-essential"
+depends "openssl"
+</code>
+
+The file itself is a Ruby script and it therefore allows for Ruby code to be run inside of it. For example, the long_description entry is generated with Ruby code.
+
+Additionally, the supported platform list is generated using a Ruby loop rather than writing an entry for each platform manually.
+
+And there would be two ways of generating the list of dependencies. Line by line:
+<code>
+depends "apt"
+depends "build-essential"
+depends "openssl"
+</code>
+
+Or with a loop:
+<code>
+%w{apt build-essential openssl}.each do |dep|
+    depends dep
+end
+</code>
+

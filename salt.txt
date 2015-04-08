@@ -1,0 +1,141 @@
+====Salt States====
+
+By default, ''states'' are located in ''/srv/salt'' and files end with the ''sls'' extension. ''state'' files use ''YAML'' formatting. 
+
+===State Files===
+
+Example of a state file ''/srv/salt/httpd.sls'':
+
+<code>
+httpd:
+    pkg.installed:
+        - name: httpd
+</code>
+
+Please note the syntax! A block cannot end with '':'' and certain syntax errors such as: ''-name: httpd'' result in an error. Additionally, ''state'' files use spaces for white-space, not actual ''tab'' characters.
+
+==Execution Module vs. State Module==
+
+Execution modules such as ''pkg.install'' always attempt to run a command such as ''apt-get install <pkg name>'' whereas a state module like ''pkg.installed'' will only do as much work as in necessary. If the package is already installed, nothing is done.
+
+===Anatomy of a State Declaration===
+
+<code>
+<ID Declaration>:
+    <State Module.<Function>:
+        - name: <name>
+        - <Function Argument>
+        - <Function Argument> 
+        - <Function Argument>
+        - <Requisite Declaration>:
+            - <Requisite Reference>
+</code>
+
+The ''ID Declaration'' must be unique across all states and it must be a valid Python string. The first ''Function Argument'' should always be ''name''.
+
+===Requisites===
+
+==require Requisite==
+
+The ''require'' requisite both defines the order and ensures that the required state completed successfully. For the ''apache2'' service:
+
+<code>
+install_apache:
+  pkg.installed:
+    - name: apache2
+
+make sure apache is running:
+  service.running:
+    - name: apache2
+    - enable: True
+    - require:
+      - pkg: install_apache
+</code>
+
+==watch Requisite==
+
+The ''watch'' requisite only executes if the watched state executed successfully. However, the ''watch'' requisite has additional behavior such as restarting a service when a change to a file is detected. In the ''apache2'' example:
+
+<code>
+install_apache:
+  pkg.installed:
+    - name: apache2
+
+make sure apache is running:
+  service.running:
+    - name: apache2
+    - enable: True
+    - require:
+      - pkg: install_apache
+    - watch:
+      - file: sync mod_status.conf
+      - file: sync mod_status.load
+
+sync mod_status.conf:
+  file.managed:
+    - name: /etc/apache2/mods-enabled/mod_status.conf
+    - source: salt://mod_status.conf
+    - user: root
+    - group: root
+    - mode: 600
+
+sync mod_status.load:
+  file.managed:
+    - name: /etc/apache2/mods-enabled/mod_status.load
+    - source: salt://mod_status.load
+    - user: root
+    - group: root
+    - mode: 600
+</code>
+
+The ''salt'' protocol in source arguments retrieves files from ''/srv/salt''. 
+
+===onfail Requisite===
+
+Used to run a state only when another state has failed.
+
+===onchanges Requisite===
+
+Runs a state only if another state created changes. This differs from the ''watch'' requisite in that it will not execute at all if nothing was changed.
+
+===prereq Requisite===
+
+''prered'' allows a state to run only if another state will make changes at some point in the future. An example would be to shutdown a service before making changes to a file. Shutting down the service should only be done if changes to the file will be made.
+
+===use Requisite===
+
+The ''use'' requisite allows a state to inherit the arguments of another state. This will overwrite arguments when necessary.
+
+===_in Requisites===
+
+Adding ''_in'' to a requisite, e.g. ''watch_in'', forces another state to depend on the state that contains the requisite. In the following example, both code blocks are equivalent with one using ''require'' and the other using ''require_in'':
+
+<code>
+install_apache:
+  pkg.installed:
+    - name: apache2
+
+make sure apache is running:
+  service.running:
+    - name: apache2
+    - enable: True
+    - require:
+      - pkg: install_apache
+</code>
+
+Now using ''require_in'':
+
+<code>
+install_apache:
+  pkg.installed:
+    - name: apache2
+    - require_in:
+      - service: make sure apache is running
+
+make sure apache is running:
+  service.running:
+    - name: apache2
+    - enable: True
+</code>
+
+The ''pkg.installed'' state is telling the ''service.running'' state to depend on ''pkg.installed''.

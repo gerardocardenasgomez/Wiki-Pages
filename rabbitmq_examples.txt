@@ -1,0 +1,159 @@
+====RabbitMQ Examples====
+
+These are mostly done with Python and Pika.
+
+====Consuming from Log Exchange====
+
+One method of viewing RabbitMQ's logs is by looking at the files generated onto the filesystem. An alternative method is to connect to RabbitMQ's built-in log exchange and view the log messages here. This script is very basic and does just that:
+
+<code>
+#!/usr/bin/env python
+import pika, sys
+
+# These are the default credentials for RabbitMQ
+rmqUser = "guest"
+rmqPass = "guest"
+
+credentials = pika.PlainCredentials(rmqUser, rmqPass)
+conn_params = pika.ConnectionParameters("localhost", credentials=credentials)
+
+conn_broker = pika.BlockingConnection(conn_params)
+channel = conn_broker.channel()
+
+errors_queue = channel.queue_declare()
+warnings_queue = channel.queue_declare()
+info_queue = channel.queue_declare()
+
+exchange = "amq.rabbitmq.log"
+
+channel.queue_bind(queue=errors_queue.method.queue,
+                    exchange=exchange,
+                    routing_key="error")
+channel.queue_bind(queue=warnings_queue.method.queue,
+                    exchange=exchange,
+                    routing_key="warning")
+channel.queue_bind(queue=info_queue.method.queue,
+                    exchange=exchange,
+                    routing_key="info")
+
+def errors_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    print body
+    return
+
+def warnings_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    print body
+    return
+
+def info_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=methods.delivery_tag)
+    print body
+    return
+
+channel.basic_consume(errors_consumer,
+                        queue=errors_queue.method.queue,
+                        consumer_tag="error-consumer")
+channel.basic_consume(warnings_consumer,
+                        queue=warnings_queue.method.queue,
+                        consumer_tag="warnings-consumer")
+channel.basic_consume(info_consumer,
+                        queue=info_queue.method.queue,
+                        consumer_tag="info-consumer")
+
+channel.start_consuming()
+</code>
+
+===Script Breakdown===
+
+The first portion of the script is going to set up the connect to the RabbitMQ node and the broker. By default, the user and password is going to be ''guest'' and ''guest'':
+
+<code>
+#!/usr/bin/env python
+import pika, sys
+
+# These are the default credentials for RabbitMQ
+rmqUser = "guest"
+rmqPass = "guest"
+
+credentials = pika.PlainCredentials(rmqUser, rmqPass)
+conn_params = pika.ConnectionParameters("localhost", credentials=credentials)
+
+conn_broker = pika.BlockingConnection(conn_params)
+channel = conn_broker.channel()
+</code>
+
+In this case, it would be safe to nevertheless declare an exchange with the same settings as the default exchange used by RabbitMQ. Nothing would break because the exchange already exists, and so it would be a safe thing to do and which might make it clear what exchange is being connected to and its settings. But this is left out of here for brevity.
+
+Next, we'll declare the queues that we will use.
+
+<code>
+errors_queue = channel.queue_declare()
+warnings_queue = channel.queue_declare()
+info_queue = channel.queue_declare()
+
+exchange = "amq.rabbitmq.log"
+</code>
+
+In this case, we are not manually naming the queues but instead allowing RabbitMQ to generate names automatically. This will become slightly problematic later on because channel.queue_declare() is going to return an object, not the name of the queue that it generated.
+
+<code>
+>>> type(errors_queue)
+<class 'pika.frame.Method'>
+</code>
+
+In order to get the name, we must request the queue name attribute with ''<object name>.method.queue'':
+
+<code>
+>>> errors_queue
+<Method(['frame_type=1', 'channel_number=1', "method=<Queue.DeclareOk(['queue=amq.gen-k9FYuNucK0yvRuXBZKtDzQ', 'message_count=0', 'consumer_count=0'])>"])>
+>>> errors_queue.__dict__
+{'frame_type': 1, 'channel_number': 1, 'method': <Queue.DeclareOk(['queue=amq.gen-k9FYuNucK0yvRuXBZKtDzQ', 'message_count=0', 'consumer_count=0'])>}
+>>> errors_queue.method.queue
+'amq.gen-k9FYuNucK0yvRuXBZKtDzQ'
+</code>
+
+The previous code (generated inside the Python console) shows the internals of the object that is returned by channel.queue_declare().
+
+Once we have the queues declared, we define the methods that will handle the messages that will come in from the queues:
+
+<code>
+def errors_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    print body
+    return
+
+def warnings_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    print body
+    return
+
+def info_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=methods.delivery_tag)
+    print body
+    return
+</code>
+
+In this very simple example, we just want to print out the body of the message. But it's possible to do things like print the name of the queue before the body, or it's possible to for example just generate alerts, emails, etc. depending on the contents of the body.
+
+Next, we declare the consumers for each queue:
+
+<code>
+channel.basic_consume(errors_consumer,
+                        queue=errors_queue.method.queue,
+                        consumer_tag="error-consumer")
+channel.basic_consume(warnings_consumer,
+                        queue=warnings_queue.method.queue,
+                        consumer_tag="warnings-consumer")
+channel.basic_consume(info_consumer,
+                        queue=info_queue.method.queue,
+                        consumer_tag="info-consumer")
+</code>
+
+The first argument is going to be the callback function, or in other words the functions we created to deal with the messages. Next is the name of the queue; as mentioned previously, in this case we'll need to request the queue name attribute from the object.
+
+Lastly, we start consuming messages from our queues:
+
+<code>
+channel.start_consuming()
+</code>

@@ -1,0 +1,183 @@
+====Perl Examples====
+
+====Regular Expressions====
+
+===Regular Expressions as Variables===
+
+Sometimes it increases the readability of a program if you put a regular expression into a variable:
+
+<code>
+#!/usr/bin/env perl
+
+$regex = '\s+';
+
+$line = "The     sun is rising.";
+@words = split($regex, $line);
+
+print "@words\n";
+</code>
+
+In this example, using ''split(/ /, $line)'' instead might cause unexpected results because the resulting array would contain values consisting of empty strings. The regular expression ''\s+'' would get around the issue of multiple spaces and produce the right output. Additionally, for readability, the regular expression is first stored in ''$regex'' but note that the expression has to use single quotes, and not double quotes.
+
+When using match variables, the parentheses must go inside the variable:
+
+<code>
+#!/usr/bin/env perl
+#
+
+$regex = '\s+';
+$wordmatch = '([T|t]he)';
+
+$line = "The     sun is rising.";
+@words = split($regex, $line);
+
+foreach $phrase (@words) {
+    if ($phrase =~ $wordmatch) {
+        print "$phrase matches! at $1\n";
+    } else {
+        print "$phrase does not match.much sad.\n";
+    }
+}
+</code>
+
+That code would print a "The" on the first match. Using ''($phrase =~ ($wordmatch))'' instead would not produce the proper output because ''$1'' would be empty.
+
+====Color text====
+
+This example will use color text as well as the built-in variables for part of the string before a regular expression match, and post-match:
+
+<code>
+#!/usr/bin/env perl
+use Term::ANSIColor;
+
+while (<>) {
+    if ($_ =~ /(^o)/g) {
+        printf $`;
+
+        print color 'bold red';
+        printf "$1";
+
+        print color 'reset';
+        print $';
+    }
+}
+</code>
+
+The regular expression is in ''($_ =~ /(^o)/g)''. The ''/g'' has the effect of saving the position of the regular expression match, which can later be used with ''pos($_)''. Although that was not necessary here. ''$`'' contains the substring before the regular expression match, and ''$%%'%%'' contains everything after the match. ''print color %%'%%<color>%%'%%;'' has the effect of adding color to the text.
+
+====The Diamond Operator====
+
+Files used in this section:
+
+<code>
+[user@www1-server-org crap]$ cat betty
+onebetety
+twobetty
+[user@www1-server-org crap]$ cat fred
+onefred
+twofrd
+threefred
+[user@www1-server-org crap]$ cat intest.pl
+#!/usr/bin/env perl
+
+while (defined($line = <>)) {
+    chomp($line);
+    print "It was $line that I saw!\n";
+}
+</code>
+
+The diamond operator, ''<>'', is used to process input. Without any arguments, a perl script would process input from the standard input stream. With arguments, the perl script would go through each file and process the data:
+
+<code>
+[user@www1-server-org crap]$ ./intest.pl betty fred
+It was onebetety that I saw!
+It was twobetty that I saw!
+It was onefred that I saw!
+It was twofrd that I saw!
+It was threefred that I saw!
+</code>
+
+Adding a dash will change what data perl will process:
+
+<code>
+[user@www1-server-org crap]$ ./intest.pl betty fred -
+It was onebetety that I saw!
+...
+It was threefred that I saw!
+this is typed from input stream
+It was this is typed from input stream that I saw!
+</code>
+
+The line ''this is typed from input stream'' is coming from the standard input stream. The data can also be piped or redirected:
+
+<code>
+[user@www1-server-org crap]$ echo "hello echo" | ./intest.pl betty fred -
+It was onebetety that I saw!
+...
+It was threefred that I saw!
+It was hello echo that I saw!
+[user@www1-server-org crap]$ ./intest.pl < fred
+It was onefred that I saw!
+It was twofrd that I saw!
+It was threefred that I saw!
+</code>
+
+====Accepting Switches====
+
+Use the ''-s'' switch to accept variables from the command-line:
+
+<code>
+user minimal $: cat opt_cars.pl
+#!/usr/bin/perl -s
+
+print "$car is the vehicle.\n";
+print "$color is the color of the vehicle.\n";
+user minimal $: ./opt_cars.pl -car='bmw' -color='blue'
+bmw is the vehicle.
+blue is the color of the vehicle.
+</code>
+
+Using double dashes (''--'') will not work for these purposes.
+
+It's also possible to set a variable to True or False by not assigning a value to it:
+
+<code>
+user minimal $: cat opt_cars.pl
+#!/usr/bin/perl -s
+
+print "$car is the vehicle.\n";
+print "$color is the color of the vehicle.\n";
+
+if ($data) {
+    print "data is enabled\n";
+}
+user minimal $: ./opt_cars.pl -car='bmw' -color='blue' -data
+bmw is the vehicle.
+blue is the color of the vehicle.
+data is enabled
+</code>
+
+It's important to note that switched must come before filenames, otherwise Perl will interpret the switches as filenames.
+
+Switches can be combined with the logical ''or'' to create default values for a variable:
+
+<code>
+user minimal $: cat opt_cars.pl
+#!/usr/bin/perl -s
+
+print "$car is the vehicle.\n";
+print "$color is the color of the vehicle.\n";
+
+$price or $price = 5;
+print "$price\n";
+user minimal $: ./opt_cars.pl -car='bmw' -color='blue' -price=15
+bmw is the vehicle.
+blue is the color of the vehicle.
+15
+user minimal $: ./opt_cars.pl -car='bmw' -color='blue'
+bmw is the vehicle.
+blue is the color of the vehicle.
+5
+</code>
+
+The logical ''or'' will only execute the second statement if the first one is false. Therefore, when ''$price'' is set with a switch, the second statement is not executed.

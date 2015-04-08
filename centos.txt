@@ -1,0 +1,83 @@
+====CentOS====
+
+Basically Red Hat Enterprise Linux but without the trademarked stuff.
+
+===Default System Settings===
+
+''SELinux'' is enabled and enforcing.
+
+''iptables'' has ''ssh'' open and on ''KVM''-enabled systems, there is also a rule for a physical bridge.
+
+''httpd'' will not start on reboot--it requires the command ''chkconfig httpd on''.
+
+ACLs are automatically enabled on any filesystem created when the system is installed.
+
+===Package Installation Process===
+
+First, the ''yum'' command is executed with at least one package as an argument.
+
+The steps for package installation are:
+
+  1. The system checks ''/etc/yum.conf'' for the configuration parameters.
+  2. On a ''RHEL'' system with licensed support properly configured, ''/etc/sysconfig/rhn/up2date'' is used to download packages from ''Red Hat Network''.
+  3. Database is updated using the repos in ''/etc/yum.repos.d/''.
+  4. ''RPM'' packages are downloaded along with their metadata.
+  5. The package files are distributed to the Linux filesystem (e.g. ''/bin'', ''/etc'').
+  6. The ''RPM'' database is updated with the new package metadata.
+
+====CentOS Booting Process====
+
+''CentOS6'' and ''RHEL6'' still use the older ''System V'' ''init'' process. After the kernel is loaded by the boot loader, the kernel loads the ''init'' process. ''init'' checks ''/etc/inittab'' for the default ''init level'', ''init'' then loads various files in the ''/etc/init'' directory which allow it to do things like key remapping, virtual console initialization, and then ''init'' loads the ''/etc/rc.sysinit'' script. ''/etc/rc.sysinit'' performs various functions such as setting up ''/proc'' and ''/sys'', setting the hostname, setting up ''SELinux'', setting up kernel parameters, setting up the filesystem, and various other actions.
+
+The ''/etc/rc.local'' file is one of the last files to be loaded during the booting process. Although it's better to create a custom boot script, the ''/etc/rc.local'' file can be used as a quick way to run a command on every boot.
+
+===Troubleshooting the Boot Process===
+
+==Local Mounts Fail==
+
+Although ''/etc/rc.sysinit'' ultimately takes care of mounting the filesystems, it uses the ''/etc/fstab'' for its configuration. Most errors that result in mount failures are in the ''/etc/fstab'' file.
+
+==Hostname not set==
+
+''/etc/rc.sysinit'' uses the ''/etc/sysconfig/network'' file for the hostname setting. ''/etc/sysconfig/network'' should contain a ''HOSTNAME='' setting but if that is properly set, and there is still a problem acquiring a hostname, the ''/etc/rc.sysinit'' might be to blame.
+
+The part of the script responsible for setting the hostname is:
+
+<code>
+HOSTNAME=$(/bin/hostname)
+
+set -m
+
+if [ -f /etc/sysconfig/network ]; then
+    . /etc/sysconfig/network
+fi
+if [ -z "$HOSTNAME" -o "$HOSTNAME" = "(none)" ]; then
+    HOSTNAME=localhost
+fi
+</code>
+
+===CentOS runlevels===
+
+  0. 0: Shutdown runlevel. The computer is powered down.
+  1. 1, Single-user: Only essential services are started, with network and networking services omitted. Typically, the system logs straight into the ''root'' account. Single-user mode can be disabled.
+  2. 2, Multi-user: Typically network services are started and other users are allowed to log in. This runlevel is rarely used.
+  3. 3, Multi-user with networking: Networking and all networking services are started. This runlevel is used for systems that do not load a GUI.
+  4. UNDEFINED: Although this runlevel is typically not used, it can be used as a user-defined runlevel.
+  5. Multi-user with GUI: Typically used for desktop environments, this runlevel runs all networking services and loads a GUI.
+  6. Reboot: Similar to runlevel 0, this runlevel shuts down all services, however, the computer is rebooted rather than shut down entirely.
+
+Runlevels are meant to be customized depending on the system. 
+
+====Important Files====
+
+===Log Files===
+
+''/etc/rsyslog.conf'' is the main configuration file for logging. There is an additional directory, ''/etc/rsyslog.d'' for configuration files that can be separate from the main file.
+
+''logrotate'' is configured using the ''/etc/logrotate.conf'' file with additional configuration files in the ''/etc/logrotate.d/'' directory. 
+
+''/var/log/messages'' contains general non-debug, non-critical messages. Usually service restarts, package updates, ACPI messages, etc.
+
+''/var/log/dmesg'' contains logging information about hardware devices. USB activity can be reviewed here.
+
+''/var/log/secure'' contains messages from ''sshd'' regarding failed log-in attempts.

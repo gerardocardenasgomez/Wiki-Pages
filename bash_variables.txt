@@ -1,0 +1,17 @@
+If ''$var'' is not set, then this will expand to DEFAULT but will NOT set ''$var'' to DEFAULT.
+<code>${var:-DEFAULT}</code>
+
+If ''$var'' is not set, then this will also assign ''$var'' to DEFAULT.
+<code>${var:=DEFAULT}</code>
+
+This will exit if ''$var'' is unset, or with a colon then it will exit if ''$var'' is NULL.
+<code>${var?}</code>
+
+Using variable expansion to create automatic underlines:
+====${var//PATTERN/STRING}—Replace All Instances of PATTERN with STRING====
+<code>
+$ var="Chapter 1"
+$ printf "%s\n" "$var" "${var//?/~}"
+Chapter 1
+~~~~~~~~~
+</code>

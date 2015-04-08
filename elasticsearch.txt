@@ -1,0 +1,43 @@
+====ElasticSearch====
+
+Related pages:
+[[jq]]\\
+
+==Search Queries==
+
+<code>
+GET /megacorp/employee/_search?q=last_name:Smith
+</code>
+
+
+Using Domain Specific Language (DSL):
+<code>
+{
+    "query" : {
+        "match" : {
+            "last_name" : "Smith"
+        }
+    }
+}
+</code>
+
+==Curl and JSON==
+
+''curl'' can be used to make requests and to insert records:
+<code>
+$ curl -XGET "http://localhost:9200/_count?pretty" -d @req
+$ cat req
+{
+    "query": {
+        "match_all": {}
+    }
+}
+</code>
+
+==Common Issues:==
+
+Installing from the ''.deb'' package seems to move the configuration files from the ''bin/'' directory to ''/etc/elasticsearch''. A simple fix is to copy them from ''/etc/elasticsearch'' to ''/usr/share/elasticsearch/config'', that way the binary will load the config files.
+
+The ''openjdk-7-jre-headless'' package in Ubuntu 14.04 is appropriate for the latest ''ElasticSearch'' version, and a better alternative than installing the Oracle version.
+
+When using curl, the ''@'' character in front of the file name for the ''-d'' option is necessary, otherwise "MapperParsingException" errors will come up.

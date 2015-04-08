@@ -1,0 +1,289 @@
+=====Managing Records=====
+
+====Inserting Records====
+
+Record insertion is done with ''.save()'':
+
+<code>
+> db.things.save({ "a" : 1, "b" : 2, "c" : 3 })
+>
+</code>
+
+There is also ''.insert()'':
+
+<code>
+> db.names.insert( { "name" : "Jill", "age" : 30 } )
+>
+</code>
+
+Bulk insertion also uses ''.inster()'' but by passing an array:
+
+<code>
+> db.names.insert([{ "name" : "Thomas",
+...  "age" : 21,
+... }, {
+...  "name" : "Eric",
+...  "age" : 15,
+... },
+... {
+...  "name" : "Jane",
+...  "age" : 18,
+... }])
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 30 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 21 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "name" : "Jane", "age" : 18 }
+</code>
+
+The previous example also shows that the MongoDB CLI can deal with commands that are spread out over multiple lines without the need for a special character. It will wait until it receives the syntax it is expecting; in this case, the '')'' character.
+
+The limit to bulk inserts is 48MB, but many drivers can work around this by inserting bulk data in multiple chunks of 48MB.
+
+====Searching for Records====
+
+Record searching is done with ''.find()'':
+
+<code>
+> db.things.find({ "a" : 1})
+{ "_id" : ObjectId("5522ee740865d1f30032fa99"), "a" : 1, "b" : 2, "c" : 3 }
+</code>
+
+Without any arguments, ''.find()'' will return all documents:
+
+<code>
+> db.things.find()
+{ "_id" : ObjectId("5522ee740865d1f30032fa99"), "a" : 1, "b" : 2, "c" : 3 }
+{ "_id" : ObjectId("5522eef90865d1f30032fa9a"), "a" : 2, "b" : 3, "c" : 4 }
+</code>
+
+''.find()'' can be used to only return certain key-value pairs. It will default to matching ''{}'' as that string will match anything:
+
+<code>
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+> db.names.find({}, {"name" : ""})
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo" }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James" }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack" }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill" }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas" }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric" }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "name" : "Jane" }
+</code>
+
+====Query Conditionals====
+
+Using ''$lt'', ''$lte'', ''$gt'', and ''$gte'':
+
+<code>
+> db.names.find({"age" : {"$gte" : 18, "$lt" : 30}})
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+</code>
+
+Using ''$ne'' or not equal to:
+
+<code>
+> db.names.find({"name" : {"$ne" : "Thomas"}})
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+</code>
+
+===OR Queries===
+
+Using ''$nin'' or not in:
+
+<code>
+> db.names.find({"name" : {"$nin" : ["Thomas", "James"]}})
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+</code>
+
+''$in'' is the same way but it will return documents that do match:
+
+<code>
+> db.names.find({"age" : {"$in" : [35, 31]}})
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+</code>
+
+When you need to query for documents that match either a key-value pair or a different key-value pair, ''$or'' comes in handy:
+
+<code>
+> db.names.find({"$or" : [{"age" : {"$in" : [35, 31]}}, {"name" : "Thomas"}]})
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+</code>
+
+The previous query is hard to visualize in one line so here is a more structured view of it:
+
+<code>
+db.names.find(
+    { "$or" : [
+                {"age" : {"$in" : [35, 31]}}, 
+                {"name" : "Thomas"}
+            ]
+    }
+)
+</code>
+
+====Removing Documents or Collections====
+
+Use ''.remove()'' to remove either documents or collections. Using it with a collection and not sending it any arguments will remove the collection itself. Records can be specified by giving it an argument:
+
+<code>
+db.mailing.list.remove({"opt-out" : true})
+</code>
+
+The previous command will remove any documents that have "opt-out" set to true.
+
+The ''.remove()'' action is final, and deletions cannot be undone.
+
+When it comes to removing collections, it's faster to use ''.drop()'':
+
+<code>
+db.mailing.list.drop();
+</code>
+
+Therefore, that command should be preferred when speed matters. ''.remove()'' should be used when you want to specify removal criteria as ''.drop()'' cannot discriminate between documents.
+
+====Updating a Document====
+
+For updates, use ''.update()'':
+
+<code>
+> jill = db.names.findOne({"name":"Jill"})
+{
+        "_id" : ObjectId("552355f10865d1f30032fa9f"),
+        "name" : "Jill",
+        "age" : 30
+}
+> jill.age++;
+30
+> jill.age
+31
+> jill._id
+ObjectId("552355f10865d1f30032fa9f")
+> db.names.update({"_id": jill._id}, jill)
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 21 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "name" : "Jane", "age" : 18 }
+>
+</code>
+
+It is important that ''.update()'' not return more than one document. In the previous example, the document's ''_id'' key was used to ensure that only one document would be returned.
+
+====Using Modifiers====
+
+Another way to update documents is to use modifiers. There are a bunch of modifiers such as ''$inc'' and ''$set'' which can be used to quickly modify a document.
+
+Using ''$inc'':
+
+<code>
+> thomas = db.names.findOne({"name":"Thomas"})
+{
+        "_id" : ObjectId("552356920865d1f30032faa0"),
+        "name" : "Thomas",
+        "age" : 21
+}
+> db.names.update({"_id": thomas._id}, {"$inc" : {"age" : 1}})
+> db.names.findOne({"name":"Thomas"})
+{
+        "_id" : ObjectId("552356920865d1f30032faa0"),
+        "name" : "Thomas",
+        "age" : 22
+}
+</code>
+
+''$inc'' will create the key if it does not already exist, and the counter can be set by modifying the value for the name of the key:  ''db.names.update({"_id": thomas._id}, {"$inc" : {"age" : 50}})'' would increment Thomas' age by 50.
+
+''$inc'' will only increment values of types integer, long, or double. And the value passed to the key must also be a number.
+
+Using ''$set'':
+
+''$set'' can be used to update an existing document's key or to add keys to a document. This is the modifier you'd use when making a change to a collection's schema.
+
+<code>
+> jane = db.names.findOne({"name" : "Jane"})
+{
+        "_id" : ObjectId("552356920865d1f30032faa2"),
+        "name" : "Jane",
+        "age" : 18
+}
+> db.names.update({"_id" : jane._id}, {"$set": {"age" : 25}})
+> db.names.findOne({"name" : "Jane"})
+{
+        "_id" : ObjectId("552356920865d1f30032faa2"),
+        "name" : "Jane",
+        "age" : 25
+}
+>
+</code>
+
+We can also add an entirely new key to any existing document in the collection:
+
+<code>
+> db.names.update({"_id" : jane._id}, {"$set": {"favorite_color" : "red"}})
+> db.names.findOne({"name" : "Jane"})
+{
+        "_id" : ObjectId("552356920865d1f30032faa2"),
+        "age" : 25,
+        "favorite_color" : "red",
+        "name" : "Jane"
+}
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "favorite_color" : "red", "name" : "Jane" }
+>
+</code>
+
+''$unset'' can be used to remove a key. In this case, only ''Jane'' has a favorite color key and so we'd like to remove it:
+
+<code>
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "favorite_color" : "red", "name" : "Jane" }
+> db.names.update({"_id" : jane._id},{$unset : {"favorite_color" : 1}})
+> db.names.find()
+{ "_id" : ObjectId("5522fe9b0865d1f30032fa9c"), "name" : "Gerardo", "age" : 26 }
+{ "_id" : ObjectId("5522fec10865d1f30032fa9d"), "name" : "James", "age" : 2 }
+{ "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
+{ "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
+{ "_id" : ObjectId("552356920865d1f30032faa0"), "name" : "Thomas", "age" : 22 }
+{ "_id" : ObjectId("552356920865d1f30032faa1"), "name" : "Eric", "age" : 15 }
+{ "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+</code>

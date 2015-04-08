@@ -1,0 +1,117 @@
+====Ubuntu Topics====
+
+====Uncomplicated Firewall (UFW)====
+
+===Quick Cheatsheet===
+
+<code>sudo ufw allow 53/tcp</code>
+
+<code>sudo ufw delete deny 80/tcp</code>
+
+<code>sudo ufw allow from 192.168.0.4 to any port 22</code>
+
+<code>
+sudo ufw deny from <ip addr>
+sudo ufw deny from <ip addr> to any port <port number>
+</code>
+
+===Logging===
+
+Logs are sent to ''/var/log/syslog''.
+
+<code>
+sudo ufw logging on
+sudo ufw logging off
+</code>
+
+Log example:
+
+<code>
+Feb 19 13:26:01 linuxuser kernel: [10844449.431132] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:08:30:08:00 SRC=122.221.1.172 DST=104.131.106.230 LEN=48 TOS=0x00 PREC=0x00 TTL=111 ID=9664 PROTO=UDP SPT=60627 DPT=50469 LEN=28
+Feb 19 13:26:07 linuxuser kernel: [10844455.518607] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:08:30:08:00 SRC=122.221.1.172 DST=104.131.106.230 LEN=48 TOS=0x00 PREC=0x00 TTL=111 ID=24179 PROTO=UDP SPT=60627 DPT=50469 LEN=28
+Feb 19 13:26:18 linuxuser kernel: [10844466.474263] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:18:30:08:00 SRC=91.238.134.92 DST=104.131.106.230 LEN=40 TOS=0x00 PREC=0x00 TTL=249 ID=2281 PROTO=TCP SPT=44018 DPT=8080 WINDOW=1024 RES=0x00 SYN URGP=0
+Feb 19 13:26:19 linuxuser kernel: [10844467.689162] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:08:30:08:00 SRC=122.221.1.172 DST=104.131.106.230 LEN=48 TOS=0x00 PREC=0x00 TTL=111 ID=16763 PROTO=UDP SPT=60627 DPT=50469 LEN=28
+Feb 19 13:26:44 linuxuser kernel: [10844492.045787] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:08:30:08:00 SRC=122.221.1.172 DST=104.131.106.230 LEN=48 TOS=0x00 PREC=0x00 TTL=111 ID=5532 PROTO=UDP SPT=60627 DPT=50469 LEN=28
+</code>
+
+Log fields:
+
+  * Date
+  * Hostname
+  * Unknown]
+  * Event/Action
+  * IN/OUT
+  * MAC
+  * SRC/DST
+  * LEN
+  * TOS (Type of Service) typically 0x00 signifying "normal service"
+  * PREC (Precedence)
+  * TTL (Time to Live)
+  * ID Typically not important
+  * PROTO Either UPD or TCP
+  * SPT Source port
+  * DPT Destination port
+  * WINDOW TCP Window setting
+  * RES Reserved; always set to 0
+  * SYN Flag indicates that a three*way handshake was required (TCP)
+
+Example of a TOS field that is not 0x00:
+
+<code>
+Feb 19 10:57:13 linuxuser kernel: [10835521.458901] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:18:30:08:00 SRC=188.138.17.205 DST=104.131.106.230 LEN=40 TOS=0x10 PREC=0x00 TTL=118 ID=50895 PROTO=TCP SPT=13478 DPT=8080 WINDOW=20949 RES=0x00 SYN URGP=0
+Feb 19 11:45:36 linuxuser kernel: [10838424.468163] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:18:30:08:00 SRC=192.99.75.185 DST=104.131.106.230 LEN=52 TOS=0x02 PREC=0x00 TTL=115 ID=11730 DF PROTO=TCP SPT=24732 DPT=22 WINDOW=8192 RES=0x00 CWR ECE SYN URGP=0
+Feb 19 12:48:52 linuxuser kernel: [10842220.129017] [UFW BLOCK] IN=eth0 OUT= MAC=04:01:2c:08:8f:01:84:b5:9c:f9:08:30:08:00 SRC=208.163.254.228 DST=104.131.106.230 LEN=66 TOS=0x08 PREC=0x00 TTL=52 ID=8523 DF PROTO=UDP SPT=53 DPT=14830 LEN=46
+</code>
+
+
+  
+====Upstart====
+
+===System Phases===
+
+The system phases are documented here: http://upstart.ubuntu.com/cookbook/#system-phases
+
+Comments of note:
+
+  - The ''rc-sysinit'' job calls the ''telinit'' command, passing it the ''runlevel'' to move to.
+  - ''upstart'' never shuts down itself; ''upstart'' will "die" when the system is powered off, but if it ever exits, that is a bug.
+  - Shutdown process: ''/etc/init/rc.conf'' calls ''/etc/init.d/rc'' passing it the new ''runlevel'' ("0"). The SystemV system will then invoke the necessary scripts in /etc/rc0.d/ to stop SystemV services. One of the scripts run is /etc/init.d/sendsigs. This script will kill any remaining processes not already stopped (including Upstart processes).
+
+The SystemV system will then invoke the necessary scripts in /etc/rc0.d/ to stop SystemV services.
+
+===Major Differences Between Upstart and Sys V init===
+
+==Changing Default runlevel==
+
+Edit the following file: ''/etc/init/rc-sysinit.conf''
+
+It contains this section of code:
+<code>
+# Default runlevel, this may be overriden on the kernel command-line
+# or by faking an old /etc/inittab entry
+env DEFAULT_RUNLEVEL=2
+</code>
+
+==Managing the behavior of Ctrl+Alt+Del==
+
+Edit the following file: ''/etc/init/control-alt-delete.conf''
+
+The contents of the file:
+<code>
+# control-alt-delete - emergency keypress handling
+#
+# This task is run whenever the Control-Alt-Delete key combination is
+# pressed, and performs a safe reboot of the machine.
+
+description     "emergency keypress handling"
+author          "Scott James Remnant <scott@netsplit.com>"
+
+start on control-alt-delete
+
+task
+exec shutdown -r now "Control-Alt-Delete pressed"
+</code>
+
+Note that the file only controls what happens for a text console; otherwise the desktop environment handles the event.
+
+The file uses the ''exec'' stanza, which is documented here: http://upstart.ubuntu.com/cookbook/#exec

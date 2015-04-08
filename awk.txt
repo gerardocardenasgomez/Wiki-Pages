@@ -1,0 +1,117 @@
+====The awk (gawk) Program====
+
+===gawk's Exit Status===
+
+The ''exit'' statement can be used to print a specific exit status. If the ''gawk'' program execute successfully, then it will leave an exit code of 0. For errors, ''gawk'' leaves the value of the C constant ''EXIT_FAILURE'' which is typically 1. Fatal errors result in ''gawk'' leaving an exit status of 2.
+
+====gawk Regular Expressions====
+
+A regular expression inside slashes, e.g. ''/ex/'', it is called a regexp constant, similar to a 5.27 numeric constant and a "name" string constant.
+
+Using regular expressions in ''gawk'' is done in the following ways:
+
+<code>
+[user@www1-server-org regex]$ awk '/the/ {print $0}' rime-intro.txt
+How a Ship having passed the Line was driven by Storms to the cold
+Country towards the South Pole; and how from thence she made her course
+to the tropical Latitude of the Great Pacific Ocean; and of the strange
+things that befell; and in what manner the Ancyent Marinere came back to
+</code>
+
+===Examples with Regular Expressions===
+
+<code>
+[user@www1-server-org regex]$ head customer.csv
+name,phone,city
+Zelda,1-680-314-5032,Okpoko
+Denton,1-349-965-5837,Outremont
+Brian,1-385-865-8662,Noduwez
+Aimee,1-421-985-8348,Calle Blancos
+</code>
+
+Using the ''~'' and ''!~'' operators, we can check specific input records against a regular expression:
+
+<code>
+[user@www1-server-org regex]$ awk '$1 ~ /^[Z|z]/' customer.csv
+Zelda,1-680-314-5032,Okpoko
+Zenia,1-243-784-6520,Eisden
+Zephania,1-907-783-9931,Palestrina
+</code>
+
+''awk %%'%%$1 ~ /^[Z|z]/%%'%%'' is the equivalent of using an ''if'' statement explicitly: ''awk %%'%%{ if ($1 ~ /^[Z|z]/) print }%%'%%''
+
+===Important awk Version Differences===
+
+One major difference to note is that older versions of ''gawk'' will not support ''interval expressions'', e.g. regular expressions with ''{}''. Example:
+
+<code>
+[user@www1-server-org regex]$ awk --version
+GNU Awk 3.1.7
+[user@www1-server-org regex]$ cat fd.txt
+fd
+fed
+feed
+feeeeeeeeeeed
+feeeeeed
+[user@www1-server-org regex]$ awk '/fe{2}d/' fd.txt
+[user@www1-server-org regex]$
+</code>
+
+But in a version 4.0+ of ''gawk'':
+
+<code>
+user testing $: awk --version
+GNU Awk 4.0.1
+user testing $: cat fd.txt
+fd
+fed
+feed
+feeeeeeeeeeed
+feeeeeed
+user testing $: awk '/fe{2}d/' fd.txt
+feed
+</code>
+
+====Common Options====
+
+''-F <fs>'' ''--field-separator <fs>'' : Set the field separator value.
+
+''-f <source-file>'' ''--file <source-file>'' : Read from the source file. Multiple source files may be used, resulting in ''awk'' using a concatenation of all the files.
+
+''-v var=val'' ''--assign var=val'' : Assign a variable a value. Only one variable can be assigned per ''-v'' option, but the option can be specified more than once. The variables will be available inside the ''BEGIN'' rule.
+
+''-c'' ''--traditional'' : Reverts to a compatibility mode; the GNU ''awk'' extensions are disabled.
+
+====Command-line Arguments====
+
+When assigning variables through the command line, it is important to note that the variable assignment occurs after all files have been read; ''awk'' first goes through each argument, determining if it is a file and if so, loads it. Therefore, these variables are not available inside a ''BEGIN'' rule. To revert this behavior, use the ''-v'' option. With the ''-v'' option, the variable will be available inside the ''BEGIN'' rule.
+
+====awk Environment Variables====
+
+===The AWKPATH Environment Variable====
+
+''AWKPATH'' will by default be: ''.:/usr/local/share/awk''
+
+This environment variable rarely needs to be set. Although it can be changed inside a running ''awk'' program, it will not have an effect.
+
+''ENVIRON["AWKPATH"]'' can be used inside an ''awk'' program to check for its value.
+
+===The AWKLIBPATH Environment Variable===
+
+Typically this is set to ''/usr/local/lib/gawk'' but the actual location can vary depending on the ''gawk'' implementation.
+
+''ENVIRON["AWKLIBPATH"]'' can be used inside an ''awk'' program to check for its value.
+
+====File Includes====
+
+External files can be loaded in from ''gawk'' programs:
+
+<code>
+@include "file1"
+
+BEGIN {
+    print "This is the first file."
+}
+</code>
+
+The file must be enclosed in double quotes, and it can also be a relative path or an absolute path: ''../file1'' or ''/usr/bin/local/file1''

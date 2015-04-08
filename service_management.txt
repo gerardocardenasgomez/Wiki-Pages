@@ -1,0 +1,9 @@
+====Managing Services====
+
+==chkconfig==
+
+''chkconfig --list''\\
+''chkconfig --list <script name>''\\
+''chkconfig --level <level> <script name> <on|off>''\\
+''chkconfig <script> reset''
+

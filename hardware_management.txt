@@ -1,0 +1,50 @@
+====Hardware Management====
+
+====RAID====
+
+NOTE: It's important to note that RAID 10 (or 1+0) and RAID 01 (or 0+1) are not the same!
+
+===RAID 0===
+
+RAID 0 does not provide redundancy, and is instead used for performance. Also referred to as a "striped set/volume" or "striping." Two or more devices are required.
+
+===RAID 1===
+
+RAID 1 is also referred to as "mirroring." Provides redundancy because data is written to more than one disk, although this negatively affects write performance. Read performance can be increased depending on the number of disks in the array.
+
+===RAID 4===
+
+RAID 4 is "dedicated parity." One drive is set as the parity drive, with data going to the rest of the disks in the array in a striped fashion. The parity drive is used to recover data in the event that it is lost from one of the other disks. 
+
+===RAID 5===
+
+RAID 5 is similar to RAID 4 but the parity information is distributed to all disks in the array. Read performance is increased because all disks participate in servicing read requests.
+
+====lspci====
+
+''lspci -k'' Kernel module information for different hardware.\\
+''lspci -v'' for verbose output.
+
+====lsusb====
+
+''lsusb'' by itself shows information about USB devices. With the ''-t'' option, it will format output as a tree which shows the relationships between the different USB devices. For USB-related kernel modules, use the ''usb-devices'' command. 
+
+====lscpu====
+
+''lscpu'' shows the properties of the CPUs on the system. The ''/proc/cpuinfo'' file contains more information than the summarized output of ''lscpu''. 
+
+====udev====
+
+''udev'' helps initialize hardware. When the kernel detects a hardware event, it will pass the information off on to ''udev'' which then acts upon the event. For example, scripts can be executed upon connection of a USB device.
+
+''udev'' uses rules to determine the action it will perform when an event is detected. The location of the rules varies is ''/etc/udev/rules.d''. However, most systems have separate directories for local rules and for system or package-supplied rules.
+
+''udevadm monitor'' can be used to trace the actions performed by the system after plugging in a decide.
+
+''udev'' is what is responsible for creating the device nodes in ''/dev''.
+
+====dbus====
+
+Monitor ''dbus'' messages with ''dbus-monitor --system'' which alerts for certain things such as USB drives being plugged in.
+
+''dbus-monitor --session'' can be used to track mouse movements between windows.

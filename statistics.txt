@@ -1,0 +1,29 @@
+====Related Pages====
+
+[[R Language]]\\
+
+====Statistics Concepts====
+
+==Jitter Plot==
+
+Sometimes a dataset will contain data points that would frequently fall on top of each other in a dot plot. This would make it difficult to visualize the actual distribution of the data points. In these cases, a jitter plot would be used. In a jitter plot, each point is shifted by a small random amount so that it is easier to see the distribution of the data points.
+
+Data points should not be shifted by a significant amount but only enough so that they don't overlap on the graph. Points can be altered either vertically or horizontally (or both). 
+
+Jitter Plot: http://i.imgur.com/YvxIkFR.png
+
+==Histogram Graph==
+
+To form a histogram, we divide the range of values into a set of “bins” and then count the number of points (sometimes called “events”) that fall into each bin. We then plot the count of events for each bin as a function of the position of the bin.
+
+Histograms make it easy to look at the quantative data whereas jitter/dot plots can often times make that difficult. 
+
+It is important to pick a proper width for each "bin." 
+
+Histogram: http://i.imgur.com/5qnZx0Y.png
+
+==Cumulative Distribution Function==
+
+The CDF at point x tells us what fraction of events has occurred “to the left” of x. In other words, the CDF is the fraction of all points x<sub>i</sub> with x<sub>i</sub> ≤ x.
+
+CDF is the dotted line: http://i.imgur.com/wjiIY60.png

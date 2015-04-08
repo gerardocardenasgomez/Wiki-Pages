@@ -1,0 +1,19 @@
+====RRD Tool====
+
+==Data Source Definition==
+
+<code>
+rrdtool create interface.rrd DS:packets:COUNTER:600:U:U RRA:AVERAGE:0.5:1:288 RRA:AVERAGE:0.5:6:336
+</code>
+
+Where the structure of the definition is:
+<code>
+DS:<name>:<DS type>:<heartbeat>:<lower limit>:<upper limit>
+</code>
+
+Field Descriptions:
+
+**name:** Must be unique! To add more data sources, add another DS line.\\
+**DS Type:** COUNTER, GAUGE, DERIVE, and ABSOLUTE are available.
+
+''heartbeat'' and the limits are for data misses or //unknown// values.

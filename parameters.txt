@@ -1,0 +1,24 @@
+======Parameters======
+
+The Bourne shell only accepts up to 9 arguments. The variable ''$12'' would be interpreted as the variable ''$1'' followed by the number 2. For this reason, any parameters after 9 must be enclosed in braces: ''${12}''.
+
+The variables $* and $@ will expand to all parameters, with $# containing the number of parameters that were passed to the script. 
+
+''$0'' contains the name of the script.
+
+===Getting Parameters Using getopts===
+
+If the option is followed by a colon, it means that it is expecting an argument and the argument it received will be stored in ''$OPTARG''.
+
+<code>
+while getopts ab:c opt
+do
+    case $opt in
+        a) echo "Option -a found" ;;
+        b) echo "Option -b found with argument $OPTARG" ;;
+        c) echo "Option -c found" ;;
+        *) echo "Invalid option: $opt"; exit 5 ;;
+     esac
+done
+</code>
+

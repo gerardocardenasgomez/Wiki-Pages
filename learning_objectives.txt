@@ -1,0 +1,40 @@
+====Learning Objectives====
+
+===Internetworking with gawk===
+
+See here: https://www.gnu.org/software/gawk/manual/gawkinet/html_node/
+
+===Google Compute Cloud===
+
+Learn the following:
+
+  - Google Cloud Storage
+      - =) Create Buckets and add data to them
+      - =) Create a management bucket that will contain a startup script and necessary ''RPM'' files
+      - =) Give instances access to buckets
+  - Google Compute
+      - =) Create a startup script for instances
+      - =) The startup script must initialize all instances with ''salt-minion''
+      - =) Create instances with ''Cloud Storage'' access to the management bucket
+  - Google Cloud Monitoring
+      - Read documentation for Monitoring options such as alerts
+
+===Salt===
+
+Learn how to manage an infrastructure using SaltStack. The following tasks must be completed with Salt:
+
+  - MySQL installation and configuration with Master/Slave replication
+      - Install MySQL on DB servers
+      - Configure MySQL instances for security
+      - Configure Master/Slave
+  - MongoDB and Python scripting and data management
+      - Install ''MongoDB'' on DB servers
+      - Install Python modules for MySQL and MongoDB
+  - Apache HTTP server configuration
+      - Install Apache on HTTP servers
+      - Configure instances
+      - Replicate website data
+  - Install and configure AWS Command Line Interface
+      - Install AWS scripts on all servers
+      - Configure AWScli with proper keys and IAM
+      - Configure cron job to push logs to AWS S3

@@ -1,0 +1,309 @@
+====R Programming Language====
+
+Script Examples: [[R Scripts]]\\
+
+Based on the S language developed by Bell Labs in the 1970s.
+
+Getting help:
+
+<code>
+?mean                   # Opens the help page for the mean function
+?"+"                    # Opens the help page for addition
+?"if"                   # Opens the help page for if
+??plotting              # Searches for topics containing words like "plotting"
+??"regression model"    # Searches for topics containing phrases like this
+</code>
+
+The ''apropos'' function helps find variables/functions that match the input:
+
+<code>
+apropos("vector")
+## [1] ".__C__vector"         "a_vector"             "as.data.frame.vector"
+## [4] "as.vector"            "as.vector.factor"     "is.vector"
+## [7] "vector"               "Vectorize"
+</code>
+
+Regular expressions can be used with ''apropos''.
+
+====R Syntax====
+
+Global variables:
+
+<code>
+x <<- 5
+</code>
+
+Wrapping a variable assignment in parentheses results in the variable being printed after the assignment:
+
+<code>
+z <- rnorm(5); z
+## [1]  1.8503 -0.5787 -1.4797 -0.1333 -0.2321
+ (zz <- rlnorm(5))
+## [1] 1.0148 4.2476 0.3574 0.2421 0.3163
+</code>
+
+===Vectorization===
+
+Vectorized can mean:
+
+  - An operator or function will act on each element of a vector without the need for an explicit loop.
+  - A function can take a vector as input and it will calculate a summary statistic.
+  - Some functions will calculate a summary statistic from several inputs, e.g. the ''sum'' function.
+
+Functions that can vectorize over arguments:
+
+  - ''sum''
+
+Relational operators are vectorized:
+
+<code>
+c(3, 4 - 1, 1 + 1 + 1) == 3                #operators are vectorized too
+## [1] TRUE TRUE TRUE
+ 1:3 != 3:1
+## [1]  TRUE FALSE  TRUE
+ exp(1:5) < 100
+## [1]  TRUE  TRUE  TRUE  TRUE FALSE
+ (1:5) ^ 2 >= 16
+## [1] FALSE FALSE FALSE  TRUE  TRUE
+</code>
+
+====R Examples====
+
+The colon operator creates a sequence of numbers:
+
+<code>
+> mean(1:5)
+[1] 3
+</code>
+
+==Checking for and creating directories:==
+
+<code>
+if (!file.exists("data")) {
+    dir.create("data")
+}
+</code>
+
+==Getting data from the internet:==
+
+<code>
+download.file(url, destfile = "/dir/here", method = "curl")
+</code>
+
+  - If the url is http, you can use ''download.file()''
+  - If the url is https, you may need to specify ''method=curl''
+  - Record the date of the download
+
+==Reading flat files==
+
+Use the ''read.table()'' function.
+
+  - Flexible and robust, but needs more parameters
+  - Reads data into RAM--this can cause problems if the file is large
+  - Important parameters: file, eader, sep, row.names, nrows
+  - Related: ''read.csv()'', ''read.csv2()''
+
+<code>
+cameraDate <- read.table("./data/cameras.csv", sep = ",", header = TRUE)
+head(cameraData)
+</code>
+
+Reading data that contains quotes can be problematic, and setting ''quote=""'' can often resolve these issues.
+
+==Reading Excel Files==
+
+Use the xlsx package:
+<code>
+library(xlsx)
+cameraData <- read.xlsx("./data/cameras.xlsx", sheetIndex=1, header=TRUE)
+</code>
+
+Use ''write.xlsx'' to write out to an Excel files. ''raed.xlsx2'' is faster.
+
+==Reading XML Files==
+
+Two components:
+
+  - Markup gives the text structure
+  - Content is the actual text of the document
+
+Use the ''XML'' library.
+
+<code>
+library(XML)
+
+doc <- xmlTreeParse(file, useInteral=TRUE)
+
+rootNode <- xmlRoot(doc)
+xmlName(rootNode)
+
+rootNode[[1]]
+rootNode[[1]][[1]]
+</code>
+
+==Reading JSON Files==
+
+Data stored as:
+
+  - Numbers (Double)
+  - Strings (double quoted)
+  - Boolean
+  - Array ([])
+  - Object ({})
+
+Use the JSONlite package
+
+<code>
+library(jsonlite)
+jsonData <- fromJSON(url)
+names(jsonData)
+names(jsonData$owner)
+names(jsonData$owner$login)
+
+myjson <- toJSON(iris, pretty=TRUE)
+iris2 <- fromJSON(myjson)
+</code>
+
+==The data.table Package==
+
+Use the data.table package.
+<code>
+library(data.table)
+DF = data.table(x=rnorm(9)m y=rep(c("a","b","c"), each=3), z=rnorm(9))
+
+tables()    # See all data tables in memory
+
+DT[,list(mean(x), sum(z))]    # x and z are assigned to columns
+
+DT[,w:=z^2]    # The := adds a new variable, in this case column z squared
+
+# Multiple operatons
+
+DT[,m:= {tmp <- (x+z); log2(tmp+5)}]     # assign (x+z) to tmp, then get log2 of (tmp+5)
+
+# Plyr Like Operations
+
+DT[,a:=x>0]    # Adds boolean variable
+
+# Special Variables
+
+# .N an integer, length 1, containing a number of times something is run/appears
+
+# Joins
+
+merge(DT1, DT2)    # Set the key to be the same in both data tables
+
+# Fast reading
+
+fread(file)
+</code>
+====R Math====
+
+<code>
+c(2, 3, 5, 7, 11, 13) - 2            #subtraction
+## [1]  0  1  3  5  9 11
+ -2:2 * -2:2                          #multiplication
+## [1] 4 1 0 1 4
+ identical(2 ^ 3, 2 ** 3)             #we can use ^ or ** for exponentiation
+                                     #though ^ is more common
+## [1] TRUE
+ 1:10 / 3                             #floating point division
+##  [1] 0.3333 0.6667 1.0000 1.3333 1.6667 2.0000 2.3333 2.6667 3.0000 3.3333
+ 1:10 %/% 3                           #integer division
+##  [1] 0 0 1 1 1 2 2 2 3 3
+ 1:10 %% 3                            #remainder after division
+##  [1] 1 2 0 1 2 0 1 2 0 1
+
+cos(c(0, pi / 4, pi / 2, pi))        #pi is a built-in constant
+## [1]  1.000e+00  7.071e-01  6.123e-17 -1.000e+00
+ exp(pi * 1i) + 1                     #Euler's formula
+## [1] 0+1.225e-16i
+ factorial(7) + factorial(1) - 71 ^ 2 #5041 is a great number
+## [1] 0
+ choose(5, 0:5)
+## [1]  1  5 10 10  5  1
+</code>
+
+The ''all.equal()'' function can be used to check the equality of numbers. It allows for a certain tolerance level of around 1.5e-8.
+
+====R Base Plotting System====
+
+  - "Artist's palette" model
+  - Start with black canvas and build up from there
+  - Start with plot function (or similar)
+  - Use annotation functions to add/modify {text, lines, points, axis}
+
+Uses the following packages: ''graphics'', ''grDevices''
+
+Considerations:
+
+  - Where will the plot be made?
+  - How will the plot be used?
+  - How much data is going into the plot?
+  - Will you need to dynamically resize the graphic?
+
+Some important base graphics parameters:
+
+|pch||The plotting symbol (default is open circle)|
+|lty||The line type, solid by default|
+|lwd||The line width specified as an integer multiple|
+|col||The plotting color, specified as a number, string, or hex code|
+|xlab||Character string for the x-axis label|
+|ylab||Character string for the y-axis label|
+
+==Common Base Plotting Functions==
+
+  - **plot**
+  - **lines**
+  - **points**
+  - **text**
+  - **title**
+  - **mtext**
+  - **axis**
+
+===Base Plotting Examples===
+
+<code>
+with(airquality, plot(Wind, Ozone, main = "Ozone and Wind in New York City"))
+with(subset(airquality, Month == 5), points(Wind, Ozone, col="blue"))
+</code>
+====R Lattice System====
+
+  - Plots are created with a single function call (xyplot, bwplot, etc.)
+  - Most useful for conditioning types of plots: 
+  - Things like margins/spacing set automatically because entire plot is specified at once
+  - Good for putting many plots on a screen
+  - Cannot add to the plot once it is created
+
+===R Lattice Examples===
+
+This would be code also
+
+====R ggplot2 System====
+
+  - Splits the difference between base and lattice in a number of ways
+  - Automatically deals with spacings, text, titles, also allows you to add to a plot
+  - Superficially similar to lattice but generally easier/more intuitive to use
+  - Default mode makes many choices for you but very customizable
+
+===R ggplot2 Examples===
+
+  - This would be code
+
+====Global Graphics Parameters====
+
+Changed using the ''par()'' function.
+
+|las||The orientation of the axis labels on the plot|
+|bg||The background color|
+|mar||The margin size|
+|oma||The outer margin size, zero by default|
+|mfrow||The number of plots per row, column (plots are filled row-wise)|
+|mfcol||The number of plots per row, column (plots are filled column-wise)|
+
+The default parameters can be viewed by calling the ''par()'' function with the name of the parameter and no other arguments:
+
+<code>
+par("bg")
+> "transparent"
+</code>

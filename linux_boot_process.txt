@@ -1,0 +1,29 @@
+====Linux Boot Process====
+
+===Kernel Initialization===
+
+1. CPU inspection
+2. Memory inspection
+3. Device bus discovery
+4. Device discovery
+5. Auxiliary kernel subsystem setup (networking, and so on)
+6. Root filesystem mount
+7. User space start
+
+Seeing the Kernel protect its memory from user-space processes:
+<code>
+Freeing unused kernel memory: 740k freed
+Write protecting the kernel text: 5820k
+Write protecting the kernel read-only data: 2376k
+NX-protecting the kernel data: 4420k
+</code>
+
+===Kernel Parameters===
+
+Viewing kernel parameters:
+<code>
+gerardo@gerardo:~$ cat /proc/cmdline
+BOOT_IMAGE=/boot/vmlinuz-3.2.0-4-amd64 root=UUID=d5922104-d1e4-46e2-92be-d904d2a15746 ro quiet
+</code>
+
+When the Kernel encounters a parameter it does not recognize, it saves it and passes it off to ''init'' later on. An example of this is ''-s'' for single-user mode.

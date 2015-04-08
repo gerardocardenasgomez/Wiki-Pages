@@ -1,0 +1,174 @@
+''mysql_secure_installation'' is a short script that sets/changes root password, removes remote logins for root, and removes test databases/tables, among a few other things.
+
+''mysql -u root -p'' An empty password will prompt you for one.
+
+''mysql -u root -p -e "SHOW DATABASES"'' executes the command SHOW DATABASES.
+
+====Quick Command Cheat Sheet====
+<code>
+CREATE DATABASE mydb;
+USE mydb;
+CREATE TABLE customers (`id` int(11) NOT NULL, `first_name` VARCHAR(20) NOT NULL, `last_name` VARCHAR(20) NOT NULL);
+SHOW TABLES;
+INSERT INTO customers (id,first_name,last_name) VALUES (1,"Jeff","Jefferson");
+UPDATE customers SET id=4 WHERE last_name="batman";
+SELECT * FROM customers WHERE first_name like "jane";
+SELECT * FROM customers WHERE last_name like "batman" AND first_name LIKE "jane";
+DESCRIBE <table>;
+SELECT user,host FROM <table>;
+CREATE USER 'jeff'@'localhost' IDENTIFIED BY 'jeffjeff';
+SELECT name,type,price FROM products ORDER BY price desc;
+SELECT type FROM products GROUP BY type;
+</code>
+
+
+<code>
+CREATE USER 'chuck'@'localhost' IDENTIFIED BY 'XYZchuck';
+GRANT ALL PRIVILEGES ON misc_data.redgreenblue TO 'chuck'@'localhost';
+
+mysql -u root -p customers < customers.sql
+
+DESCRIBE customers.shady_law_services;
+
+ALTER TABLE customers.shady_law_services MODIFY COLUMN code VARCHAR(6);
+
+CREATE VIEW q_only AS SELECT * FROM customers.flybynight_airlines WHERE code LIKE 'Q%';
+
+INSERT INTO color_codes (id,red,green,blue,name) VALUES (256,152,245,255,'CadetBlue1');
+
+UPDATE color_codes SET blue=213 WHERE id=517;
+
+CREATE TABLE redgreenblue (`id` int(11) NOT NULL AUTO_INCREMENT, `red` int(10) NOT NULL, `green` int(10) NOT NULL, `blue` int(10) NOT NULL, `name` VARCHAR(20) NOT NULL, PRIMARY KEY ( id ));
+
+
+DELETE FROM testing.color_codes WHERE red LIKE 139;
+
+DROP TABLE <name>
+
+external-locking
+</code>
+
+====MYSQL Options====
+
+List of options: http://dev.mysql.com/doc/refman/5.0/en/server-system-variables.html
+
+Finding the name of an option:
+
+Consider an example where you know you want to set the SQL Mode option but don't know exactly what it is called. Using the command line:
+
+<code>
+mysql> SHOW GLOBAL VARIABLES LIKE '%mode%';
++--------------------------+--------+
+| Variable_name            | Value  |
++--------------------------+--------+
+| innodb_autoinc_lock_mode | 1      |
+| innodb_strict_mode       | OFF    |
+| slave_exec_mode          | STRICT |
+| sql_mode                 |        |
++--------------------------+--------+
+4 rows in set (0.00 sec)
+</code>
+
+Now we know to set sql_mode!
+
+====Location of Important Files====
+
+my.cnf In CentOS6: /etc/mysql/my.cnf\\
+mysql.err in CentOS6: /var/log/mysql.err\\
+mysql.log in CentOS6: /var/log/mysql.log\\
+
+====MySQL Data Types====
+
+===Numeric Data Types===
+
+^ Type Name ^ Meaning ^
+| TINYINT | A very small integer |
+| SMALLINT | A small integer |
+| MEDIUMINT | A medium-sized integer |
+| INT | A standard integer |
+| BIGINT | A large integer | 
+| DECIMAL | A fixed-point number |
+| FLOAT | A single-precision floating-point number |
+| DOUBLE | A double-precision floating-point number |
+| BIT | A bit field |
+
+===String Data Types===
+
+^ Type Name ^ Meaning ^
+| CHAR | A fixed-length non-binary string |
+| VARCHAR | A variable-length non-binary string |
+| BINARY | A fixed-length binary string |
+| VARBINARY | A varuable-length binary string |
+| TINYBLOB | A very small BLOB (binary large object) |
+| BLOB | A small BLOB |
+| MEDIUMBLOB | A medium-sized BLOB |
+| LONGBLOB | A large BLOB |
+| TINYTEXT | A very small non-binary string |
+| TEXT | A small non-binary string |
+| MEDIUMTEXT | A medium-sized non-binary string |
+| LONGTEXT | A large non-binary string |
+| ENUM | An enumeration; each column value is assigned one enumeration member |
+| SET | A set; each column value is assigned zero or more set members |
+
+===Temporal Data Types===
+
+^ Type Name ^ Meaning ^
+| DATE | A date value, in ''CCYY-MM-DD'' format |
+| TIME | A time value, in ''hh:mm:ss'' format |
+| DATETIME | A date and time value in ''CCYY-MM-DD hh:mm:ss'' format |
+| TIMESTAMP | A timestamp value in ''CCYY-MM-DD hh:mm:ss'' format |
+| YEAR | A year value in ''CCYY'' or ''YY'' format |
+
+====Solving MySQL issues====
+
+===Enabling Query Logging===
+
+In some cases, it is helpful to log the queries that are being made to a MySQL database. In this example, there is a Python script that is returning an error but the error might not be enough to troubleshoot the error so we will enable query logs to see exactly what the database is seeing from the Python script.
+
+This is a portion of the code in the script:
+
+<code>
+tb_name = "admin"
+tb_users = "users"
+tuple = (tb_users, tb_name)
+cursor.execute("SELECT * FROM %s WHERE username LIKE %s", tuple)
+</code>
+
+Python returns the following code:
+
+<code>
+[root@localhost servers]# ./mysql-view.py
+Traceback (most recent call last):
+  File "./mysql-view.py", line 17, in <module>
+    cursor.execute("SELECT * FROM %s WHERE username LIKE %s", tuple)
+  File "/usr/lib64/python2.6/site-packages/MySQLdb/cursors.py", line 173, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib64/python2.6/site-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+_mysql_exceptions.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''users' WHERE username LIKE 'admin'' at line 1")
+</code>
+
+Although the error in this example does print the query, it is nevertheless useful to look at the query log. In the ''my.cnf'' file, add the following option to enable query logs: ''general_log_file=/var/log/query.log'' The server must be restarted.
+
+Next, enable query logging inside the MySQL console:
+
+<code>
+mysql> SET global general_log = 1;
+Query OK, 0 rows affected (0.00 sec)
+</code>
+
+Now, ''tail -f /var/log/query.log'' should enable us to see the queries as they come into the database. This is what the Python query looks like:
+
+<code>
+150328 16:17:07    22 Connect   myuser@localhost on dbname
+                   22 Query     set autocommit=0
+                   22 Query     SELECT * FROM 'users' WHERE username LIKE 'admin'
+                   22 Quit
+</code>
+
+In this case, not only might MySQL return a ''ERROR 1046 (3D000): No database selected'' error, but the single quotes around users should instead be backticks:
+
+<code>
+mysql> SELECT * FROM `dbname`.`users` WHERE username LIKE 'admin';
+Empty set (0.00 sec)
+</code>

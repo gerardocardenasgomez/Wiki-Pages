@@ -1,0 +1,40 @@
+====MongoDB====
+
+[[Managing Records (MongoDB)]]\\
+
+====MongoDB Data Types====
+
+There are a few basic data types for MongoDB:
+
+null        : {"x" : null}\\
+boolean     : {"y" : true}\\
+number      : {"a" : 3.14, "b" : 4, "c" : NumberInt("3"), "d" : NumberLong("4")}\\
+string      : {"x" : "This is a string"}\\
+date        : {"y" : new Date()}\\
+regex       : {"x" : /foobar/i}\\
+array       : {"y" : ["a", "b", "c"]}\\
+embedded doc: {"x" : {"foo", "bar"}}\\
+object id   : {"y" : ObjectId()}\\
+binary data : {"x" : Binary(data)}\\
+code        : {"y" : function() { ''<js code here'' }\\
+
+====ObjectId====
+
+===Structure===
+
+Each ObjectId is 12 bytes long:
+
+| 0 1 2 3 | 4 5 6 | 7 8 | 9 10 11 |
+| Timestamp| Machine| PID | Increment |
+
+Certain MongoDB drivers will allow you to query for the Timestamp data in an ObjectId.
+
+It's important to note that the Timestamp field does not need to be synchronized across all machines in a cluster. It is a field that only needs to be new and incremental.
+
+The Machine field is a hash of the machine's hostname.
+
+The PID field is the PID of the ObjectId-generating process.
+
+Combined, the different fields allow for 16,777,216 different ObjectIds to be generated per second. 
+
+

@@ -1,0 +1,52 @@
+====The Linux Kernel====
+
+''lsmod'' to list kernel modules.
+
+''modinfo <module name>'' lists parameters supported by a kernel module.
+
+''modprobe <module name>'' loads a module--by default, it will take care of any dependencies.
+
+''modprobe -r <module name>'' will unload a kernel module.
+
+Loading a module with a parameter takes the following form: ''modprobe ecryptfs ecryptfs_verbosity=1''
+
+===Kernel Parameters===
+
+Editing the configuration file, ''/etc/sysctl.conf'', ensures that changes to the Kernel Parameters survive reboots. However, temporary changes can be made by modifying the files in ''/proc/sys'':
+
+<code>
+# echo "1" > /proc/sys/net/ipv4/ip_forward
+</code>
+
+==Configuration File==
+
+The ''/etc/sysctl.conf'' file contains some of the configuration related to Kernel Parameters.
+
+Example:
+
+<code>
+# Kernel sysctl configuration file for Red Hat Linux
+#
+# For binary values, 0 is disabled, 1 is enabled.  See sysctl(8) and
+# sysctl.conf(5) for more details.
+
+# Controls IP packet forwarding
+net.ipv4.ip_forward = 0
+
+# Controls source route verification
+net.ipv4.conf.default.rp_filter = 1
+
+# Do not accept source routing
+net.ipv4.conf.default.accept_source_route = 0
+</code>
+
+After changing a value inside ''/etc/sysctl.conf'', the command ''sysctl -p'' should be executed.
+
+In the configuration file above, ''net.ipv4.conf.default.accept_source_route'' is set to 0. This setting will correspond with a file in ''/proc/sys'' that contains the value 0. The file path is in the setting, with the ''/proc/sys'' string prepended:
+
+<code>
+$ pwd
+/proc/sys/net/ipv4/conf/default
+$ cat accept_source_route
+0
+</code>

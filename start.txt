@@ -1,0 +1,102 @@
+wiki.LearningUnix.org
+
+----
+Salt And Google Compute Cloud:\\
+[[Learning Objectives]]\\
+[[Salt]]\\
+[[Google Compute Cloud]]\\
+----
+
+[[Blog Ideas]]\\
+
+Courses:\\
+[[Python for Informatics]]\\
+[[MongoDB for Python]]\\
+
+[[Issues]]\\ 
+
+There is documentation here.\\ 
+--->[[Extracting Data]]\\ 
+
+--->[[Infrastructure Overview]]\\ 
+
+
+And topics of interest:\\ 
+---> [[BASH]]\\ 
+---> [[Linux Commands]]\\ 
+---> [[LPIC-101]]\\ 
+---> [[LPIC-102]] \\ 
+---> [[Redirection]] \\ 
+
+---> [[Ubuntu]] \\ 
+---> [[CentOS]] \\ 
+
+---> [[Linux Kernel]] \\ 
+---> [[Linux Boot Process]] \\ 
+
+---> [[Hardware Management]] \\ 
+---> [[Service Management]] \\ 
+---> [[Performance Monitoring]]\\ 
+---> [[Network Management]]\\ 
+
+---> [[AWS]]\\ 
+
+Package Management\\ 
+---> [[RPM]]\\ 
+---> [[DPKG]]\\ 
+---> [[YUM]]\\ 
+---> [[APT]]\\ 
+---> [[Zypper]]\\ 
+
+Linux Filesystem Hierarchy Standard\\ 
+---> [[/sys]]\\ 
+---> [[/proc]]\\ 
+---> [[/dev]]\\ 
+---> [[/tmp]]\\ 
+---> [[/var]]\\
+
+[[BASH Scripting]]\\ 
+---> [[Parameters]] (To be removed)\\ 
+---> [[BASH Parameters]]\\ 
+
+[[Chef]]\\ 
+---> [[Knife(Chef)]]\\ 
+---> [[Nodes(Chef)]]\\ 
+---> [[Attribute Precedence(Chef)]]\\ 
+
+SysAdmin:\\
+---> [[OneLiners]]\\ 
+---> [[Sed]]\\ 
+---> [[Awk]]\\ 
+---> [[Common Issues]]\\ 
+---> [[Curl]]\\ 
+---> [[File Systems]]\\ 
+---> [[Rsync]]\\ 
+---> [[iptables]]\\ 
+---> [[Web Security]]\\ 
+
+[[Python]]:\\ 
+---> [[RRDTool]]\\ 
+
+[[Ruby]]:\\ 
+---> [[Script Examples]]\\ 
+
+Lots of computer things.\\ 
+[[MySQL]]:\\
+
+ELK Stack:\\
+[[ElasticSearch]]:\\
+
+Drupal:\\
+[[Drupal Installation]]:\\
+
+OpenShift:\\
+[[OpenShift Commands]]:\\
+
+[[Statistics]]:\\
+
+---> [[Data Analysis]]:\\
+[[R (Language)]]\\
+[[R Scripts]]\\
+
+[[Reddit Project]]:\\

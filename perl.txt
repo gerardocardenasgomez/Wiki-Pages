@@ -1,0 +1,121 @@
+====Perl====
+
+Scalar variables contain a single value and start with a ''$'': ''$sentence = "The cat is in the hat."''
+
+Arrays start with ''@'': ''print @employee_array''
+
+
+''$_'' is the default variable.
+
+====Common Perl Options====
+
+''-e %%'<code>'%%'' -- Code execution. Perl will execute the code as a program.\\
+''-w'' -- Enable warning messages.\\
+''-n'' -- Enables an implicit input-reading loop; input records will be stored in ''$_''.\\
+''-p'' -- Records are stored in ''$_'' and then automatically printed.\\
+''-l'' -- Automatic line-end processing.\\
+''-0<digits>'' -- Sets the input record separator. E.g. ''-00'' for paragraph mode, ''-0777'' for file mode.\\
+
+===Option Clusters===
+
+Some options go well with others, and are commonly used. These "groups" of options are called option clusters. One example: ''-wnl''.
+
+====Special Variables====
+
+''$_'' -- When used with ''-n'' or ''-p'', this variable contains the most recently read input record. Analogous to ''awk''%%'%%s ''$0''.\\
+''$.'' -- With ''-n'' or ''-p'', this variable contains the number of the current input record. Analogous to ''awk''%%'%%s ''NR''.\\
+
+====Syntax====
+
+Concatenation is with the period (.): ''print "hello" . " " . "fred";''
+
+Scalar variables start with a dollar sign ($): ''$money = 50;''
+
+Initializing an array can be done by assigning a value to an element: ''$shopping_list[0] = ##'##milk##'##;''\\
+But you do not have to start with the 0th element: ''$shopping_list[4] = ##'##milk##'##;''\\
+
+Getting the last element:
+
+<code>
+chicagolug learningperl $: cat arrays.pl
+#!/usr/bin/env perl
+$shopping_cart[4] = 'milk';
+$last = $shopping_cart[$#shopping_cart];
+
+print $last, "\n";
+
+$last_num = $#shopping_cart;
+
+print $last_num, "\n";
+chicagolug learningperl $: ./arrays.pl
+milk
+4
+</code>
+
+Out-of-bounds subscripts will return ''undef''. However, assigning beyond the last element will extend the array; previously unassigned elements will return ''undef''.
+
+A short-cut for ''$shopping_cart[$#shopping_cart]'' is ''$shopping_cart[-1]'' because elements start wrapping around; ''$shopping_cart[-2]'' is the second-to-last element.
+
+Numeric comparison:\\
+''== != <= >= < >''\\
+String comparison:\\
+''eq ne lt gt le ge''\\
+
+Difference:
+
+<code>
+'12' lt '3' # true because the STRING '12' comes before the STRING '3'
+'12' < '3' # false because the NUMBER 12 is greater than the NUMBER 3
+</code>
+
+Use math symbols for maths, use words for words!
+
+===Simple if===
+
+<code>
+if ($x > 3) {
+    print "x is greater than 3\n";
+}
+else {
+    print "3 is greater than x\n";
+}
+</code>
+
+Boolean Logic:
+
+What is false? 0, empty string, '0', or ''undef''\\
+Everything else is true! Even a string with two zeroes: ''00''
+
+Using the not (!) operator: ''if (!$is_bigger) {...}''
+
+Simple user input:
+
+With the line-input function: ''$x = <STDIN>;''\\
+Combined with the ''chomp'' function: ''chomp($x = <STDIN>);'' (The parentheses are required for precedence reasons.)
+
+===Simple loops===
+
+While:
+
+<code>
+$count = 0;
+while ($count < 10) {
+    $count += 2;
+    print "count is now $count\n";
+}
+</code>
+
+===The undef Value===
+
+''undef'' is the initial value for all variables.\\
+With math, the ''undef'' value is 0.\\
+
+Detecting ''undef'':\\
+Use the ''defined()'' function which only returns false when the value is ''undef''. It will not return false for an empty string or a 0.
+
+====Fun With Arrays====
+
+The ''pop'' function will return the last element that was removed from an array.\\
+The ''shift'' function will also return the element that it removed from an array.\\
+The ''push'' function will return the total number of elements that are in an array *after* ''push'' appended data to the array.\\
+The ''unshift'' function will also return the total number of elements after ''unshift'' has added data.\\

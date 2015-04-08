@@ -1,0 +1,8 @@
+==Chef Resources==
+
+---> [[Attributes]]\\ 
+---> [[Metadata]]\\ 
+---> [[Recipes]]\\ 
+---> [[Resources]]\\ 
+---> [[Templates]]\\ 
+---> [[Definitions]]\\ 

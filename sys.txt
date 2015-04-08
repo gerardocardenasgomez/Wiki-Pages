@@ -1,0 +1,18 @@
+===The /sys directory===
+
+The ''/sys'' directory was added with the 2.6.X kernel updates. It is a mount point for the sysfs filesystem.
+
+The directory contains kernel objects which have been ported over into userspace so that they may be both observed but also modified directly.
+
+Devices can be found in ''/sys/block'', e.g.:
+<code>
+gerardo@desktop:~/Documents/stuff$ ls /sys/block/
+dm-0  loop0  loop1  loop2  loop3  loop4  loop5  loop6  loop7  sda  sdb  sr0
+gerardo@desktop:~/Documents/stuff$ ls /sys/block/sda/
+alignment_offset  capability  device             events        events_poll_msecs  holders   power  range      ro    sda2  sda4  slaves  subsystem  uevent
+bdi               dev         discard_alignment  events_async  ext_range          inflight  queue  removable  sda1  sda3  size  stat    trace
+gerardo@desktop:~/Documents/stuff$ ls /sys/block/sda/sda1
+alignment_offset  dev  discard_alignment  holders  inflight  partition  power  ro  size  start  stat  subsystem  trace  uevent
+</code> 
+
+The listing shows a device, ''/dev/sda'' which has four partitions. More details about the device can be gleaned from the other files in the ''/dev/sda'' directory.

@@ -1,0 +1,32 @@
+====History Expansion====
+
+===Event Designators===
+
+|! ||Start a history expansion|
+|!! ||Refers to previous command|
+|!n ||Refers to command ''n''|
+|!-n ||Refers to command line minus ''n''|
+|!string ||Refers to most recent command starting with string|
+|!?string? ||Refers to most recent command containing string|
+|%%^string1^string2%% ||Repeat last command replacing string1 with string2|
+|!# ||The entire command line typed so far|
+
+===Word Designators===
+
+|0 ||Zero'th word in a line|
+|n ||''n''th word in a line|
+|%%^%% ||First argument (second word)|
+|$ ||Last argument|
+|% ||Word matched by the most recent ?string match|
+|x-y ||Range of words from ''x'' to ''y'', ''-y'' is synonymous with ''0-y''|
+|x- ||Words from ''x'' to the second to last word|
+
+===Modifiers===
+
+|h ||Remove trailing pathname, leaving the head|
+|r ||Removes trailing suffix of the form ''.xxx''|
+|e ||Removes all but trailing suffix|
+|t ||Removes leading pathname components, leaving the tail|
+|p ||Prints resulting command but doesn't execute it|
+|g ||Quotes substituted word, escaping further substitutions|
+|s/string1/string2 ||Substitutes ''string1'' with ''string2''|

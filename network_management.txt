@@ -1,0 +1,34 @@
+====TCP Wrappers====
+
+Two configuration files, referred to as TCP Wrappers, provide host access control but only for services that are ''host_access'' aware. Some services include ''inetd'' and ''sshd''.
+
+The configuration files are in ''/etc/hosts.allow'' and ''/etc/hosts.deny''.
+
+Format: ''service:host'' or ''service:network''
+
+Many patterns are allowed, such as ''n.n.n.n/mm'' as well as files. See ''man hosts.allow'' for more information.
+
+===Accept/Deny process===
+
+  - First, ''/etc/hosts.allow'' is checked. If a match is found, network connection is accepted.
+  - Second, ''/etc/hosts.deny'' is checked. If a match is found, network connection is rejected.
+  - Third, upon finding no matches in either ''hosts*'' file, the network connection is accepted.
+
+===Denying access by default===
+
+Edit the ''/etc/hosts.deny'' file:
+<code>
+ALL:ALL
+</code>
+
+===Allowing host and service access===
+
+To allow ''sendmail'', edit the ''/etc/hosts.allow'' file:
+<code>
+sendmail:ALL
+</code>
+
+To allow a ''/24'' network:
+<code>
+sshd: 192.168.1.0/255.255.255.0
+</code>

@@ -1,0 +1,17 @@
+====Zypper====
+
+Zypper commands can be shortened, e.g. ''zypper up'' instead of ''zypper update''.
+
+Zypper also does partial name matching so that ''zypper search ap'' will return packages that match the string "ap." Regex can be used if the search term is inside single quotes.
+
+''ypper search'' searches in the package name in the description. But the ''--provides'' option can be used to search packages that contain a specific file.
+
+''zypper info'' provides information about the package. The ''-r'' option can be used to search a specific repository. ''zypper info --provides'' can be used to list the contents of the package and ''zypper info --requires'' will list the dependencies for the package.
+
+''zypper install'' will install packages. It can be used to install and remove packages simultaneously: ''zypper install vim -nano''
+
+To install a source package, use ''zypper si''.
+
+Patch management can also be done with zypper. ''zypper info -t patch <name>'' will list information about the patch. ''zypper list-patches'' lists available patches. Installing patches from bugzilla patch numbers is also possible with the ''zypper patch -b ###'' command. 
+
+Locking a package into a version is possible with ''zypper addlock <name>''.

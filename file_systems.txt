@@ -1,0 +1,73 @@
+====Ext2====
+
+System Extended File version 2 (Ext2) was released in 1992. Does not provide journaling. Previously the default file system on Linux.
+
+====Ext3====
+
+Improves on Ext2 by providing journaling and better file indexing. Uses linear indexes to track files, which makes it slower with more files.
+
+====Ext4====
+
+Better kernel module. Uses extents to allocate blocks. An extent is a group of blocks that can be addressed and administered as a single entity. The default size of an extent is 2MB. Ext4 is a very stable file system.
+
+====ReiserFS====
+
+Introduced by SUSE. Although not used often, it is a good file system for dealing with many small files. Still available in SLES12
+
+====Btrfs====
+
+Pronounced "butter fs" or "better fs." Developed in 2008 by Chris Mason. It is a Copy on Write (CoW) file system. Blocks that are altered are copied to new blocks, maintaining the old block as a different version.
+
+FIXME (Include more information on CoW)
+
+Also provides subvolumes. Lastly, snapshots are easy to create and revert to.
+
+====XFS====
+
+FIXME (Is XFS the default file system in SLES12?)
+
+Uses a database to maintain its metadata. It is a versatile file system as it can be tuned for small or large files.
+
+====UUID====
+
+Getting the UUID of all file-systems available: ''blkid''
+
+There is the UUID and also the Partition UUID which is created when you use GUIDs. Either can be used in ''/etc/fstab'':
+
+<code>
+UUID=
+PARTUUID=
+</code>
+
+====Partitions====
+
+Getting a list of available partitions:
+
+<code>
+ec2-user@ip-172-31-45-120:/mnt/logs> cat /proc/partitions 
+major minor  #blocks  name
+
+   3        0   10485760 hda
+   3        1   10484736 hda1
+ 202       16   10485760 xvdb
+ 202       17   10484719 xvdb1
+ 254        0    5242880 dm-0
+ 254        1    5140480 dm-1
+</code>
+
+====mkfs====
+
+Using the ''-L'' option in ''mkfs'' allows you to put a label on the new partition.
+
+''mkfs'' is just a front-end for ''mkfs.*'' commands, such as ''mkfs.ext4''.
+
+====fsck====
+
+''Btrfs'' partitions generally do not need file system checks.
+
+Useful options: -f to force a check, -y to answer yes to all questions, -c which checks bad blocks and marks them. The -b option allows for superblock backups. Usually, the 8193 block is used as the backup and so using the following command will enable a back up to the 8193 block:
+
+<code>
+fsck -b 8193 /dev/sda1
+</code>
+

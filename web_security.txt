@@ -1,0 +1,33 @@
+====SQL Injection====
+
+Protections:\\
+- Whitelisting: What input do we trust? Does it adhere to expected patterns?\\
+- Parameterise: Separate the query from the input data. Type cast each parameter.\\
+- Fine tune DB: Segment accounts for admin and public. Apply the "principle of least privilege."
+
+===SQL Injection in the Wild===
+
+- Sony Hack by LulzSec\\
+- PBS Hack: http://blog.imperva.com/2011/05/pbs-breached-how-hackers-probably-did-it.html
+
+====Authentication Hijacking====
+
+Types:\\
+
+==Auth Cookie Theft==
+
+- XSS attack\\
+- Physical access to the machine\\
+- Sniffing the cookie over the network\\
+
+==Session ID Theft==
+
+- Retrieving it from a log\\
+- Stealing it from a URL\\
+- Sent via email\\
+
+==Account Management Hack==
+
+- Brute force attacks\\
+- Exploiting a password reset\\
+- Discover weak credentials\\

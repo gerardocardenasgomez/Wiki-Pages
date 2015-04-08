@@ -1,0 +1,303 @@
+====Regular Expressions====
+
+====Regular Expressions with Perl====
+
+Using Perl in the command line for regular expressions is very handy.
+
+Use the i operator to ignore case:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /ship/' intro.txt
+[user@www1-server-org ~]$ perl -ne 'print if /ship/i' intro.txt
+How a Ship having passed the Line was driven by Storms to the cold
+</code>
+
+The -n option will loop through the input.
+
+The -e option will accept code from the command line.
+
+===Perl Directives===
+
+Perl offers some directives that can be useful, for example ''\u'' ''\l'' ''\U'' and ''\L''
+
+The directives work almost like tags in that one will continue to affect the rest of the text until another of the same directive "type" is encountered. For example:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if s/(South) (Pole)/\U\2 \l\1/i' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the POLE SOUTH;
+</code>
+
+The ''\U'' directive continues to take effect, resulting in an all caps "POLE SOUTH" string as opposed to "POLE South." To fix it, "close" the ''\U'' directive with ''\E'', the directive for "end of string":
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if s/(South) (Pole)/\U\2\E \u\1/i' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the POLE South;
+</code>
+
+===Perl with Unicode===
+
+The syntax for entering the Unicode number is: ''\x{<unicode>}''
+
+When using Perl for regular expressions, use the ''-C'' flag to enable Unicode support:
+
+<code>
+[user@www1-server-org regex]$ perl -ne "print if /\x{00E9}/" voltaire.txt
+[user@www1-server-org regex]$ perl -C -ne "print if /\x{00E9}/" voltaire.txt
+"Qu’est-ce que la tolérance? c’est l’apanage de l’humanité. Nous sommes tous pétris de faiblesses et d’erreurs; pardonnons-nous réciproquement nos sottises, c’est la première loi de la nature." —Voltaire (1694–1778)
+</code>
+
+The syntax to match control characters is with ''\c'': ''\x<control character>''
+
+<code>
+[user@www1-server-org regex]$ perl -C -ne "print if /\c[/" ascii.txt
+27. Escape
+</code>
+
+====Short Introduction====
+
+===Character set===
+
+As a range: ''[0-9]''\\
+As a limited set: ''[abcd]'' ''[xyz]''\\
+
+===Character shorthand===
+
+All Arabic numerals: ''\d'' \\
+Anything not a number: ''\D'' This will match whitespace, punctuation, quotation marks, etc.\\
+All word characters: ''\w'' This will not match things like punctuation, quotation marks, etc.\\
+None word character: ''\W'' Which is equal to ''[^_a-zA-Z0-9]''\\
+Spaces: ''\s''\\
+Non-spaces: ''\S''\\
+Null character: ''\0''\\
+Word boundary: ''\b''\\
+Non-word boundary: ''\B''\\
+
+
+Any character: ''.''
+
+===Capture Groups===
+
+Capturing is done with parentheses: ''(\d)''
+
+The backreference is accomplished with the ''\1'': ''(\d)\d\1'' The capture group is the first ''\d'', the next ''\d'' is its own character shorthand, and the ''\1'' references the capture group.
+
+<code>
+[user@www1-server-org ~]$ cat examples.txt
+123-123-3456
+(123)-123-3456
+
+808-123-4562
+773-123-4567
+</code>
+
+Capture the 8 digit for the area code:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(\d)\d\1-\d\d\d-\d\d\d\d/' examples.txt
+808-123-4562
+</code>
+
+Capture the 2 digit:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /\d\d\d-\d(\d)\d-\d\d\d\1/' examples.txt
+808-123-4562
+</code>
+
+===Quantifiers===
+
+Curly braces specify exactly how many occurrences should match: ''\d{3}''\\
+The question mark (?) matches zero occurrences or one: ''\d{3}-?''\\
+The plus sign (+) matches one or more: ''\d{3}-\d+''\\
+The asterisk (*) matches none or more: ''\d{3}-\d*''\\
+
+Fun with quantifiers:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(\d{3,4}[.-]?){2}\d{4}/' examples.txt
+123-123-3456
+808-123-4562
+773-123-4567
+0123456789 +-.,!@#$%^&*();\/|<>"'
+555.123.4567    +1-(800)-555-2468
+[user@www1-server-org ~]$ perl -ne 'print if /(\d{3,4}[.-]+){2}\d{4}/' examples.txt
+123-123-3456
+808-123-4562
+773-123-4567
+555.123.4567    +1-(800)-555-2468
+</code>
+
+The first example uses the ''?'' quantifier, which makes the period and the dash optional. The ''+'' quantifier in the second example means one or more of the characters in the set will match. 
+
+===Negation===
+
+Using ''\D'' will match anything that's not a numeral, but the ''^'' can be used for negation: ''[^\d]'' or ''[^0-9]''
+
+===Assertions===
+
+Assertions mark boundaries but will not consume characters. Also known as zero-width assertions. They will match locations in a string, but not necessarily characters.
+
+Match beginning of a line: ''^''\\
+Match end of a line or string: ''$''\\
+
+Example:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /^How.*Country\.$/' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the South Pole; and how from thence she made her course to the tropical Latitude of the Great Pacific Ocean; and of the strange things that befell; and in what manner the Ancyent Marinere came back to his own Country.
+</code>
+
+The ''^How'' regex matches How at the beginning of a string, ''.''* matches any series of characters, ''Country\.'' will match Country followed by a literal period (.), and ''$'' will match ''Country\.'' at the end of a string.
+
+Example of ''\B'':
+
+''\B'' will match non-word boundaries. For example, matching "lose" only when it's within a word:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /\Blose\B/' rime.txt
+       "And closes from behind.
+     The Boat came closer to the Ship,
+</code>
+
+===Quoting groups of characters as literals===
+
+To use characters like ''^*$'' as literals without having to escape each one individually, use ''\Q \E'':
+
+<code>
+\Q$?^\E
+</code>
+
+====Quick Examples====
+
+===Match a word that starts and ends with certain letters===
+
+In this example, the regular expression is going to match a STRING that starts with the w letter and ends with an e. It will match a string because the character set is including spaces:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /\bW.*e\b/i' intro.txt
+How a Ship having passed the Line was driven by Storms to the cold
+things that befell; and in what manner the Ancyent Marinere came back to
+4        "Now wherefore stoppest me?
+</code>
+
+This can be fixed using the ''\S'' which will match non-spaces:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /\bW\S*e\b/i' intro.txt
+4        "Now wherefore stoppest me?
+</code>
+
+===Match a string that does not contain a word====
+
+Use ''^(?!management).*$'' which matches the start of a line or ''^((?!management).)*$'' which matches the word at any point in the string.
+
+Differences:
+
+<code>
+[user@www1-server-org ~]$ cat redt.txt
+management-server-org
+www1-server-org
+test-server-org
+linux-management-server-org
+
+
+[user@www1-server-org ~]$ perl -ne 'print if /^((?!management).)*$/' redt.txt
+www1-server-org
+test-server-org
+
+[user@www1-server-org ~]$ perl -ne 'print if /^(?!management).*$/' redt.txt
+www1-server-org
+test-server-org
+linux-management-server-org
+</code>
+
+Explanation of ''^((?!management).)*$'':
+
+''^'' matches the beginning of a string or a line if the ''m'' flag is enabled.\\
+The outer set of parenthesis is the capturing group.\\
+Next, ''(?! )'' is the negative lookahead. The positive lookahead takes the form of ''(?= )''.\\
+The period matches any character except line breaks.\\
+Star (asterisk) matches 0 or more of the preceding token.\\
+''$'' matches the end of a string or line if the ''m'' flag is enabled.
+
+====Grouping and Alternation====
+
+Grouping is done with parentheses. In this example, three different variations of "the" are grouped together:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(the|THE|The)/' rime.txt
+THE RIME OF THE ANCYENT MARINERE, IN SEVEN PARTS.
+</code>
+
+The ''|'' operator is used for alternation. 
+
+====Specifying Options====
+
+Options use the format ''(?<option(s)>)''. Or alternatively, place the option after the last pattern delimiter: ''/the/i''.
+
+Instead of grouping different variations of "the" like so: ''(the|The|THE)'', it is much easier to instead use the ''ignore case'' option:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(?i)the/' rime.txt
+THE RIME OF THE ANCYENT MARINERE, IN SEVEN PARTS.
+How a Ship having passed the Line was driven by Storms to the cold Country towards the South Pole; and how from thence she made her course to the tropical Latitude of the Great Pacific Ocean; and of the strange things that befell; and in what manner the Ancyent Marinere came back to his own Country.
+</code>
+
+====Sub-patterns====
+
+In the ''(the|The|THE)'' example, the three different "sub-patterns" are independent of each other. It is possible to create sub-patterns that are depended on other sub-patterns:
+
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(T|t)he(ir|e|se)/' rime.txt
+     "Now get thee hence, thou grey-beard Loon!
+       "Or my Staff shall make thee skip."
+     Nodding their heads before her goes
+</code>
+
+But sub-patterns do not have to be grouped in order to work:
+ 
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /\bswe[e|a]t\b/i' rime.txt
+       But no sweet Bird did follow
+     The cold sweat melted from their limbs,
+</code>
+ 
+The previous example used a character class as a sub-pattern.
+ 
+====Capture Groups and Back-references====
+ 
+Content that is grouped into a pair of parentheses is temporarily stored in memory and is accessible for later retrieval. The format to retrieve the information is ''\n'' or ''$n'', starting with 1. So in order to retrieve the 3rd capture group, you would use ''\3'' or ''$3''. Both formats do not always work, e.g. ''sed'' only accepts ''\n'' and ''perl'' will accept both.
+ 
+Example:
+ 
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if /(South) (Pole)/i' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the South Pole;
+[user@www1-server-org ~]$ perl -ne 'print if s/(South) (Pole)/\2 \1/i' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the Pole South;
+</code>
+ 
+===Named Groups===
+ 
+Accessing a group by integer can make it more difficult to read a regular expression. It is possible to name a group and reference it using the name instead: ''/(?<first>South) (?<second>Pole)/$+{second} $+{first}/'':
+ 
+<code>
+[user@www1-server-org ~]$ perl -ne 'print if s/(?<first>South) (?<second>Pole)/$+{second} $+{first}/i' rime.txt
+How a Ship having passed the Line was driven by Storms to the cold Country towards the Pole South;
+ </code>
+ 
+====Non-Capturing Groups====
+ 
+When a group will not be referenced later, it is better to create a non-capturing group. This will mean the group is not stored in memory for later retrieval and it can result in some performance increase. The format is: ''(?:<pattern>)''
+ 
+ 
+Examples:
+ 
+<code>
+(?:the|The|THE)
+(?i:the)
+</code>
+
+====Atomic Groups====
+
+When performance is absolutely crucial, it is possible to turn off backtracking for a group (and also entirely): ''(?<the)''

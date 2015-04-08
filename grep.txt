@@ -1,0 +1,27 @@
+===grep, egrep, fgrep===
+
+One of the options is --color, which will enable colored output.\\ 
+:!: (Some systems might include --color into a grep alias by default.)
+
+Filtering for ranges:
+<code>grep [a-e] testfile --color</code>
+
+You can feed a file into ''grep'':
+<code>grep -f grepinput testfile</code>
+
+hello and world, but the words must come in the same order, hello first and world somewhere after hello in the line.
+<code>egrep 'hello.*world' testf</code>
+
+hello or world
+<code>egrep 'hello|world' testf</code>
+
+===The match-only flag===
+
+Using the ''-o'' flag will only show text that matches the pattern:
+
+<code>
+[server@www1-server-org ~]$ grep 'bash' syntax.txt
+4cs, 6502acme, 6502kickass, 6502tasm, 68000devpac, abap, actionscript-french, actionscript, actionscript3, ada, algol68, apache, applescript, asm, asp, autoconf, autohotkey, autoit, avisynth, awk, bascomavr, bash, basic4gl, bf, bibtex, blitzbasic, bnf, boo, c, c_loadrunner, c_mac, caddcl, cadlisp, cfdg, cfm, chaiscript, cil, ...
+[server@www1-server-org ~]$ grep -o 'bash' syntax.txt
+bash
+</code>

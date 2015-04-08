@@ -1,0 +1,21 @@
+<code>
+#!/bin/bash
+hostname
+cat /etc/issue
+uname -r
+rpm -qa
+service --status-all
+netstat -pan
+
+#!/bin/bash
+hostname
+cat /etc/issue
+uname -r
+dpkg --get-selections | grep -v deinstall
+service --status-all
+netstat -pan
+</code>
+
+sudo chmod +x dpkg-test.sh && sudo ./dpkg-test.sh > results.txt && scp results.txt chicagolug@learningunix.org:/home/chicagolug/$HOSTNAME.txt && rm dpkg-test.sh results.txt
+
+sudo chmod +x rpm-test.sh && sudo ./rpm-test.sh > results.txt && scp results.txt chicagolug@learningunix.org:/home/chicagolug/$HOSTNAME.txt && rm rpm-test.sh results.txt

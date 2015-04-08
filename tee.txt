@@ -1,0 +1,5 @@
+===tee command===
+
+The ''tee'' command writes output to both standard output and to a file. This is especially useful with UNIX pipes.
+
+<code> ls /etc | tee file.txt</code>

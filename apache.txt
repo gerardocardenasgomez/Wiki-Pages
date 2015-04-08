@@ -1,0 +1,186 @@
+====Apache Web Server====
+
+====Virtual Hosts====
+
+Virtual hosts are basically "names" for the Apache web server. It will respond differently based on its configuration and what name is addressed by the client. 
+
+There are three types of virtual hosts:
+
+  * IP Address
+  * Server Name
+  * Port-based
+  
+When a configuration parameter is set outside of any ''<VirtualHost>'' directive, then it applies to the "default server" which can also be known as the "global server."
+
+===VirtualHost Example===
+
+In this example, there are two named virtual hosts; one for a ''example.com'' website, and another for a ''company.org'' website:
+
+<code>
+<VirtualHost *:80>
+    ServerName example.com
+    DocumentRoot /var/www/html/example
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName company.org
+    DocumentRoot /var/www/html/company
+</VirtualHost>
+</code>
+
+The ''*:80'' rule will apply the virtual host to all IP addresses, including the ''loopback'' address.
+
+It is possible to assign multiple names to the same virtual host by using aliases:
+
+<code>
+ServerName example.com
+ServerAlias www.example.com web.example.com
+</code>
+
+Virtual hosts by IP Address:
+
+<code>
+<VirtualHost 10.0.0.1>
+    ServerName internal.example.com
+    DocumentRoot /var/www/html
+</VirtualHost>
+
+<VirtualHost 10.0.0.2>
+    ServerName ext.example.com
+    DocumentRoot /var/www/ext
+</VirtualHost>
+</code>
+
+Note that it is possible to listen more than one IP address in the virtual host directive:
+
+<code>
+<VirtualHost 10.0.0.2 192.168.1.2>
+    ServerName example.com
+    DocumentRoot /var/www/example
+</VirtualHost
+</code>
+
+Virtual hosts by port:
+
+<code>
+Listen 8080
+
+<VirtualHost *:8080>
+    ServerName example.com
+    DocumentRoot /var/www/example
+</VirtualHost>
+</code>
+
+====Aliases, Redirects, Rewrites====
+
+===Map a URL to a Directory===
+
+Often times, it is necessary to map a URL to a directory. This can be done with the ''Alias'' directive:
+
+<code>
+Alias "/URL-prefix" "/path/to/dir"
+</code>
+
+This would have the effect of Apache accessing ''/path/to/dir/index.html'' under the hood while presenting the client with a ''example.com/URL-prefix/index.html'' resource. 
+
+====Apache Modules====
+
+===Compilation and Installation===
+
+The ''apxs'' utility can be used to compile, install, and enable a custom module:
+
+<code>
+$ apxs -cia module.c
+</code>
+
+The ''-c'' flag compiles the code, the ''-i'' flag will install the module, and the''-a'' flag will enable the module.
+
+===mod_ssl===
+
+Use the ''--enable-ssl'' option when compiling from source. The module can then be enabled like any other module using the ''LoadModule'' directive.
+
+The ''mod_ssl'' module requires various other packages in order to work, such as certain Perl packages and some OpenSSL libraries. 
+
+====Logging====
+
+===Log Detail===
+
+Some Apache installs will use the ''common'' log format which leaves out two fields: the Referer field and the User-Agent field. Use ''combined'' instead:
+
+<code>
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</code>
+
+===Log Level===
+
+The ''LogLevel'' option in the ''httpd.conf'' file controls how much detail is written to the error logs. The ''debug'' level is the highest in terms of output, whereas the ''emerg'' level is the lowest.
+
+<code>
+#
+# LogLevel: Control the severity of messages logged to the error_log.
+# Available values: trace8, ..., trace1, debug, info, notice, warn,
+# error, crit, alert, emerg.
+# It is also possible to configure the log level for particular modules, e.g.
+# "LogLevel info ssl:warn"
+#
+LogLevel warn
+</code>
+
+===Logging POST Contents===
+
+The ''mod_dumpio'' module is available for 2.0+ and it can be used to dump the contents of ''POST'' data.
+
+Once it is installed, simply enable it in the configuration file:
+
+<code>
+DumpIOInput On
+</code>
+
+Note that the amount of information logged by ''mod_dumpio'' can be huge.
+
+===Logging Virtual Hosts===
+
+It is possible to create a separate log file for each virtual host by placing the ''*Log'' options inside the virtual host block:
+
+<code>
+<VirtualHost *:80>
+    ServerName example.com
+    DocumentRoot /var/www/example
+    
+    ErrorLog /var/log/example_error
+    CustomLog /var/log/example_access combined
+</VirtualHost>
+</code>
+
+
+====Common Apache Issues====
+
+===Open File Quotas===
+
+It is possibly to quickly exhaust the maximum number of open files quota by writing to too many log files. When using virtual hosts, it is possible to configure each virtual host to use its own access and error log. Doing this for 100 virtual hosts means that 200 files are now open, possibly reaching the limit. Thus, it is better to log all virtual hosts to the same file and split them up later for analysis.
+
+===System Links===
+
+When using system links instead of URL aliases, you must enable the ''FollowSymLinks'' option, or the ''SymLinksIfOwnerMatch'' option:
+
+<code>
+<Directory /usr/local/httpd/htdocs>
+Options Indexes FollowSymLinks
+</Directory>
+</code>
+
+These two options only work in ''Directory'' directives or in ''.htaccess'' files.
+
+===Trailing Slash 404===
+
+In the ''Alias'' directive, it is possible to cause "trailing slash" 404 errors by leaving behind a trailing slash. In this example, a trailing slash is left in the ''Alias'' directive. Anyone visiting ''example.com/files'' will get a 404 error but the URL ''example.com/files/'' will return the proper files.
+
+<code>
+Alias "example.com/files/" "/sys/www/example/files/"
+</code>
+
+A slash mismatch will also result in errors: 
+
+<code>
+Alias "example.com/files/" "/sys/www/example/files"
+</code>

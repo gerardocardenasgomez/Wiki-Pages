@@ -1,0 +1,6 @@
+========Pathname Expansion AKA Globbing========
+
+Asterisk (*) matches any string, including an empty string. This will match any files, except those starting with a period.\\ 
+Question Mark (?) matches any single character. This will not match a single dot but will match any file whose name is a single character.\\ 
+[] will match any of the enclosed characters. This can be a set of individual characters, a range of characters, a range of numbers, or any mixture.
+

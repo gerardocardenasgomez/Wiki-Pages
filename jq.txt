@@ -1,0 +1,98 @@
+====jq - Command-line JSON processor====
+
+Getting all data from a file:
+<code>
+gerardo@gerardo:~/Scripts$ jq '.' results.txt 
+{
+  "_shards": {
+    "failed": 0,
+    "successful": 0,
+    "total": 0
+  },
+  "count": 0
+}
+</code>
+
+Getting a specific value:
+
+<code>
+gerardo@gerardo:~/Scripts$ jq .count results.txt 
+0
+</code>
+
+Chaining queries with ''|'':
+<code>
+gerardo@gerardo:~/Scripts$ jq '.' es-result.txt 
+{
+  "hits": {
+    "hits": [
+      {
+        "_source": {
+          "interests": [
+            "music",
+            "sports"
+          ],
+          "about": "I love to go rock climbing",
+          "age": 25,
+          "last_name": "Smith",
+          "first_name": "John"
+        },
+        "_score": 1,
+        "_id": "1",
+        "_type": "employee",
+        "_index": "megacorp"
+      },
+      {
+        "_source": {
+          "interests": [
+            "music"
+          ],
+          "about": "I like to collect rock albums",
+          "age": 32,
+          "last_name": "Smith",
+          "first_name": "Jane"
+        },
+        "_score": 1,
+        "_id": "2",
+        "_type": "employee",
+        "_index": "megacorp"
+      },
+      {
+        "_source": {
+          "interests": [
+            "forestry"
+          ],
+          "about": "I like to build cabinets",
+          "age": 35,
+          "last_name": "Fir",
+          "first_name": "Douglas"
+        },
+        "_score": 1,
+        "_id": "3",
+        "_type": "employee",
+        "_index": "megacorp"
+      }
+    ],
+    "max_score": 1,
+    "total": 3
+  },
+  "_shards": {
+    "failed": 0,
+    "successful": 5,
+    "total": 5
+  },
+  "timed_out": false,
+  "took": 26
+}
+gerardo@gerardo:~/Scripts$ jq '.hits | .hits | .[0] | ._score' es-result.txt 
+1
+</code>
+
+Replacing ''.[0]'' with ''.[]'' would return a list of all the scores:
+
+<code>
+gerardo@gerardo:~/Scripts$ jq '.hits | .hits | .[] | ._score' es-result.txt 
+1
+1
+1
+</code>

@@ -1,0 +1,42 @@
+A large, but disjointed, hash structure.
+
+Set of priorities:\\ 
+Default\\ 
+Normal\\ 
+Override\\ 
+
+The order in which data is obtained:\\ 
+Cookbook attribute files -> environment -> role -> node config data stored on the Chef server
+
+Attribute files are loaded in alphabetical order.
+
+Multiple Platform Support:\\ 
+<code>
+default[:users]['root'][:group] = value_for_platform(
+  "openbsd"   => { "default" => "wheel" },
+  "freebsd"   => { "default" => "wheel" },
+  "ubuntu"    => { "default" => "admin" },
+  "default"   => "root"
+)
+</code>
+
+==include_attribute==
+''include_attribute'' is used to load external attributes. Before using them, make sure to place the other cookbooks as a dependency.
+
+<code>
+include_attribute "apache"
+default['mywebapp']['port'] = node['apache']['port']
+</code>
+
+That will load attributes from the ''default.rb'' file. For other files, specify them as such:
+<code>
+include_attribute "postgresql::client"
+</code>
+
+That code would load attributes from the client.rb file in the postgresql cookbook.
+
+==Getting A Node's Attributes==
+''$ knife node show -l nodename''
+
+Any attribute can then be used:
+''<%= node["languages"]["python"]["version"] %>''

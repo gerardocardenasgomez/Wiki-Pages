@@ -1,0 +1,14 @@
+===Redirection===
+
+The %%>%% operator redirects output to a file. If the file exists, it is overwritten.
+The %%>>%% operator also redirects output to a file but if the file exists, it appends the output instead.
+
+|**Redirection**||**Result**|
+|1> filename||Redirect standard out to a new file.|
+|%%1>>%% filename||Append standard out to an existing file.|
+|2> filename||Redirect standard error to a new file.|
+|%%2>>%% filename||Append standard error to an existing file.|
+|&> filename||Redirect standard out and standard error to a new file.|
+|%%&>>%% filename||Append standard out and standard error to an existing file.|
+|> filename 2>&1||Redirect standard out and standard error to a new file.|
+|%%>>%% filename 2>&1||Append standard out and standard error to a new file.|

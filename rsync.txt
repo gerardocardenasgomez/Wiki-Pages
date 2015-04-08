@@ -1,0 +1,26 @@
+====Rsync====
+
+The trailing slash in ''rsync'' commands is important! The trailing slash will copy the contents of the directory whereas omitting the trailing slash will copy the directory itself, and its contents. The difference might be between ''/home/user/backup/backup/files'' and ''/home/user/backup/files''.
+
+Important options:
+
+''-a'', ''--archive'': This will preserve most file characteristics such as permissions, ownership, modification times, etc.\\
+''-r'', ''--recursive'': Copies all directories and their contents.\\
+''-n'', ''--dry-run'': Does not actually copy anything but displays files that would be copied and statistics about the transfer.\\
+''-v'', ''--verbose'': Display file names and transfer statistics.\\
+''--checksum'': Compute checksums to ensure file integrity.\\
+''--backup'': Does not overwrite files but renames the existing files.\\
+''--update'': Updates the files only.
+''-az'': Performs compression on the files before transferring them.
+
+==Excluding:==
+
+Use the ''--exclude='' option. Or place the patterns in a file and use ''--exclude-from=<file>''
+
+Excluding specific files:
+<code>rsync -a --exclude=/src/.git src host:</code>
+
+But note that the leading slash is not the root directory but the base directory of the transfer.
+
+Use a trailing slash to exclude a directory: ''--exclude=item/''\\
+Or use a pattern: ''--exclude=.git''\\

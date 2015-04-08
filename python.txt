@@ -1,0 +1,60 @@
+====Python====
+
+====The Zen of Python====
+
+  * Beautiful is better than ugly
+  * Explicit is better than implicit
+  * Simple is better than complex
+  * Complex is better than complicated
+    * Complex: Made up of many interconnected parts
+	* Complicated: So complex as to be difficult to understand
+  * Flat is better than nested
+  * Readability counts
+  * Special rules aren't special enough to break the rules
+  * Practicality beats purity
+  * Errors should never pass silently
+  * There should be one obvious way to do it
+  * If the implementation is hard to explain, it's a bad idea
+  * Don't repeat yourself
+  * 
+
+====Quick Examples====
+
+===Opening files in binary mode for Python 2.7 and Python 3====
+
+<code>
+with open('/tmp/random.bin', 'wb') as f:
+    f.write(os.urandom(10))
+</code>
+
+===Using boolean expressions in place of if statements===
+
+<code>
+>>> cars = []
+>>> num_of_cars = cars or 0
+>>> num_of_cars
+0
+</code>
+
+===Enumerator vs range===
+
+<code>
+for i in range(len(flavor_list)):
+    flavor = flavor_list[i]
+    print('%d: %s' % (i + 1, flavor))
+    
+for i, flavor in enumerate(flavor_list):
+    print('%d: %s' % (i + 1, flavor))
+    
+for i, flavor in enumerate(flavor_list, 1):
+    print('%d: %s' % (i, flavor))
+</code>
+
+===Testing for numbers===
+
+<code>
+try:
+    val = int(num)
+except:
+    print("That ain't no number I ever heard of")
+</code>

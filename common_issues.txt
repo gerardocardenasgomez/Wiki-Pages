@@ -1,0 +1,137 @@
+====Checkinstall====
+When installing software from source, the installation may spread files throughout the system that are then difficult to remove later on. It's possible to use ''make uninstall'' to remove the software but that is not always included. A better way to do it is to use ''checkinstall'' instead of ''make install'' as this will track the files installed by ''make install'' and it will generate a Deb package so that the package manager can manage the software.
+
+https://help.ubuntu.com/community/CheckInstall
+
+For RPM, first use ''rpmdev-setuptree'' to create a directory tree for the package and then ''rpmbuild'' to complete the install.
+
+====Visudo Default Editor====
+Set the following in the sudoers file:
+
+<code>
+Defaults editor=/path/to/editor
+</code>
+
+====Password-less Sudo====
+Add the NOPASSWD option to the sudoers file:
+
+<code>
+excom   ALL=(ALL:ALL) NOPASSWD: ALL
+</code>
+
+====503 Server Error with Django and Apache====
+
+http://stackoverflow.com/questions/5841531/django-mod-wsgi-apache-importerror-at-no-module-named-djproj-urls
+
+Adding the following:
+
+<code>
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+</code>
+
+to the wsgi.py file and it should work. FIXME Check for potential security issues.
+
+====pkg-config====
+
+''pkg-config'' can be used to list the required libraries for a package:
+<code>
+pkg-config --libs openssl
+pkg-config --list-all
+</code>
+
+By default, ''pkg-config'' looks in the ''lib/pkgconfig'' directory inside its installation prefix directory, e.g. ''/usr/local/lib/pkgconfig''.\\
+
+The best way to add configuration files to ''pkg-config'' is to create symbolic links inside the ''lib/pkgconfig'' directory. 
+
+====Removing Spaces from Directory Names====
+
+Use the ''rename'' Perl script which may be pre-installed:
+<code>
+find -name "* *" -type d | rename 's/ /_/g'
+find -name "* *" -type f | rename 's/ /_/g'
+</code>
+
+====Getting the Absolute Pathname of a File====
+
+Use the ''readlink'' program:
+
+<code>
+user@server:/etc/mysql$ readlink -f my.cnf
+/etc/mysql/my.cnf
+</code>
+
+====Filesystem Issues====
+
+Warning: ''vim'' creates .swp files for files opened, which can cause disk usage problems.
+
+===Check for Reserved Block Counts===
+
+<code>
+$ sudo tune2fs -l /dev/sda1 | grep -i "block count"
+Block count:              2620928
+Reserved block count:     131046
+</code>
+
+===Disk Usage by Filesystem and Directory===
+
+<code>
+$ sudo du -ckx | sort -n
+4       ./ConsoleKit
+4       ./ntpstats
+8       ./salt
+24      ./prelink
+3104    ./sa
+10140   ./audit
+14056   .
+14056   total
+</code>
+
+===Checking inode Usage===
+
+<code>
+$ df -i
+Filesystem     Inodes IUsed  IFree IUse% Mounted on
+/dev/sda1      655360 43018 612342    7% /
+tmpfs           75575     1  75574    1% /dev/shm
+</code>
+
+===Corrupt Filesystem===
+
+''-y'' to answer yes automatically and ''-C'' to show a progress bar.
+
+<code>
+fsck -y -C /dev/sda5
+</code>
+
+==="Cannot open your terminal" issues when using screen===
+
+This is explained in this ServerFault page: http://serverfault.com/questions/255521/why-does-redirecting-script-to-dev-null-allow-screen-to-work-while-sued-a/255531#255531
+
+>This has nothing to do with screen actually. Why this works is invoking script has a side effect of creating a pseudo-terminal for you at /dev/pts/X. This way you don't have to do it yourself, and screen won't have permission issues - if you su from user A to user B, by directly invoking screen you try to grab possession of user A's pseudo-terminal. This won't succeed unless you're root. That's why you see the error message.
+
+====Some network services, e.g. SSH, refuse connection attempts====
+
+Check TCP Wrappers! Configuration files are in ''/etc/hosts.allow'' and ''/etc/hosts.deny''. Error messages will be:
+
+PuTTy:
+<code>
+Server unexpectedly closed network connection.
+</code>
+
+''/var/log/secure'' log:
+<code>
+Feb 23 20:31:31 localhost sshd[1197]: refused connect from 192.168.1.141 (192.168.1.141)
+</code>
+
+====git push returns 403 error====
+
+Go to the ''.git/config'' file, and change the ''url='' setting from ''url=%%https://github.com/<git user>/<project>.git%%'' to:
+
+<code>
+[remote "origin"]
+    fetch = +refs/heads/*:refs/remotes/origin/*
+    url = https://<git user>@github.com/<git user>/<project>.git
+</code>

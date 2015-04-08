@@ -1,0 +1,101 @@
+====Advanced Package Tool (APT)====
+
+A suite of commands that include ''apt-get'', ''apt-cache'', and ''apt-key''.
+
+===sources.list===
+
+The file in ''/etc/apt/sources.list'' contains a list of repositories. Running ''apt-get update'' results in the list of packages and package updates being refreshed to match the repos in ''/etc/apt/sources.list''.
+
+===Package Searches===
+
+''apt-cache search <keyword>'' will search the package database for packages that match they keyword. This command does not require elevated privileges. 
+
+===Installing Packages===
+
+''apt-get install <pkg name>'' installs the package or packages. ''apt'' now uses GPG to verify packages that it installs, although this can be skipped by using the ''--allow-unauthenticated'' option. GPG files are kept in ''/var/lib/apt/lists/'' and these files can be imported manually and packages can be checked manually against verified keys.
+
+''SecureApt'' reference: https://wiki.debian.org/SecureApt
+
+The ''-d'' option can be used to download a package but not install it. Packages are downloaded to ''/var/cache/apt/archives/''. The downloaded package can then be transferred to another system which might not have internet access.
+
+<code>
+$ sudo apt-get -d install package
+</code>
+
+===Package Information===
+
+The ''apt-cache show <pkg name>'' command can be used to display information about a package.
+
+<code>
+gerardo apt $: apt-cache show apache2
+Package: apache2
+Priority: optional
+Section: web
+Installed-Size: 462
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Original-Maintainer: Debian Apache Maintainers <debian-apache@lists.debian.org>
+Architecture: amd64
+Version: 2.4.7-1ubuntu4.1
+Replaces: apache2.2-common
+Depends: lsb-base, procps, perl, mime-support, apache2-bin (= 2.4.7-1ubuntu4.1), apache2-data (= 2.4.7-1ubuntu4.1)
+...
+</code>
+
+Listing package stats is done with the ''apt-cache stats'' command:
+
+<code>
+gerardo apt $: sudo apt-cache stats
+Total package names: 59422 (1188 k)
+Total package structures: 100787 (5644 k)
+  Normal packages: 69491
+  Pure virtual packages: 1435
+  Single virtual packages: 8427
+  Mixed virtual packages: 1905
+  Missing: 19529
+Total distinct versions: 78738 (5669 k)
+Total distinct descriptions: 91653 (2200 k)
+Total dependencies: 616770 (17.3 M)
+Total ver/file relations: 82349 (1976 k)
+Total Desc/File relations: 91653 (2200 k)
+Total Provides mappings: 18197 (364 k)
+Total globbed strings: 164 (2120 )
+Total dependency version space: 3054 k
+Total slack space: 38.9 k
+Total space accounted for: 31.0 M
+</code>
+
+Listing package dependencies is done with the ''apt-cache depends'' command:
+
+<code>
+chicagolug apt $: apt-cache depends apache2
+apache2
+  Depends: lsb-base
+  Depends: procps
+    procps:i386
+  Depends: perl
+  Depends: mime-support
+  Depends: apache2-bin
+  Depends: apache2-data
+  Suggests: <www-browser>
+    arora
+    dillo
+    dwb
+    lynx-cur:i386
+    lynx-cur
+    netsurf
+    netsurf-fb
+    netsurf-gtk
+    uzbl
+    chimera2
+...
+</code>
+
+===Package Upgrades===
+
+Updating installed packages to a newer version is done with the ''apt-get upgrade'' command. This can sometimes result in new packages being installed or packages being removed depending on the updates available. ''apt-get autoclean'' removed partially downloaded packages. Broken packages and unmet dependencies can be fixed with the ''apt-get -f install'' command.
+
+Running ''apt-get install <pkg name>'' on a package that is installed but not up-to-date will result in ''apt'' upgrading the package.
+
+===Version Information===
+
+''apt-config -v'' prints ''apt'' version information.

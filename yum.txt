@@ -1,0 +1,30 @@
+===yum==
+Yellowdog Updater, Modified
+
+''yum'' is dependent on repositories (libraries of packages).
+
+''yum'' was created as a solution to the problem of "dependency hell. ''up2date'' was the precursor to ''yum''. ''yum'' was included into RHEL starting with RHEL5.
+
+Configuration of repositories is done in ''/etc/yum.repos.d''.
+
+Some configuration files for ''yum'':\\ 
+''/etc/yum.conf''\\ 
+''/etc/yum/''\\ 
+''/etc/yum.repos.d''\\ 
+
+==Run the ''man yum.conf'' command for help with configuring the repos!==
+
+|yum list||Lists all packages, installed or available|
+|yum info||Lists the package info, same as ''rpm-qi''|
+|yum install pkg||Install or update pkg|
+|yum update pkg||Update the package or without a pkg argument, the system|
+|yum erase pkg||Removes the pkg|
+|yum list updates||Lists available updates, same as ''yum check-update''|
+|yum whatprovides||Helps search for a package that contains a command|
+|yum grouplist||Lists groups of packages that are installed or available|
+|yum groupinfo "Remote Desktop Clients"||Displays more information about the group|
+|yum groupinstall "Print Server" -x paps -x gutenprint-cups||The -x flag excludes packages from the group|
+|yum groupremove||Removes all packages in the group--exclusions are not possible|
+|yumdownloader||Downloads the package file to the local system|
+
+

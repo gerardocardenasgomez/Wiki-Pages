@@ -1,0 +1,17 @@
+====Amazon Web Services====
+
+====AWS CLI====
+
+Default configuration file: ''~/.aws/config''
+
+Example:
+<code>
+[default]
+output = json
+region = us-east-1
+</code>
+
+
+====AWS Regions====
+
+Region and Endpoint names: http://docs.aws.amazon.com/general/latest/gr/rande.html

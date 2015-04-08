@@ -1,0 +1,247 @@
+====Main Commands====
+---> [[grep]]\\ 
+---> [[sed]]\\ 
+---> [[tee]]\\ 
+---> [[History Expansion]]\\ 
+
+====Using tr====
+
+''tr'' is for translating or deleting characters. It can be used to delete newlines, for example:
+<code>tr -d '\n'</code>
+
+Uppercase to lowercase:
+<code>
+tr '[:upper:]' '[:lower:]'< redt.txt
+</code>
+
+Output is set to ''stdout''
+
+In this example, ''tr'' is used to replace the dashes with an empty space ('' '') so that the ''perl'' regular expression can work properly:
+
+<code>
+[server@www1-server-org ~]$ cat redt.txt
+management-server-org
+www1-server-org
+test-server-org
+linux-management-server-org
+
+[server@www1-server-org ~]$ tr '-' ' ' < redt.txt | perl -ne 'print if /(?i)management (?=server)/'
+management server org
+linux management server org
+</code>
+
+====pushd, popd, and dirs===
+
+These commands are used to manipulate a directory stack. ''pushd'' puts a directory path at the top of the stack, with the stack being displayed from left (top) to right (bottom). ''popd'' takes a directory at the top of the stack and ''cd''s to it. ''dirs'' displays the current stack. 
+
+<code>
+localhost ~ $: pwd
+/home/localhost
+localhost ~ $: pushd /etc
+/etc ~
+localhost etc $: dirs
+/etc ~
+localhost etc $: pwd
+/etc
+localhost etc $: pushd /tmp
+/tmp /etc ~
+localhost tmp $: dirs
+/tmp /etc ~
+localhost tmp $: pwd
+/tmp
+localhost tmp $: popd
+/etc ~
+localhost etc $: dirs
+/etc ~
+localhost etc $: pwd
+/etc
+localhost etc $: popd
+~
+localhost ~ $: dirs
+~
+localhost ~ $: pwd
+/home/localhost
+localhost ~ $:
+</code>
+
+The user starts at ''/home/localhost/'', as ''pwd'' shows. Using ''pushd'' to push the ''/etc'' directory on to the stack causes the current working directory to switch to ''/etc'' and it also places the directory at the top of the stack, as ''dirs'' shows: ''/etc ~''.
+
+Using ''pushd'' again, with the ''/tmp'' directory as the argument, causes a ''cd'' to the ''/tmp'' directory as well as putting ''/tmp'' at the top of the stack. Now that the stack has three directories, ''popd'' causes ''/tmp'', which is at the top of the stack, to "pop off the stack" and the directory is changed to ''/etc'', the next directory in the stack.
+
+By default, ''pushd'' and ''popd'' cause a change in directory. But the ''-n'' option can be used so that only the stack is manipulated but not a change in directory.
+
+<code>
+localhost ~ $: dirs
+~
+localhost ~ $: pwd
+/home/localhost
+localhost ~ $: pushd -n /etc
+~ /etc
+localhost ~ $: dirs
+~ /etc
+localhost ~ $: pwd
+/home/localhost
+localhost ~ $: popd
+/etc
+localhost etc $: dirs
+/etc
+localhost etc $: pwd
+/etc
+</code>
+
+Additionally, for both ''pushd'' and ''popd'', ''+ count'' and ''- count'' remove ''count'' number of entries from the stack. No change in directory occurs.
+
+===dirs options===
+
+  * **-c** clear the stack
+  * **-l** long listing
+  * **-p** one stack entry per line
+  * **-v** verbose printing; one stack entry per line and the index of the entry
+  
+====ss====
+
+''ss'' is a utility for displaying socket statistics similar to ''netstat''. It is more verbose and detailed than other utilities.
+
+====time====
+
+The ''time'' command can be used to measure the execution time of a program:
+
+<code>
+[user@www1-server-org telltale]$ time sudo yum update
+Loaded plugins: downloadonly, fastestmirror, security
+Setting up Update Process
+...
+No Packages marked for Update
+
+real    0m3.008s
+user    0m1.257s
+sys     0m0.275s
+</code>
+
+''real'' is the total amount of time it took to execute the command. ''user'' is how much time the program spent in userspace and ''sys'' is how long the program spent waiting on system calls.
+
+====cat====
+
+''cat'' is used for concatenation.
+
+Some options:\\
+''-s'' can be used to strip out blank lines.\\
+''-n'' adds line numbers to the output; can be used with ''-b'' to skip line numbers on blank lines.\\
+
+====find====
+
+''find'' is used to locate files.
+
+''find'' has a very basic syntax: ''find <location> <options>''
+
+Some useful options:
+
+''-name'' is used to specify the name of a file. Use ''-iname'' to ignore case. This accepts wildcards: ''find . -name "*.txt"''\\
+''-o'' is used for OR conditions: ''find . \( -name "*.txt" -o -name "*.pdf" \)''\\
+''-path'' can be used to match against the file path of the file: ''find . -path "*/home/*" -print''\\
+''-regex'' is similar to ''-path'' except that it uses regular expressions. ''-iregex'' will ignore case.\\
+''!'' is used to match files which do not match a pattern: ''find . ! -name "*.txt" -print''\\
+''-mindepth'' and ''-maxdepth'' are used to specify how many directories ''find'' should traverse in its search. Note that where the arguments are located in the command has an effect on the efficiency of the command.\\
+''-type'' is used to specify the type of file to search for; ''d'' for directories, ''f'' for regular files, ''l'' for symlinks, etc.\\
+''-atime'' ''-mtime'' and ''-ctime'' specify the access time, modification time, and change time of a file, respectively. The parameter can be ''n'' for n days, ''+n'' for older than ''n'' days, and ''-n'' for last ''n'' days.\\
+''-size'' can specify how large the file should be. Format can be ''[+|-]n[b|c|W|k|M|G]'' e.g. ''-size +2k''\\
+''-delete'' is used to delete the files that ''find'' matches.\\
+''-perm'' and ''-user'' are for the pemission bits set on the file and the file's owner.\\
+''-prune'' can be used to prevent ''find'' from descending into certain directories:
+
+<code>
+[user@www1-server-org crap]$ find . -type f -print
+./betty
+./text.txt
+./intest.pl
+./trtests/numbers.txt
+./trtests/rank.sh
+./trtests/procs.txt
+./fred
+[user@www1-server-org crap]$ find . \( -name "trtests" -prune \) -o \( -type f -print \)
+./betty
+./text.txt
+./intest.pl
+./fred
+</code>
+
+===The -exec Option===
+
+''-exec'' can be used with the ''{}'' string to perform actions on results returned by ''find''. Only one instance of ''{}'' can be used per ''find'' command.
+
+Short examples:
+
+<code>
+[user@www1-server-org trtests]$ ls -l
+-rwxrwxr-x. 1 user user 248 Mar 13 01:41 rank.sh
+-rwxrwxr-x. 1 user user 248 Mar 13 09:48 rtest.sh
+-rwxrwxr-x. 1 user user 248 Mar 13 09:49 rthing.sh
+
+[user@www1-server-org trtests]$ find . -type f -executable -print
+./rthing.sh
+./rank.sh
+./rtest.sh
+[user@www1-server-org trtests]$ find . -type f -executable -exec chmod -x {} \;
+[user@www1-server-org trtests]$ ls -l
+-rw-rw-r--. 1 user user 248 Mar 13 01:41 rank.sh
+-rw-rw-r--. 1 user user 248 Mar 13 09:48 rtest.sh
+-rw-rw-r--. 1 user user 248 Mar 13 09:49 rthing.sh
+</code>
+
+The ''-executable'' argument filters out files/directories that do not have the executable permission. ''-type f'' is used to filter out directories like ''.'' which would otherwise show up. The '';'' must be escaped.
+
+====xargs====
+
+The ''xargs'' utility can be used to get around issues such as the "argument list too long" error.
+
+Manipulation of the argument list is done with the ''-n'' flag: ''find . -print | xargs -n 3 ls''
+
+To process filenames or directories with spaces in their names, use ''-0'' in ''xargs'', ''-z'' in sort, and ''-print0'' in ''find'': ''find . -print0 | xargs -0 ls''
+
+By default, ''{}'' is the replacement string. It will be replaced with the input that ''xargs'' receives. This can be changed with the ''-I'' flag, although it should be noted that using the ''-I'' flag will also limit the number of arguments to 1 by default.
+
+====tmux====
+
+===Quick Short-cuts===
+
+These short-cuts require ''CTRL+b'' and then the short-cut in order to work, e.g. ''CTRL+b x''
+
+Controlling panes:\\
+''%'' splits the current pane vertically.\\
+''"'' splits the current pane horizontally.\\
+''x'' kills the current pane after confirmation.\\
+
+
+Resizing a pane:\\
+''Alt+<arrow-keys>'' e.g. ''Ctrl+b Alt+<Up Arrow>'' will resize the current window up.\\
+
+====tail====
+
+''tail'' with ''-f'' will monitor a file for changes and it will display the changes when it encounters any. Giving move than one file to ''tail'' as an argument will actually monitor all of the files:
+
+<code>
+user ~ $: tail -f fix.pl num.txt
+==> fix.pl <==
+    # Then write the @FIXES array to the end of the target file.
+    if ($LINE =~ /Fix Me Links/) {
+        print FILE "\n";
+        foreach $line (@FIXES) {
+            $insert = $line . "\n";
+            print FILE $insert;
+        }
+        exit(0);
+    }
+}
+
+==> num.txt <==
+
+===Fix Me Links===
+
+[[server/file_systems]] -> FIXME (Include more information on CoW)\\
+[[server/file_systems]] -> FIXME (Is XFS the default file system in SLES12?)\\
+[[server/infrastructure_overview]] -> FIXME (Write a Python script to describe each server, enable it using Salt)\\
+[[server/issues]] -> [[file systems]]-> FIXME (Include more information on CoW)\\\\
+[[server/issues]] -> [[file systems]]-> FIXME (Is XFS the default file system in SLES12?)\\\\
+[[server/oneliners]] -> FIXME (hello world)\\
+[[server/sed]] -> FIXME (these things are hard)\\
+</code>

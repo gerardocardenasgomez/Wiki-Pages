@@ -1,0 +1,12 @@
+===Backup Files===
+
+Chef always creates a backup file of every file it modifies or removes.\\ 
+That directory for backups is located at: ''/var/chef/backup/etc''\\ 
+
+===Useful Commands===
+
+<code>knife node list</code>
+<code>knife cookbook create <name></code>
+<code>knife cookbook upload <name></code>
+<code>knife node run_list add <node_name> "recipe[<recipe_name>]"</code>
+<code>knife node run_list add <node_name> -b "recipe[<recipe_name>]" "recipe[<new_recipe>]"</code>

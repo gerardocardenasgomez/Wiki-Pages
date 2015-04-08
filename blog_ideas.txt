@@ -1,0 +1,11 @@
+====Blog Ideas====
+
+Proposals are marked with :!:, completed projects with a =).
+
+===Proposals===
+
+:!: Google Cloud Platform series\\
+:!: Memory in Linux introduction series\\
+:!: Small bites part 3 (need ideas)\\
+
+===Completed===

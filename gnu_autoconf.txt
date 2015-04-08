@@ -1,0 +1,13 @@
+====GNU Autoconf====
+
+''GNU autoconf'' is used for automatic ''Makefile'' generation. It is necessary because C code is portable but different platforms nevertheless require certain custom modifications.
+
+Packages that use ''GNU autoconf'' come with files such as ''configure'', ''Makefile.in'', and ''config.h.in''. ''.in'' files are templates. The ''configure'' script detects certain properties of the platform and then makes the necessary substitutions in the ''.in'' files.
+
+Running the ''configure'' script results in a lot of diagnostic output as the script checks the system for prerequisites. A ''config.cache'' file is generated so that tests do not need to be duplicated later on.
+
+Once the ''configure'' script completes its work, the ''make'' command can be executed to compile the package. The ''make'' utility uses the ''makefile'' to determine the relationships between all the different files that the package requires. It compiles the different files into object code and then the object code is updated into an executable file or files. 
+
+After everything has been compiled, the ''make install'' command will move the compiled files to their appropriate locations in the system. It will use the ''makefile'' to determine where the files should be placed. ''make -n install'' will not actually perform any actions but it will simulate them.
+
+''make clean'' removes object files, configuration files, etc. and is useful for starting over.

@@ -1,0 +1,109 @@
+====The /proc Directory====
+
+The ''/proc'' directory contains files related to currently running processes as well as files with a variety of system information.
+
+Some commonly-used files in the ''/proc'' directory include:\\ 
+''/proc/cpuinfo'' which includes various information about the CPU, its cores, architectures, etc.\\ 
+''/proc/meminfo'' Memory information, paging, buffers, etc.\\ 
+''/proc/version'' Includes information about the system such as kernel version, distribution, GCC version, etc.\\ 
+''/proc/cmdline'' Includes the parameters that were passed to the kernel upon boot:
+
+<code>
+[user@server ~]$ cat /proc/cmdline
+ro root=UUID=a433ac64-ac34-4783-b4ef-4826d3734ff8 rd_NO_LUKS  KEYBOARDTYPE=pc KEYTABLE=us LANG=en_US.UTF-8 rd_NO_MD SYSFONT=latarcyrheb-sun16 rd_NO_LVM crashkernel=129M@0M  rd_NO_DM
+</code>
+
+''/proc/diskstats'' Provides a list of the disks or partitions on the system. This is used by utilities like ''sar'' to gather information:
+
+<code>
+[excom@wiki ~]$ cat /proc/diskstats
+   1       0 ram0 0 0 0 0 0 0 0 0 0 0 0
+   1       1 ram1 0 0 0 0 0 0 0 0 0 0 0
+   1       2 ram2 0 0 0 0 0 0 0 0 0 0 0
+   1       3 ram3 0 0 0 0 0 0 0 0 0 0 0
+   1       4 ram4 0 0 0 0 0 0 0 0 0 0 0
+   1       5 ram5 0 0 0 0 0 0 0 0 0 0 0
+   1       6 ram6 0 0 0 0 0 0 0 0 0 0 0
+   1       7 ram7 0 0 0 0 0 0 0 0 0 0 0
+   1       8 ram8 0 0 0 0 0 0 0 0 0 0 0
+   1       9 ram9 0 0 0 0 0 0 0 0 0 0 0
+   1      10 ram10 0 0 0 0 0 0 0 0 0 0 0
+   1      11 ram11 0 0 0 0 0 0 0 0 0 0 0
+   1      12 ram12 0 0 0 0 0 0 0 0 0 0 0
+   1      13 ram13 0 0 0 0 0 0 0 0 0 0 0
+   1      14 ram14 0 0 0 0 0 0 0 0 0 0 0
+   1      15 ram15 0 0 0 0 0 0 0 0 0 0 0
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0
+   7       4 loop4 0 0 0 0 0 0 0 0 0 0 0
+   7       5 loop5 0 0 0 0 0 0 0 0 0 0 0
+   7       6 loop6 0 0 0 0 0 0 0 0 0 0 0
+   7       7 loop7 0 0 0 0 0 0 0 0 0 0 0
+ 253       0 vda 19102 2439 571402 4860 146599 281304 3417568 216846 0 59211 221735
+ 253       1 vda1 18947 2439 570162 4842 145403 281304 3417568 216724 0 59080 221595
+  11       0 sr0 0 0 0 0 0 0 0 0 0 0 0
+</code>
+
+''/proc/kmsg'' is queried by ''dmesg'' and ''klogd'' for kernel messages that are still buffered.\\
+''/proc/loadavg'' has the 1-min, 5-min, 15-min load averages; the number of read-to-run threads/total number of threads; and the PID of the most recently created thread:
+
+<code>
+[excom@wiki ~]$ cat /proc/loadavg
+0.00 0.00 0.00 1/95 21759
+</code>
+
+Most of the directories in ''/proc'' are named after PIDs and these directories contain information about those processes. There is a directory named ''fd'' which contains information about the PID file descriptors in use.
+
+The ''lsmod'' command (and some other commands) reads the ''/proc/modules'' file and formats it to make the output easier to read.
+
+====Implementation of /proc====
+
+The ''/proc'' directory is not stored as an actual directory in a volatile medium. The "files" are generated in real time as they are queried. Data from the files in the directory can be returned as either text data or as binary data depending on the file.
+
+====Process-Specific Subdirectories====
+
+===auxv===
+
+This is an array of values that contain some kernel information. This is information that is generated dynamically after the kernel is loaded and therefore if a process requires the information, it can be retrieved by querying this function.
+
+===cmdline===
+
+This is the list of command-line arguments that a command received.
+
+<code>
+[user@server ~]$ ps axjf
+   1   835   831   610 ?           -1 Sl       0   0:08 /sbin/rsyslogd -i /var/run/syslogd.pid -c 5
+[user@server ~]$ sudo head /proc/795/cmdline
+/sbin/dhclient-1-q-cf/etc/dhcp/dhclient-eth0.conf-lf/var/lib/dhclient/dhclient-eth0.leases-pf/var/run/dhclient-eth0.pideth0
+</code>
+
+===environ===
+
+This will list all environment variables that the process knows about.
+
+<code>
+[user@server ~]$ sudo head /proc/835/environ
+[sudo] password for user:
+TERM=linuxPATH=/sbin:/usr/sbin:/bin:/usr/binrunlevel=3RUNLEVEL=3LANGSH_SOURCED=1PWD=/LANG=en_US.UTF-8previous=NPREVLEVEL=NCONSOLETYPE=vtSHLVL=3UPSTART_INSTANCE=UPSTART_EVENTS=runlevelUPSTART_JOB=rc_=/sbin/rsyslogd
+</code>
+
+===stat and statm===
+
+Both of these print text, and they contain information about the process and the process memory information.
+
+<code>
+[user@server ~]$ sudo cat /proc/835/stat
+835 (rsyslogd) S 1 831 610 0 -1 4202816 1634 0 4 0 415 421 0 0 20 0 4 0 1005 255852544 1484 18446744073709551615 139924203905024 139924204266488 140735213712208 140735213711568 139924188005235 0 0 16781830 1133601 18446744073709551615 0 0 17 1 0 0 0 0 0
+[user@server ~]$ sudo cat /proc/835/statm
+62464 1484 265 89 0 57148 0
+</code>
+
+There are seven values provided by the ''statm'' file:
+
+<code>
+Total program size Size of memory portions Num of shared pages Num of pages that are code Num of pages of data/stack Num of library pages Num of dirty pages
+62464              1484                    265                 89                         0                          57148                0
+</code>
+

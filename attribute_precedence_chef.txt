@@ -1,0 +1,10 @@
+===Attribute Precedence===
+
+default: Lowest level--Automatically reset at the start of every chef-client run\\ 
+force_default: Used in a cookbook/recipe to override an existing "default" attribute\\ 
+Normal: A setting that persists in the node object\\ 
+Override: Should only be used when required\\ 
+force_override: Used to ensure that an attribute defined in a cookbook takes precedence over an override attribute\\ 
+Automatic: Data populated by Ohai at the start of every chef-client run, cannot be modified. Highest precedence! OS info, CPU info, etc.
+
+

@@ -1,0 +1,76 @@
+====Google Compute Cloud====
+
+====Instances====
+
+===Adding an Instance===
+
+<code>
+$ gcutil --project=webexample addinstance www1-example-com
+</code>
+
+Then select the zone, instance type, and image.
+
+<code>
+Select a zone:
+1: asia-east1-a
+2: asia-east1-b
+...
+8: us-central1-f
+9: europe-west1-a (DEPRECATED)
+>>> 6
+Select a machine type:
+1: n1-standard-1        1 vCPU, 3.75 GB RAM
+2: n1-standard-16       16 vCPUs, 60 GB RAM
+3: n1-standard-2        2 vCPUs, 7.5 GB RAM
+4: n1-standard-4        4 vCPUs, 15 GB RAM
+...
+13: n1-highmem-8        8 vCPUs, 52 GB RAM
+14: f1-micro    1 vCPU (shared physical core) and 0.6 GB RAM
+15: g1-small    1 vCPU (shared physical core) and 1.7 GB RAM
+>>> 14
+Select an image:
+1: projects/centos-cloud/global/images/centos-6-v20150127
+2: projects/centos-cloud/global/images/centos-7-v20150127
+3: projects/coreos-cloud/global/images/coreos-alpha-584-0-0-v20150205
+...
+12: projects/suse-cloud/global/images/sles-11-sp3-v20150127
+13: projects/suse-cloud/global/images/sles-12-v20141023
+14: projects/windows-cloud/global/images/windows-server-2008-r2-dc-v20150110
+</code>
+
+===List images===
+<code>
+/gcloud compute instances list
+NAME                        ZONE          MACHINE_TYPE INTERNAL_IP    EXTERNAL_IP     STATUS
+www1-learningunix-org       us-central1-a f1-micro     10.240.134.148 ...             RUNNING
+management-learningunix-org us-central1-a f1-micro     10.240.32.13   ...             RUNNING
+</code>
+
+===SSH Into an Instance===
+<code>
+gcutil --project webexample ssh www1-learningunix-org
+</code>
+
+====Google Cloud Storage====
+
+===Creating a Bucket===
+
+The bucket name has to be globally unique, not just unique inside the project.
+
+<code>
+$: gsutil mb gs://<unique bucket name>
+Creating gs://<unique bucket name>/...
+</code>
+
+===Listing Contents of a Bucket===
+
+<code>
+$: gsutil ls gs://bsd
+gs://bsd/epel-release-6-8.noarch.rpm
+</code>
+
+===Copying from a Bucket===
+
+<code>
+$: gsutil cp gs://<bucket>/<item> /home/<dir>
+</code>

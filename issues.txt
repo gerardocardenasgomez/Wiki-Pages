@@ -1,0 +1,51 @@
+===LearningUnix.org is a blank page===
+
+:!: Set up a simple page at learningunix.org that points to wiki.learningunix.org and gerardobsd.com
+
+===Add Upstart section for Ubuntu Page===
+
+:!: What is ''upstart'', how does it work, important ''upstart'' config files and commands.
+
+===Server Description Script for Google Cloud Platform===
+
+=) Create a Python script that will query a server for various pieces of information, send it to ''aws''.
+
+===SPDY for gerardobsd.com===
+
+=) FIXED -- Enable SPDY support for the blog.
+
+http://nginx.org/en/docs/http/ngx_http_spdy_module.html\\
+https://spdycheck.org/#gerardobsd.com shows SPDY, HSTS, 301 HTTP-to-HTTPS redirect, and proper HTTPS support.
+
+===CSS for Drupal Website===
+
+=) FIXED -- div.warning, div.status, etc. in modules.css need to be fixed!
+
+===Fix for SSL Labs A===
+
+=) FIXED -- RC4 cipher is used with TLS 1.1 or newer protocols, even though stronger ciphers are available. Grade reduced to A-.\\ 
+=) FIXED -- The server does not support Forward Secrecy with the reference browsers. Grade reduced to A-.
+
+Fixed by changing these parameters in ''/etc/nginx/sites-enabled/ghost'':
+<code>
+ssl_prefer_server_ciphers on;
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS !MEDIUM";
+ssl_dhparam dh4096.pem;
+</code>
+
+And ran the command: ''sudo openssl dhparam -out dh4096.pem 4096'' in the ''/etc/nginx/'' directory.
+
+===Fix for FIPS Compliance===
+FIPS-ready	No
+
+===Fix for Session Resumption===
+Session resumption (caching)	No (IDs assigned but not accepted)
+
+===Possible SHA Upgrade===
+Certificate uses SHA1. When renewing, ensure you upgrade to SHA256.  MORE INFO »
+
+===Fix Me Links===
+[[file systems]]-> FIXME (Include more information on CoW)\\
+[[file systems]]-> FIXME (Is XFS the default file system in SLES12?)\\
+[[infrastructure overview]]-> FIXME (Write a Python script to describe each server, enable it using Salt)\\

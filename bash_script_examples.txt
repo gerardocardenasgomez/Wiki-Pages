@@ -1,0 +1,31 @@
+====BASH Script Examples====
+
+This script is used to replace a username or a server name with generic strings so that internal usernames and hostnames are not leaked.
+
+<code>
+#!/bin/bash
+INFILE='in.txt'
+OUTFILE='o.txt'
+USER='user'
+SERVER='server'
+
+echo "" > $OUTFILE
+
+while read line
+do
+    case $line in
+        *myuser*)
+            echo ${line/myuser/$USER} >> $OUTFILE
+            ;;
+        *myserver*)
+            echo ${line/myserver/$SERVER} >> $OUTFILE
+            ;;
+        *myserver*)
+            echo ${line/myserver/$SERVER} >> $OUTFILE
+            ;;
+        *)
+            echo $line >> $OUTFILE
+            ;;
+    esac
+done < $INFILE
+</code>

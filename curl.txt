@@ -1,0 +1,20 @@
+====Fun things with Curl!====
+
+Testing a connection to a website, with verbose output:
+
+<code>
+curl -s --verbose -k https://gerardobsd.com -o /dev/null
+</code>
+
+''-s'' or ''--silent'': Silent/quiet mode. Does not show progress meter.\\
+''--verbose'': Outputs more information, use ''--trace'' or ''--trace-ascii'' if you need even more information.\\
+''-k'' or ''--insecure'': Allows for insecure SSL connections. Useful for self-signed certs?\\
+''-o'' or ''--output'': Redirects the output to a file instead.\\
+
+===Downloading A File From A PHP Link===
+
+Use the ''--content-disposition'' header:
+
+<code>
+wget --content-disposition <link here>
+</code>

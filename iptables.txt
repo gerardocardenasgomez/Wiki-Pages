@@ -1,0 +1,40 @@
+====iptables====
+
+====Options:====
+
+''-p [!] proto'': TCP, UDP, ICMP, ALL\\
+''-s [!] addr[/mask] [!] [port[:port]]'': Source address, optional port\\
+''--sport [!]'': Source port\\
+''-d [!] addr[/mask] [!] [port[:port]]'': Destination address, optional port\\
+''--dport [!] [port[:port]]'': Destination port\\
+''--icmp-type [!] typename''\\
+''-i [!] name[+]'': Input network interface--only on INPUT\\
+''-j target [port]'': Target for a rule\\
+''-m'': module to use, such as state\\
+''--state'': NEW, INVALID, RELATED, ESTABLISHED\\
+''--syn'': SYN packets, new connection\\
+''--tcp-flags'': SYN, ACK, FIN, RST. etc.\\
+''--limit'': Option for limit module\\
+''--limit-burst'': Option for limit module, DDoS\\
+
+====Traffic Control====
+
+twitch.tv/directory/following
+
+Traffic control is done with ''tc'', a script used to show and manipulate traffic control settings.
+
+Simple traffic control script:
+
+<code>
+tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit 
+
+tc class add dev $DEV parent 1: classid 1:1 cbq rate 512kbit allot 1500 prio 5 bounded isolated 
+
+tc filter add dev $DEV parent 1: protocol ip prio 16 u32 match ip dst 195.96.96.97 flowid 1:1
+</code>
+
+Quick reference:
+
+''qdisc'' is short for 'queueing discipline.' 
+
+CBQ - Class  Based Queueing implements a rich linksharing hierarchy of classes.  It contains shaping elements as well as prioritizing capabilities. Shaping is performed using link idle time calculations based on average packet size and underlying link bandwidth. The latter may  be  ill-defined  for  some interfaces. Meaning that for this interface, configuring it to 10mbit regardless of its actual bandwidth does not result in too much harm.

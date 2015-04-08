@@ -1,0 +1,49 @@
+API Link: https://www.reddit.com/dev/api
+
+====Listings API====
+
+listings
+Many endpoints on reddit use the same protocol for controlling pagination and filtering. These endpoints are called Listings and share five common parameters: after / before, limit, count, and show.
+
+Listings do not use page numbers because their content changes so frequently. Instead, they allow you to view slices of the underlying data. Listing JSON responses contain after and before fields which are equivalent to the "next" and "prev" buttons on the site and in combination with count can be used to page through the listing.
+
+The common parameters are as follows:
+
+after / before - only one should be specified. these indicate the fullname of an item in the listing to use as the anchor point of the slice.
+limit - the maximum number of items to return in this slice of the listing.
+count - the number of items already seen in this listing. on the html site, the builder uses this to determine when to give values for before and after in the response.
+show - optional parameter; if all is passed, filters such as "hide links that I have voted on" will be disabled.
+To page through a listing, start by fetching the first page without specifying values for after and count. The response will contain an after value which you can pass in the next request. It is a good idea, but not required, to send an updated value for count which should be the number of items already fetched.
+
+
+====Search API====
+
+|after||fullname of a thing|
+|before	||fullname of a thing|
+|count	||a positive integer (default: 0)|
+|limit	||the maximum number of items desired (default: 25, maximum: 100)|
+|q	||a string no longer than 512 characters|
+|restric||t_sr	boolean value|
+|show	||(optional) the string all|
+|sort	||one of (relevance, new, hot, top, comments)|
+|syntax	||one of (cloudsearch, lucene, plain)|
+|t	||one of (hour, day, week, month, year, all)|
+
+====Thread Examples====
+
+http://redd.it/1vamol\\
+http://redd.it/2hop2j\\
+http://redd.it/2551tu\\
+http://redd.it/2f7oog\\
+
+==Considerations:==
+
+The Kabum match has a unique victory message: **KABUM MOTHA FOCKIN ESPORTS WIN in 38:46**\\
+OGN matches may also have a unique victory message: **KT Rolster Arrows 2>0 SK Telecom T1 K**\\
+Another unique victory message: **CLOUD 9 2-3 TEAM SOLOMID**
+
+Most matches are best of 1, but some are best of 3 and best of 5. Thus, the parser must be able to tell from the format which one is which. 
+
+There are also best of 2s for OGN matches: http://redd.it/21nz9q\\
+And a best of 3: http://redd.it/2oimo7\\
+Best of 5: http://redd.it/2f7oog

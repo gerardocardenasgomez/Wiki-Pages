@@ -1,0 +1,44 @@
+===Ruby Script Examples===
+
+<code>
+#!/usr/bin/env ruby
+
+# Pick up the first argument
+file = ARGV[0]
+
+# tail is used as the command but this can be anything
+data = `tail -n 20 #{file}`
+
+# The output here will be formatted as an HTML table
+puts "<table>"
+
+# Split the output by line
+data.lines.each do |line|
+    puts "\t<tr>"
+    puts "\t\t" + "<td>" + line.chomp + "</td>" # Using chomp to cut out the last \n character
+    puts "\t</tr>"
+end
+puts "</table>"
+</code>
+
+==Ruby Fail Unless==
+Fails with an error message if there is no first argument.
+<code>
+fail "Usage: \n ruby prepare_image.rb <bucket name>\n" unless ARGV.first
+
+puts ARGV.first
+</code>
+
+The fail keyword can also accept the type of error. By default, it raises a RunTimeError but in some cases, it is better to raise an ArgumentError: ''fail ArgumentError, "Illegal String"''
+
+===Default Values Using ||= with Nil Result===
+<code>
+cities = {
+   'CA' => "San Fransisco",
+   'MI' => "Detroit"
+}
+
+city = cities['TX']
+city ||= "Does Not Exist"
+puts "The city for the state 'TX' is: #{city}"
+</code>

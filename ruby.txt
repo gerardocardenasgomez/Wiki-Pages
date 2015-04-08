@@ -1,0 +1,105 @@
+  * Common Ruby Words: [[words(Ruby)]]
+
+===Variables===
+
+Variables are not objects, they are just labels for objects.
+<code>
+irb(main):001:0> a = "abc"
+=> "abc"
+irb(main):002:0> b = a
+=> "abc"
+irb(main):003:0> a.upcase!
+=> "ABC"
+irb(main):004:0> b
+=> "ABC"
+irb(main):005:0> a.object_id
+=> 7247960
+irb(main):006:0> b.object_id
+=> 7247960
+</code>
+
+It's possible to create a copy of an object rather than a new label for it using the clone method:
+<code>
+irb(main):007:0> c = a.clone
+=> "ABC"
+irb(main):008:0> a.downcase!
+=> "abc"
+irb(main):009:0> b
+=> "abc"
+irb(main):010:0> c
+=> "ABC"
+</code>
+===Copying Files===
+''FileUtils.cp("file", "file2")''
+
+<code>
+File.open("filename.txt", "a") do |f|
+    f << "Append this line to the file"
+    f << "This line will also get appended"
+end
+</code>
+
+<code>
+File.mtime("filename.txt").hour
+File.mtime("filename.txt").min
+</code>
+
+''File.foreach'' method opens each line of a file.
+<code>
+File.foreach("path") do |line|
+    name, url = line.split(": ")
+end
+</code>
+
+The strip method for Strings removes extra white space.
+<code>
+name = url.strip
+</code>
+
+===Optional Arguments===
+<code>
+def tweet(message, lat, long)
+ # stuff
+end
+
+tweet("Ruby", nil, nil) # Both lat and long must be sent as arguments, otherwise error
+
+def tweet(message, lat = nil, long = nil)
+ # stuff
+end
+
+tweet("Ruby") # lat and long now have default parameters
+</code>
+
+===Hash Options===
+<code>
+def new_game(name, options = {})
+  {
+    name: name,
+    year: options[:year],
+    system: options[:system]
+  }
+end
+game = new_game("Street Fighter II", 
+  :system => "SNES", 
+  :year => 1992
+  )
+</code>
+
+===Defining a Class===
+<code>
+class Library
+  attr_accessor :games
+
+  def initialize(games)
+    self.games = games
+  end
+
+  def has_game?(search_name)
+    for game in games
+      return true if game.name == search_name
+    end
+    false
+  end
+end
+</code>

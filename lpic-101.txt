@@ -1,0 +1,19 @@
+====User Management====
+
+Any new users created with ''useradd -m'' will have the contents of ''/etc/skel/'' copied to their home directory.
+
+The default values when creating a user are defined in ''/etc/login.defs'' and ''/etc/default/useradd''. Some available settings:
+
+  * **MOTD_FILE**: Defines the file that is used as “message of the day” file. In this file, you can include messages to be displayed after the user has successfully logged in to the server.
+  * **ENV_PATH**: Defines the $PATH variable, a list of directories that should be searched for executable files after logging in
+  * **CREATE_HOME**: Indicates whether or not to create a home directory for new users
+  * **USERGROUPS_ENAB**: Set to “yes” to create a private group for all new users. That means that a new user has a group with the same name as the user as its default group. If set to “no,” all users are made a member of the group “users.”
+
+Environment files:
+
+  * **/etc/profile**: Default settings for all users when starting a login shell.
+  * **/etc/bash.bashrc**: Defines defaults for all users when starting a subshell.
+  * **~/.profile**: Settings for the user when starting a login shell.
+  * **~/.bashrc**: Settings for the user when starting a subshell.
+
+----

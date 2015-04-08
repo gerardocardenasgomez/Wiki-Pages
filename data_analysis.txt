@@ -1,0 +1,27 @@
+====Data Analysis Basics====
+
+Four things to have:
+
+  - The raw data itself
+    - Ran no software on data
+    - No manipulation of the data
+    - No data was removed
+    - No data was summarized in any way
+  - A tidy data set 
+    - Each variable should be in one column
+    - Each different observation should be in a different row
+    - One table for each "kind" of variable
+    - Multiple tables should be linked
+    - Variable names should be human readable
+  - A code book describing each variable and its values in the tidy data set
+    - Information about the variables (including units)
+    - Information about the summary choices you made
+    - Information about the experimental study design you used
+    - Use a common format (e.g. plain text file)
+    - Describe how the data was collected
+  - An explicit and exact recipe you used to go from 1 > 2 > 3
+    - Ideally a computer script (R, Python, etc.)
+    - Input for the script should be raw data
+    - Output is the processed, tidy data
+    - No parameters to the script!
+    - If more steps are necessary, provide additional instructions

@@ -1,0 +1,125 @@
+====Web Hosting====
+
+====ICANN====
+
+Internet Corporation for Assigned Names and Numbers (ICANN).
+
+Non-profit organization responsible for coordinating DNS, the allocation of IP address space, and autonomous system numbers. 
+
+Added new Generic Top Level Domains (gTLDs) including .science, .expert, .systems, etc.
+
+Internet Assigned Numbers Authority (IANA) is a department of ICANN and handles registration of commonly used port numbers.
+
+====WHOIS====
+
+A query and response protocol used to query a database for information about an internet resource's registered user or assignee. The information returned by the server is in a human-readable text format. 
+
+The information returned in a WHOIS server response can be a privacy concern, although domain privacy can be used to help mitigate this issue.
+
+====Some cPanel Things====
+
+There is a demo available at ''http://cpanel.net/demo/''
+
+====Some WHM things====
+
+====SMTP====
+
+The Simple Mail Transfer Protocol defines how mail should be sent from one server to another.
+
+Port 25 is the default SMTP port. Data sent over this port is sent in the clear!
+
+Connection to an SMTP server using Telnet:
+
+<code>
+> telnet example.com 25
+220 mail ESMTP Postfix
+> EHLO example.com
+250 OK
+> RCPT TO: admin@example.com
+250 OK - Recipient admin@ example.com
+> DATA
+354 Send data. End with CRLF.CRLF
+.....
+</code>
+
+Different commands are available, such as ''MAIL FROM:'', ''RCPT TO:'', etc. Closing a connection is done with the ''QUIT'' command.
+
+There are different types of software that deal with email, some examples:
+
+  * Mail User Agent (MUA): A MUA communicates with a Mail Transport Agent in order to fetch and compose email. Uses protocols such as POP3 and IMAP to move email from the client to the server.
+  * Mail Transport Agent (MTA): Handles the transport of email from one server to another; e.g. Sendmail and Postfix.
+  * Mail Delivery Agent (MDA): Takes a message from a server and delivers it to the appropriate user mailbox; e.g. Dovecot, procmail, cyrus IMAP
+
+ports:
+25 by default\\
+465 for SMTP with SSL/TLS (SMTPS)\\
+587 for email submission\\
+
+Quick Postfix notes: main.cf file for config master.cf file for crazy things like socket configuration options.
+
+
+====POP3====
+
+Post Office Protocol, the 3 is the version. POP3 is not compatible with POP2. Process:
+
+  - POP3 client initiates connection with the POP3 server over port 110
+  - POP3 server requests a username and password, client provides it
+  - The client passes the last message received number to the server
+  - The server sends all messages numbered higher than the client's last message received number
+  - The POP3 server closes the connection and deletes email that was sent to the client
+
+Some POP commands: ''STAT'' ''USER'' ''RETR'' ''DELE'' ''LAST''
+
+ports:\\
+110 by default, cleartext\\
+995 POP3 over SSL/TLS (POP3S)\\
+
+====IMAP====
+
+Internet Message Access Protocol (IMAP) is a server-based protocol. Unlike POP3, IMAP creates an email data store on the server that can then be accessed by a client. Emails can also be stored on the client, however (such as for backup purposes). Both online and offline sessions are supported--in an offline session, email is stored locally on the client and then synchronized when the client connects to the server again. Changes that are made from any client are stored on the server and then synchronized across all clients.
+
+IMAP and ports:\\
+143 by default, cleartext\\
+993 IMAP over SSL/TLS (IMAPS)\\
+
+====FTP====
+
+File Transfer Protocol (FTP) sends authentication over cleartext by default. Used to transfer files from one host to another; it is common way of sending website files to a server. 
+
+FTP and ports:\\
+20 for data\\
+21 for control/command (e.g. connection initiation)\\
+
+There is a difference between SFTP and FTPS. SFTP is SSH File Transfer Protocol (and not FTP over SSH!), and FTPS is File Transfer Protocol over SSL/TLS.
+
+====SSH====
+
+Secure Shell Protocol (SSH) is a network protocol used for securing data communication. Should always be used, especially over something like telnet which communicates in cleartext. Two versions: SSH-1 and SSH-2, SSH1 should no longer be used. Secure Copy (SCP) is the replacement for RCP.
+
+====SSL====
+
+Secure Socket Layer (SSL). Replaced with Transfer Layer Security (TLS). Version 1 was never publicly released; Version 2 and version 3 are obsolete. TLS has version 1, 1.1, and 1.2 which should all be used over SSL.
+
+SSL stuff and ports:\\
+80 HTTP\\
+443 HTTP secured with SSL/TLS\\
+
+Wordpress stuff
+
+====DNS====
+
+Domain Name System (DNS) is a name resolution protocol. Translates human-readable domain names to IP addresses. 
+
+DNS record types:
+Name server: Stores information used to identify the name servers in the domain that store DNS information for that domain.\\
+A: Stores the hostname and IP address of individual hosts, translates hostnames to IP addresses.\\
+AAAA: Same as an A record but for IPv6 (quad-A record).\\
+CNAME: Canonical Name (CNAME) stores additional hostnames, or aliases, for hosts in the domain.\\
+TXT: Text Information (TXT) Can store up to 256 bytes of text per line, used for things like SPF.\\
+MX: Mail Exchange (MX) Stores information about where mail for the domain should be delivered.\\
+PTR: Pointer (PTR) sames as an A record but translates IP addresses to hostnames as a reverse DNS lookup.\\
+HINFO: Host Information (HINFO) stores information about the hardware for specific hosts.\\
+
+Ports: \\
+53 UDP: for DNS queries\\
+53 TCP: for data that exceeds 512 bytes or tasks such as zone transfers\\

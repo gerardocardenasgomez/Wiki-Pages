@@ -1,0 +1,74 @@
+===RPM Package Manager===
+(Originally Red Hat Package Manager)
+
+You can use the ''rpm -V package'' command to check if any files have been changed from the original package. Uses MD5.
+
+''rpm --force'' will force the install of a package even if dependencies are not installed. Can be dangerous. It can also be used to downgrade a newer package version into an older one.
+
+''rpm -i'' installs the package if it isn't already installed.\\ 
+''rpm -U'' upgrades any existing package or installs it if an earlier version isn't already installed.\\ 
+''rpm -F'' only upgrades existing packages and will not install a package if it wasn't previously installed.
+
+-vh options add verbose mode and use hash marks for progress.
+
+The ''rpm'' command will try to back up previous configuration files and will post a warning message indicating that it has done so. Files will be saved with the .rpmsave extension.
+
+''rpm -e'' "erases" a package. RPM first checks to make sure that the package being removed isn't a dependency for another package. If so, an error will pop up.
+
+Remote rpm installation from an FTP server (requires the full package name):\\ 
+<code>
+# rpm -ivh ftp://ftp.rpmserver.com/pub/package.rpm
+# rpm -ivh ftp://username:password@ftp.rpmserver.com:port/path/to/package
+</code>
+
+GPG keys used for package verification are stored in ''/etc/pki/rpm-gpg''\\ 
+And to import a GPG key:
+<code># rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY</code>
+There will be no output if the command was executed successfully. Else, you get an "import failed" message. To verify the key: ''rpm -qa gpg-pubkey''.
+
+Example GPG keys:
+<code>
+-rw-r--r-- 1 root root 1706 Nov 30  2013 RPM-GPG-KEY-CentOS-6
+-rw-r--r-- 1 root root 1730 Nov 30  2013 RPM-GPG-KEY-CentOS-Debug-6
+-rw-r--r-- 1 root root 1730 Nov 30  2013 RPM-GPG-KEY-CentOS-Security-6
+-rw-r--r-- 1 root root 1734 Nov 30  2013 RPM-GPG-KEY-CentOS-Testing-6
+-rw-r--r-- 1 root root 1649 Nov  4  2012 RPM-GPG-KEY-EPEL-6
+</code>
+
+The command ''rpm -U newkernel'' can be used to update the kernel but this will overwrite the older kernel, which can mean that the system may no longer boot at all if the newer kernel does not work.
+
+Two ways of updating the kernel: ''rpm -ivh newkernel'' and ''yum install kernel''.
+
+Verify that a package has been installed:
+<code>rpm -q package</code>
+
+Checking package signatures:
+<code># rpm --checksig pkgname</code>
+
+|Some common RPM query commands:|||
+|rpm -qa||List all installed packages|
+|rpm -qf /path/to/file||Identifies the package associated with the file|
+|rpm -qc||Lists the configuration files for the package|
+|rpm -qi||Displays information about the package|
+|rpm -ql||Lists all files from the package|
+|rpm -qR||Shows dependencies for the package|
+
+File Verification:
+|rpm --verify -a||Verify all files, equal to ''rpm -Va''|
+|rpm --verify -p packagename||Verify against the downloaded RPM file|
+|rpm --verify --file /path/to/file||Verify a file from an RPM package|
+
+The previous commands will show no output if the files were successfully verified. The output of a failed verification will display failure codes:
+
+|5||MD5 checksum|
+|S||File Size|
+|L||Symbolic Link|
+|T||Modification Time|
+|D||Device|
+|U||User|
+|G||Group|
+|M||Mode|
+
+You can use ''rpm --verify -p packagename'' to compare an older version of an RPM with a newer one, e.g. you have the new version installed and you want to see how it differs from the older version.
+
+The ''/root/install.log'' file will show a list of all packages that were installed when the system was first installed. This can be useful to test against changes!

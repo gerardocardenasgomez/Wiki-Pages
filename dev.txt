@@ -1,0 +1,9 @@
+===The /dev Directory===
+
+The ''/dev'' directory contains entries for devices, both virtual and physical.
+
+Some interesting notes about the directory:\\ 
+The files ''/dev/cdrom'' and ''/dev/dvd'' both link to ''/dev/sr0'' which is the actual device itself.\\ 
+If your ''/dev'' directory contains an ''audio'' or ''dsp'' file, then you can do weird things like ''cat audio.mp3 > /dev/audio'' to play music from the command line.
+
+''/dev/disk'' directory will contain another directory, ''by-uuid'' which can be used to determine the UUID of a device or partition.

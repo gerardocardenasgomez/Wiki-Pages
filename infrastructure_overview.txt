@@ -1,0 +1,119 @@
+====Google Cloud Platform====
+
+See [[Learning Objectives]]
+
+FIXME (Write a Python script to describe each server, enable it using Salt)
+
+===management server===
+
+centos6\\
+salt-master\\
+
+===www1 server===
+
+centos6\\
+salt-minion\\
+httpd\\
+data store\\
+
+===test server===
+
+centos6\\
+gcloud data read-only scope\\
+salt-minion\\
+httpd\\
+mysql-server\\
+
+
+====Blog Infrastructure====
+
+===Bastion Server===
+
+==Purpose==
+
+This is the server that is used to access all of the other servers. It is the only server that can accept SSH connections from the internet.
+
+==Quick Info==
+<code>
+bastion
+CentOS release 6.5 (Final)
+2.6.32-431.1.2.0.1.el6.x86_64
+</code>
+----
+===VPN Server===
+
+==Purpose==
+
+This server only functions as the VPN server for the other systems.
+
+==Quick Info==
+<code>
+bsdvpn
+Ubuntu 14.04.1 LTS
+3.13.0-32-generic
+</code>
+----
+===Chef Testing Server===
+
+==Purpose==
+
+This server is where cookbooks are tested. There should be no important data on this server.
+
+==Quick Info==
+<code>
+chefnode
+Ubuntu 14.04.1 LTS
+3.13.0-32-generic
+</code>
+----
+===Chef Server===
+
+==Purpose==
+
+This server is for the Chef Server install. It is configured to connect to the VPN.
+
+==Quick Info==
+<code>
+chefserver.tiplette.com
+CentOS release 6.5 (Final)
+2.6.32-431.1.2.0.1.el6.x86_64
+</code>
+----
+===GerardoBSD Blog Server===
+
+==Purpose==
+
+This server hosts the GerardoBSD blog. The SSL private keys are protected by a passprhase which must be entered on every restart of the nginx web server. The CMS is Ghost. It is based on NODE.js
+
+==Quick Info==
+<code>
+gerardobsd
+Ubuntu 14.04.1 LTS
+3.13.0-24-generic
+</code>
+----
+===ITSA Server===
+
+==Purpose==
+
+This server mainly hosts Nagios. It is also connected to the VPN. The SSL private keys are protected by a passprhase which must be entered on every restart of the httpd web server. Also acts as the CA for the Rsyslog keys and certificates.
+
+==Quick Info==
+<code>
+itsa
+Ubuntu 14.04.1 LTS
+3.13.0-32-generic
+</code>
+----
+===SECBASE Server===
+
+==Purpose==
+
+This server acts as the Rsyslog server. All other hosts should send their logs to this server. It uses TLS for encryption and therefore in order to add another host to the Rsyslog client list, a new private key must be generated for the new host and the key must be signed by the CA. This server also runs Splunk Enterprise, which should only be accessible from the 10.8.0.0 network. It is also connected to the VPN.
+
+==Quick Info==
+<code>
+secbase
+Ubuntu 14.04.1 LTS
+3.13.0-32-generic
+</code>

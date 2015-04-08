@@ -1,0 +1,66 @@
+====Performance Monitoring====
+
+===Quick Tips===
+Pressing ''1'' in ''top'' will show usage information for each CPU core on its own line.
+
+<code>
+top - 09:09:41 up 15:47,  2 users,  load average: 0.59, 0.69, 0.62
+Tasks: 148 total,   2 running, 146 sleeping,   0 stopped,   0 zombie
+%Cpu0  :  7.5 us,  2.7 sy,  0.3 ni, 88.4 id,  1.0 wa,  0.0 hi,  0.0 si,  0.0 st
+%Cpu1  :  6.9 us,  0.7 sy,  0.0 ni, 92.4 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+%Cpu2  :  5.7 us,  2.0 sy,  0.0 ni, 92.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+%Cpu3  :  5.1 us,  1.7 sy,  0.0 ni, 93.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+</code>
+
+''top'': Reports process information\\
+''sar'': Extensive monitoring capabilities\\
+''vmstat'': Memory and swap usage\\
+''iostat'': Input/Output statistics\\
+
+====sar====
+
+''sar'' is perfect for use with ''cron''!
+
+Save output to /log/file, memory (-r), 10 lines 1 second each:
+<code>
+sar -r -o /log/file 1 10
+</code>
+
+Save CPU performance data to /log/file:
+<code>
+sar -o /log/file 1 10
+</code>
+
+''-d'' option for disk I/O.\\
+''-n'' option for networking data, accepts additional switches:
+    DEV -> networking interface information
+    EDEV -> network errors
+    SOCK -> Socket information
+    FULL -> All three switches
+    
+====vmstat====
+
+''-m'': Memory fields are shown in MB.
+
+===Field meanings===
+
+swpd: Used swap space\\
+free: Amount of free RAM\\
+buff: Amount of RAM used for buffers\\
+cache: Amount of RAM used for filesystem cache\\
+
+Swap Metrics:\\
+si: Amount paged from disk to memory\\
+so: Amount paged to disk from memory\\
+
+I/O Fields:\\
+bi: Blocks in from disk\\
+bo: Blocks out to disk\\
+
+===Memory States===
+
+There are three different types of memory states: active, inactive dirty, inactive clean.
+
+  - Active: Memory has been used recently
+  - Inactive Dirty: Memory has not been used recently and may be reclaimed--in order to be reclaimed, memory must be written to disk (called "laundering").
+  - Inactive Clean: Once laundered, inactive dirty memory becomes inactive clean.

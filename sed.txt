@@ -1,0 +1,32 @@
+===sed Stream Editor===
+
+Format:
+<code> sed options script file</code>
+
+Multiple Commands:
+<code> sed -e 's/brown/green/; s/dog/cat/' data.txt</code>
+
+Multiline Commands (the last command and the last quotation mark must be on the same line):
+<code>
+sed -e '
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/; data.txt
+</code>
+
+Input Commands from a File:
+<code>
+$ cat script
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/
+$ sed -f script data.txt
+</code>
+
+The s flag is for replacement. This does not modify the file itself.
+<code>sed 's/before/replacement/' <file></code>
+
+The w flag at the end writes the results to another file.
+<code>sed 's/before/replacement/w promotions.txt' <file></code>
+
+

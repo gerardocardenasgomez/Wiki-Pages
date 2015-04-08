@@ -1,0 +1,18 @@
+====Required Packages (Ubuntu)====
+
+apache2 php5 mysql-server php-pear php5-gd php5-mysql
+
+====Drush Installation====
+
+<code>
+pear channel-discover pear.drush.org
+sudo pear channel-discover pear.drush.org
+sudo pear install drush/drush
+</code>
+
+====White Page Error After Install====
+
+If you get the "White Page of Death" error after completing the installation, use Drush instead to configure the site:
+<code>
+drush site-install standard --db-url='mysql://[mysqluser]:[mysqlpass]@localhost/[database]' --site-name=[sitename] --account-name=[username] --account-pass=[pass]
+</code>
