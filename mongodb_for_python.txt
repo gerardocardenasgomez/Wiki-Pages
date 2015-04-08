@@ -1,3 +1,39 @@
 ====MongoDB for Python Developers====
 
 Course website: https://university.mongodb.com/
+
+====MongoDB Cursors in Python====
+
+Documentation Link: http://api.mongodb.org/python/current/api/pymongo/cursor.html
+
+===Example===
+
+Using ''find'' to fetch a cursor and then iterating over the cursor:
+
+<code>
+>>> items = names.find({})
+>>> items.count()
+7
+>>> for doc in items:
+...     print doc
+...
+{u'age': 26.0, u'_id': ObjectId('5522fe9b0865d1f30032fa9c'), u'name': u'Gerardo'}
+{u'age': 2.0, u'_id': ObjectId('5522fec10865d1f30032fa9d'), u'name': u'James'}
+{u'age': 35.0, u'_id': ObjectId('552355e10865d1f30032fa9e'), u'name': u'Jack'}
+{u'age': 31.0, u'_id': ObjectId('552355f10865d1f30032fa9f'), u'name': u'Jill'}
+{u'age': 22.0, u'_id': ObjectId('552356920865d1f30032faa0'), u'name': u'Thomas'}
+{u'age': 15.0, u'_id': ObjectId('552356920865d1f30032faa1'), u'name': u'Eric'}
+{u'age': 25.0, u'_id': ObjectId('552356920865d1f30032faa2'), u'name': u'Jane'}
+>>> items.rewind()
+<pymongo.cursor.Cursor object at 0x7fbd451cc7d0>
+>>> for doc in items:
+...     doc["name"]
+...
+u'Gerardo'
+u'James'
+u'Jack'
+u'Jill'
+u'Thomas'
+u'Eric'
+u'Jane'
+</code>
