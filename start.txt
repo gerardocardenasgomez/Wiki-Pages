@@ -5,28 +5,32 @@ Salt And Google Compute Cloud:\\
 [[Learning Objectives]]\\
 [[Salt]]\\
 [[Google Compute Cloud]]\\
+
+[[RabbitMQ]]\\
+[[RabbitMQ Examples]]\\
+
+[[Reddit Project]]:\\
 ----
 
 [[Blog Ideas]]\\
-
-Courses:\\
-[[Python for Informatics]]\\
-[[MongoDB for Python]]\\
 
 [[Issues]]\\ 
 
 There is documentation here.\\ 
 --->[[Extracting Data]]\\ 
-
 --->[[Infrastructure Overview]]\\ 
 
+Topics of interest:\\ 
+---> [[MySQL]]\\
+---> [[MongoDB]]\\
+---> [[MongoDB for Python]]\\
+---> [[ElasticSearch]]\\
 
-And topics of interest:\\ 
 ---> [[BASH]]\\ 
 ---> [[Linux Commands]]\\ 
----> [[LPIC-101]]\\ 
----> [[LPIC-102]] \\ 
+
 ---> [[Redirection]] \\ 
+---> [[GNU Autoconf]] \\ 
 
 ---> [[Ubuntu]] \\ 
 ---> [[CentOS]] \\ 
@@ -55,10 +59,6 @@ Linux Filesystem Hierarchy Standard\\
 ---> [[/tmp]]\\ 
 ---> [[/var]]\\
 
-[[BASH Scripting]]\\ 
----> [[Parameters]] (To be removed)\\ 
----> [[BASH Parameters]]\\ 
-
 [[Chef]]\\ 
 ---> [[Knife(Chef)]]\\ 
 ---> [[Nodes(Chef)]]\\ 
@@ -69,11 +69,22 @@ SysAdmin:\\
 ---> [[Sed]]\\ 
 ---> [[Awk]]\\ 
 ---> [[Common Issues]]\\ 
+---> [[Silly Mistakes]]\\ 
 ---> [[Curl]]\\ 
 ---> [[File Systems]]\\ 
 ---> [[Rsync]]\\ 
 ---> [[iptables]]\\ 
 ---> [[Web Security]]\\ 
+---> [[Web Hosting]]\\ 
+---> [[Apache]]\\ 
+
+
+Programming:\\
+[[BASH Scripting]]\\ 
+---> [[Parameters]] (To be removed)\\ 
+---> [[BASH Parameters]]\\ 
+
+---> [[Regular Expressions]]\\ 
 
 [[Python]]:\\ 
 ---> [[RRDTool]]\\ 
@@ -81,17 +92,17 @@ SysAdmin:\\
 [[Ruby]]:\\ 
 ---> [[Script Examples]]\\ 
 
-Lots of computer things.\\ 
-[[MySQL]]:\\
+[[Perl]]:\\
+---> [[Perl Examples]]\\ 
 
-ELK Stack:\\
-[[ElasticSearch]]:\\
-
-Drupal:\\
-[[Drupal Installation]]:\\
+---> [[LPIC-101]]\\ 
+---> [[LPIC-102]] \\ 
 
 OpenShift:\\
 [[OpenShift Commands]]:\\
+
+Drupal:\\
+[[Drupal Installation]]:\\
 
 [[Statistics]]:\\
 
@@ -99,4 +110,5 @@ OpenShift:\\
 [[R (Language)]]\\
 [[R Scripts]]\\
 
-[[Reddit Project]]:\\
+To Be Pruned:\\
+[[Python for Informatics]]\\

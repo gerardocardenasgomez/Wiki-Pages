@@ -1,0 +1,40 @@
+====Silly Mistakes====
+
+This is a list of silly things I have done. Hopefully they will not be done again. :)
+
+====The Perl RegEx Fiasco====
+
+I did something silly in this script:
+
+<code>
+user ~ $: cat test.pl
+#!/usr/bin/env perl
+
+$string = "cars.txt";
+$string =~ s/\.txt/$2/;
+print $string, "\n";
+
+$test = "cars.txt";
+$test =~ s/(cars)/$1oh/;
+print $test, "\n";
+</code>
+
+Executing the script returns the following:
+
+<code>
+user ~ $: ./test.pl
+cars
+carsoh.txt
+</code>
+
+The mistake is in this line: ''$string =~ s/\.txt/$2/;''
+
+It produces the right output because there is nothing in ''$2'' which would typically contain the value of a successful match. These come from capture groups. There is a capture group in ''$test =~ s/(cars)/$1oh/;''. The parentheses capture the string ''cars'' and it is placed into ''$1''.
+
+The proper code should be: 
+
+<code>
+$string =~ s/\.txt//;
+</code>
+
+so that the matched string is replaced by an empty string.

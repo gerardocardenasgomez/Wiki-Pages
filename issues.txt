@@ -1,10 +1,15 @@
+===Fix Start Page Issues===
+
+:!: The Start page needs to be organized better, possibly with tables?\\
+:!: Some pages need to be deleted and un-linked.\\
+
 ===LearningUnix.org is a blank page===
 
-:!: Set up a simple page at learningunix.org that points to wiki.learningunix.org and gerardobsd.com
+=) FIXED -- Set up a simple page at learningunix.org that points to wiki.learningunix.org and gerardobsd.com
 
 ===Add Upstart section for Ubuntu Page===
 
-:!: What is ''upstart'', how does it work, important ''upstart'' config files and commands.
+=) FIXED -- What is ''upstart'', how does it work, important ''upstart'' config files and commands.
 
 ===Server Description Script for Google Cloud Platform===
 
