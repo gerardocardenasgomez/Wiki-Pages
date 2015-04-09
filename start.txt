@@ -5,6 +5,7 @@ Salt And Google Compute Cloud:\\
 [[Learning Objectives]]\\
 [[Salt]]\\
 [[Google Compute Cloud]]\\
+[[AWS]]\\ 
 
 [[RabbitMQ]]\\
 [[RabbitMQ Examples]]\\
@@ -20,89 +21,47 @@ There is documentation here.\\
 --->[[Extracting Data]]\\ 
 --->[[Infrastructure Overview]]\\ 
 
-Topics of interest:\\ 
----> [[MySQL]]\\
----> [[MongoDB]]\\
----> [[MongoDB for Python]]\\
----> [[ElasticSearch]]\\
+^  Database Topics  ^^
+| [[MongoDB]] | [[MySQL]] |
+| [[MongoDB for Python]] | [[ElasticSearch]] |
 
----> [[BASH]]\\ 
----> [[Linux Commands]]\\ 
+^  Linux  ^^^
+| [[BASH]] | [[Ubuntu]] | [[GNU Autoconf]] |
+| [[Linux Commands]] | [[CentOS]] | [[Linux Boot Process]] |
+| [[Redirection]] | [[LPIC-101]] | [[Performance Monitoring]] |
 
----> [[Redirection]] \\ 
----> [[GNU Autoconf]] \\ 
+^  Package Management  ^^
+| [[RPM]] | [[DPKG]] |
+| [[YUM]] | [[APT]] |
+| [[Zypper]] |
 
----> [[Ubuntu]] \\ 
----> [[CentOS]] \\ 
+^  Linux Filesystem Hierarchy Standard  ^^
+| [[/sys]] | [[/proc]] |
+| [[/dev]] | [[/tmp]] |
+| [[/var]] |
 
----> [[Linux Kernel]] \\ 
----> [[Linux Boot Process]] \\ 
+^  SysAdmin  ^^^^
+| [[Sed]] | [[iptables]] | [[OneLiners]] | [[Hardware Management]] |
+| [[Awk]] | [[Web Security]] | [[Common Issues]] | [[Service Management]] |
+| [[Curl]] | [[Web Hosting]] | [[Silly Mistakes]] | [[Network Management]] |
+| [[Rsync]] | [[Apache]] | [[File Systems]] | [[Linux Kernel]] |
 
----> [[Hardware Management]] \\ 
----> [[Service Management]] \\ 
----> [[Performance Monitoring]]\\ 
----> [[Network Management]]\\ 
-
----> [[AWS]]\\ 
-
-Package Management\\ 
----> [[RPM]]\\ 
----> [[DPKG]]\\ 
----> [[YUM]]\\ 
----> [[APT]]\\ 
----> [[Zypper]]\\ 
-
-Linux Filesystem Hierarchy Standard\\ 
----> [[/sys]]\\ 
----> [[/proc]]\\ 
----> [[/dev]]\\ 
----> [[/tmp]]\\ 
----> [[/var]]\\
-
-[[Chef]]\\ 
----> [[Knife(Chef)]]\\ 
----> [[Nodes(Chef)]]\\ 
----> [[Attribute Precedence(Chef)]]\\ 
-
-SysAdmin:\\
----> [[OneLiners]]\\ 
----> [[Sed]]\\ 
----> [[Awk]]\\ 
----> [[Common Issues]]\\ 
----> [[Silly Mistakes]]\\ 
----> [[Curl]]\\ 
----> [[File Systems]]\\ 
----> [[Rsync]]\\ 
----> [[iptables]]\\ 
----> [[Web Security]]\\ 
----> [[Web Hosting]]\\ 
----> [[Apache]]\\ 
-
-
-Programming:\\
-[[BASH Scripting]]\\ 
----> [[Parameters]] (To be removed)\\ 
----> [[BASH Parameters]]\\ 
+^  Programming  ^^^^
+| [[BASH Scripting]] | [[Python]] | [[Ruby]] | [[Perl]] | 
+| [[BASH Parameters]] | [[RRDTool]] | [[Script Examples]] | [[Perl Examples]] | 
 
 ---> [[Regular Expressions]]\\ 
-
-[[Python]]:\\ 
----> [[RRDTool]]\\ 
-
-[[Ruby]]:\\ 
----> [[Script Examples]]\\ 
-
-[[Perl]]:\\
----> [[Perl Examples]]\\ 
-
----> [[LPIC-101]]\\ 
----> [[LPIC-102]] \\ 
 
 OpenShift:\\
 [[OpenShift Commands]]:\\
 
 Drupal:\\
 [[Drupal Installation]]:\\
+
+[[Chef]]\\ 
+---> [[Knife(Chef)]]\\ 
+---> [[Nodes(Chef)]]\\ 
+---> [[Attribute Precedence(Chef)]]\\ 
 
 [[Statistics]]:\\
 
