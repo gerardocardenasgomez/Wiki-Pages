@@ -1,8 +1,9 @@
-wiki.LearningUnix.org
+Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspiring system administrator. This page contains the notes I will be taking throughout my journey to system administration. Most of my notes are related to Linux in some way but I also enjoy studying statistics and astronomy.
+
+[[https://github.com/gerardocardenasgomez|My GitHub Page]] | [[https://gerardobsd.com/|My Blog]] | [[https://learningunix.org/|Daily Updates]]
 
 ----
 Salt And Google Compute Cloud:\\
-[[Learning Objectives]]\\
 [[Salt]]\\
 [[Google Compute Cloud]]\\
 [[AWS]]\\ 
@@ -13,17 +14,20 @@ Salt And Google Compute Cloud:\\
 [[Reddit Project]]:\\
 ----
 
-[[Blog Ideas]]\\
+====Documentation and Issues====
 
-[[Issues]]\\ 
+^  Documentation  ^^^
+| [[Blog Ideas]] | [[Learning Objectives]] | [[Issues]] |
+| [[Extracting Data]] | [[Infrastructure Overview]] ||
 
-There is documentation here.\\ 
---->[[Extracting Data]]\\ 
---->[[Infrastructure Overview]]\\ 
+====Databases====
 
 ^  Database Topics  ^^
 | [[MongoDB]] | [[MySQL]] |
 | [[MongoDB for Python]] | [[ElasticSearch]] |
+
+
+====Linux====
 
 ^  Linux  ^^^
 | [[BASH]] | [[Ubuntu]] | [[GNU Autoconf]] |
@@ -39,6 +43,9 @@ There is documentation here.\\
 | [[/sys]] | [[/proc]] |
 | [[/dev]] | [[/tmp]] |
 | [[/var]] |
+
+
+====System Administration====
 
 ^  SysAdmin  ^^^^
 | [[Sed]] | [[iptables]] | [[OneLiners]] | [[Hardware Management]] |
@@ -62,6 +69,8 @@ Drupal:\\
 ---> [[Knife(Chef)]]\\ 
 ---> [[Nodes(Chef)]]\\ 
 ---> [[Attribute Precedence(Chef)]]\\ 
+
+====Science and Math====
 
 [[Statistics]]:\\
 
