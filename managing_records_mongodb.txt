@@ -16,7 +16,7 @@ There is also ''.insert()'':
 >
 </code>
 
-Bulk insertion also uses ''.inster()'' but by passing an array:
+Bulk insertion also uses ''.instert()'' but by passing an array:
 
 <code>
 > db.names.insert([{ "name" : "Thomas",
@@ -94,6 +94,47 @@ Without any arguments, ''.find()'' will return all documents:
 { "_id" : ObjectId("552355e10865d1f30032fa9e"), "name" : "Jack", "age" : 35 }
 { "_id" : ObjectId("552355f10865d1f30032fa9f"), "name" : "Jill", "age" : 31 }
 { "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
+</code>
+
+===Querying with Dot Notation===
+
+Querying for embedded documents can be difficult because the order of the record has to match the query. In this case, user "Julie" has a personal email and a work email. Queries for her email addresses would have to match the order that the embedded document is in. But with dot notation, that does not have to be the case:
+
+<code>
+> db.names.find({"name" : "Julie"})
+{ "_id" : ObjectId("55282ec14f2282891aa48d81"), "name" : "Julie", "age" : 20, "email" : { "work" : "july@company.com", "personal" : "july@example.com" } }
+> db.names.find({"email.personal" : "july@example.com"})
+{ "_id" : ObjectId("55282ec14f2282891aa48d81"), "name" : "Julie", "age" : 20, "email" : { "work" : "july@company.com", "personal" : "july@example.com" } }
+</code>
+
+MongoDB will also traverse arrays of embedded documents, so a query does not need to know that an embedded document will be inside of an array:
+
+<code>
+> db.reviews.find().pretty()
+{
+	"_id" : ObjectId("552832e64f2282891aa48d82"),
+	"product" : "car",
+	"price" : 100000,
+	"reviews" : [
+		{
+			"user" : "fred",
+			"comment" : "good",
+			"rating" : 5
+		},
+		{
+			"user" : "chad",
+			"comment" : "great",
+			"rating" : 3
+		},
+		{
+			"user" : "mark",
+			"comment" : "eg",
+			"rating" : 3
+		}
+	]
+}
+> db.reviews.find({"price": {"$gt" : 100}, "reviews.rating" : {"$gt" : 3}})
+{ "_id" : ObjectId("552832e64f2282891aa48d82"), "product" : "car", "price" : 100000, "reviews" : [ 	{ 	"user" : "fred", 	"comment" : "good", 	"rating" : 5 }, 	{ 	"user" : "chad", 	"comment" : "great", 	"rating" : 3 }, 	{ 	"user" : "mark", 	"comment" : "eg", 	"rating" : 3 } ] }
 </code>
 
 ====Query Conditionals====
