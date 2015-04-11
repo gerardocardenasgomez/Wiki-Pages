@@ -1,0 +1,17 @@
+====Python Examples====
+
+====Removing Special Characters====
+
+It is always useful to remove special characters from strings. In this example, there is input from an unknown user that must be cleansed of special chracters before the string can be processed further:
+
+<code>
+import re
+dangerous_string = raw_input("Enter a string: ")
+
+clean_string = re.sub('\W+', '', dangerous_string)
+
+if not clean_string.isalnum():
+    print "No special characters allowed"
+</code>
+
+The ''string.isalnum()'' method will return ''True'' if there are no special characters in the string. This is just a final check to make absolutely sure that there are no special characters in the string. One thing to note is the variable names that are used, such as ''dangerous_string'' and ''clean_string''. This is to ensure that there is no mistake made further down the program because it is clear when a string that hasn't been cleansed is being used.
