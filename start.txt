@@ -62,6 +62,7 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 
 ^  Python  ^^^
 | [[Python]] | [[OpenShift Commands]] | [[Flask]] |
+| [[Python Examples]] |||
 
 ----
 
