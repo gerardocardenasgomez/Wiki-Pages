@@ -1,0 +1,62 @@
+=====Flask=====
+
+====Requests====
+
+===Context Globals===
+
+Context globals are available to all views that are processing a request. A quick example: ''user_agent = request.headers.get(%%'%%User-Agent%%'%%)''
+
+====Responses====
+
+View functions are expected to return a value. Generally, the value is just the HTTP page that will be served to the client. However, it is possible to specify other values to return.
+
+===HTTP Status Codes===
+
+It is possible to return a specific HTTP status code:
+
+<code>
+@app.route('/')
+def index():
+    return 'Bad request', 400
+</code>
+
+The ''400'' status code is returned to the client. 
+
+Alternatively, the view can return a status code and give control back to the server as an ''abort'' exception:
+
+<code>
+from flask import abort
+
+@app.route('/user/<id>')
+def get_user(id):
+    user = load_user(id)
+    if not user:
+        abort(404)
+    return "user: {0}".format(user)
+</code>
+
+===Response Objects===
+
+It's possible to set other values, such as a cookie, by creating a Response object:
+
+<code>
+from flask import make_response
+
+@app.route('/')
+def index():
+    response = make_response('This response gives you a cookie!')
+    response.set_cookie('answer', '42')
+    return response
+</code>
+
+===Redirect===
+
+Because redirects are so common, Flask provides a function for redirects:
+
+<code>
+from flask import redirect
+
+@app.route('/')
+def index():
+    return redirect('http://example.com')
+</code>
