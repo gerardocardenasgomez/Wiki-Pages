@@ -281,6 +281,24 @@ You can set the ''multi'' option to true so that ''update()'' does alter more th
 { "_id" : ObjectId("55282ec14f2282891aa48d81"), "age" : 20, "company" : "example.com", "email" : { "work" : "july@company.com", "personal" : "july@example.com" }, "name" : "Julie" }
 </code>
 
+It is possible to specify exactly which set of documents to match for an ''update()'' operation. Simply use a query instead of empty curly braces ''{}'':
+
+<code>
+> db.scores.find()
+{ "_id" : ObjectId("552c2b31529c0d483628de71"), "name" : "Carl", "score" : 40 }
+{ "_id" : ObjectId("552c2b43529c0d483628de72"), "name" : "Jenn", "score" : 60 }
+{ "_id" : ObjectId("552c2b4b529c0d483628de73"), "name" : "Benn", "score" : 80 }
+{ "_id" : ObjectId("552c2b53529c0d483628de74"), "name" : "Ain", "score" : 10 }
+{ "_id" : ObjectId("552c2b7a529c0d483628de75"), "name" : "End", "score" : 23 }
+> db.scores.update({"score" : {"$lt" : 70}}, {"$inc" : {"score" : 20}}, {multi:true})
+> db.scores.find()
+{ "_id" : ObjectId("552c2b31529c0d483628de71"), "name" : "Carl", "score" : 60 }
+{ "_id" : ObjectId("552c2b43529c0d483628de72"), "name" : "Jenn", "score" : 80 }
+{ "_id" : ObjectId("552c2b4b529c0d483628de73"), "name" : "Benn", "score" : 80 }
+{ "_id" : ObjectId("552c2b53529c0d483628de74"), "name" : "Ain", "score" : 30 }
+{ "_id" : ObjectId("552c2b7a529c0d483628de75"), "name" : "End", "score" : 43 }
+</code>
+
 ====Using Modifiers====
 
 Another way to update documents is to use modifiers. There are a bunch of modifiers such as ''$inc'' and ''$set'' which can be used to quickly modify a document.
