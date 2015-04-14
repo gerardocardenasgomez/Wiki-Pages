@@ -40,3 +40,17 @@ Combined, the different fields allow for 16,777,216 different ObjectIds to be ge
 ====Multi-threading in MongoDB====
 
 Certain operations affect multiple documents. Operations like a multi-update have a single thread for the entire operation and every update is performed one after the other in sequence. However, the threads will occasionally yield to other threads in order to allow other operations to affect the same documents. MongoDB does lock a document when it is performing a write operation on it, and this is done to ensure that a read/write operation will not work on a document that has only been half updated.
+
+====Data with an Expiration Period====
+
+It is possible to configure MongoDB to automatically delete documents after a specified amount of time. For this, create an index with ''createdAt'' set to 1 and ''expireAfterSeconds'' set to the number of seconds before the data is removed from the collection:
+
+<code>
+> db.data.createIndex({"createdAt" : 1}, {"expireAfterSeconds": 45})
+> db.data.insert({"createdAt": new Date(), "name" : "geardo", "commitMessage" : "hey there"})
+> db.data.find()
+{ "_id" : ObjectId("552d4eac4f0c78aef8b75224") }
+{ "_id" : ObjectId("552d4ec74f0c78aef8b75225"), "createdAt" : ISODate("2015-04-14T17:30:47.888Z"), "name" : "geardo", "commitMessage" : "hey there" }
+> db.data.find()
+{ "_id" : ObjectId("552d4eac4f0c78aef8b75224") }
+</code>
