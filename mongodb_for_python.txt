@@ -37,3 +37,24 @@ u'Thomas'
 u'Eric'
 u'Jane'
 </code>
+
+====Authenticating with PyMongo====
+
+Use the ''authenticate()'' method on a database, supplying the username and the password:
+
+<code>
+mongo_host = 'localhost'
+mongo_port = 27017
+
+mongo_user = 'admin'
+mongo_pass = 'pass'
+
+connection = pymongo.MongoClient(mongo_host, mongo_port)
+connection.gccom.authenticate(mongo_user, mongo_pass)
+
+db = connection.gccom
+pydata = db.data
+pydata.find({})
+</code>
+
+The ''connection.gccom.authenticate(mongo_user, mongo_pass)'' statement will return ''True'' if the authentication was successful. It is possible that the authentication will succeed but the user will not have the proper permissions to access the database, in which case ''pydata.find({})'' would return an authorization error.
