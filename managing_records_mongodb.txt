@@ -160,6 +160,36 @@ Using ''$ne'' or not equal to:
 { "_id" : ObjectId("552356920865d1f30032faa2"), "age" : 25, "name" : "Jane" }
 </code>
 
+===Checking if a Field Exists===
+
+Use ''$exists'' to find documents that have a certain field defined. In this case, some documents have a ''media'' field defined and I want to see what that field is set to:
+
+<code>
+> db.stories.find({"media" : {"$exists" : true}}, {"media" : 1, "_id" : 0}).pretty()
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+{ "media" : null }
+</code>
+
+All documents seem to have the ''media'' field set to ''null''. But in this case, now we no longer have to sift through each document manually to see what the field is set to.
+
 ===OR Queries===
 
 Using ''$nin'' or not in:

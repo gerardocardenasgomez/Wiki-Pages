@@ -58,3 +58,52 @@ pydata.find({})
 </code>
 
 The ''connection.gccom.authenticate(mongo_user, mongo_pass)'' statement will return ''True'' if the authentication was successful. It is possible that the authentication will succeed but the user will not have the proper permissions to access the database, in which case ''pydata.find({})'' would return an authorization error.
+
+====Inserting JSON into MongoDB====
+
+In this example, we fetch a JSON document from ''reddit.com'' and stuff it into a file ''data.txt''. Next, the JSON is read from the file into a variable in Python and then, once a connection to the MongoDB database is established, we push data from the JSON document into the database:
+
+<code>
+import json
+import pymongo
+
+with open('data.txt', 'w') as datafile:
+    parsed = json.load(datafile)
+
+# parsed['data']['children'] contains the data we want to keep!
+# It's an array, so we can iterate over it.
+
+connection = pymongo.MongoClient('localhost')
+db = connection.reddit
+stories = db.stories
+
+for item in parsed['data']['children']:
+    stories.insert(item['data'])
+</code>
+
+The records are now in the ''reddit.stories'' collection!
+
+====Using Regex Queries in Python====
+
+This searches through the ''reddit.stories'' collection that was created in the ''Inserting JSON into MongoDB'' section.
+
+We will be using a regular expression query to get all titles that match the string 'Internet'. The ''try'' block is meant to execute when there is a problem connecting to the collection.
+
+<code>
+>>> query = {'title' : {'$regex' : 'Internet'}}
+>>> # display will be used to specify which fields I want MongoDB to return. Here, exclude _id
+>>> display = {'title' : 1, '_id' : 0}
+>>> 
+>>> try:
+...     iter = stories.find(query, display)
+... except:
+...     print "No results"
+... 
+>>> for document in iter:
+...     print document
+... 
+{u'title': u"145 of the Internet\u2019s 10,000 top websites use hidden scripts to extract a device fingerprint from users' browsers. The findings suggest that secret tracking is more widespread than previously thought."}
+{u'title': u'Zuckerberg says Internet.org is not anti-net neutrality... but it is'}
+{u'title': u'Internet.org is just a Facebook proxy targeting India\u2019s poor'}
+</code>
+
