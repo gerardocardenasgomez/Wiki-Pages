@@ -12,6 +12,18 @@ There are three types of virtual hosts:
   
 When a configuration parameter is set outside of any ''<VirtualHost>'' directive, then it applies to the "default server" which can also be known as the "global server."
 
+VirtalHosts must be enabled with the ''NameVirtualHost'' directive:
+
+<code>
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+    ServerName example.com
+    DocumentRoot /var/www/html/company
+</VirtualHost>
+
+</code>
+
 ===VirtualHost Example===
 
 In this example, there are two named virtual hosts; one for a ''example.com'' website, and another for a ''company.org'' website:
