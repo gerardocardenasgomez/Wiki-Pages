@@ -54,3 +54,66 @@ It is possible to configure MongoDB to automatically delete documents after a sp
 > db.data.find()
 { "_id" : ObjectId("552d4eac4f0c78aef8b75224") }
 </code>
+
+====Indexing====
+
+To ensure that a field is indexed: 
+
+<code>
+db.users.ensureIndex({"username" : 1})
+</code>
+
+There is a limit of 64 indexes per collection because the index has to be updated whenever data in the collection changes. Fields that are queried regularly should be indexed, whereas fields that are rarely indexed should not be indexed. For example, "username", "birthday", etc. are fields that should be indexed because they might be queried daily.
+
+===Compound Indexes===
+
+Compound indexes are useful for things like sorting, and it is also done with ''ensureIndex()'':
+
+<code>
+db.users.ensureIndex({"age" : 1, "username" : 1})
+</code>
+
+That compound index would greatly increase the performance of the following query:
+
+<code>
+db.users.find({"age" : {"$gte" : 20, "$lte" : 30}})
+</code>
+
+The index now contains a sorted "table" starting with the lowest age and ending with the highest age, and with the age field linked to the corresponding user. So a query for a set of 21 year olds is easy because the index is already sorted.
+
+Note that listing "username" first is different:
+
+<code>
+db.users.ensureIndex({"username" : 1, "age" : 1})
+</code>
+
+Now the sorted index is sorting based on usernames, not age. So querying for ages would be less efficient.
+
+===Indexing Embedded Documents===
+
+You can index a document that is embedded in another by using dot notation. In this example, we have documents similar to this one:
+
+<code>
+{
+    "username" : "sid",
+    "loc" : {
+        "ip" : "1.2.3.4",
+        "city" : "Springfield",
+        "state" : "NY"
+    }
+}
+</code>
+
+And we can create an index with the following command:
+
+<code>
+db.users.ensureIndex({"loc.city" : 1})
+</code>
+
+It's possible to go into lower levels than this. Just continue to add fields.
+
+Another thing to note about embedded documents is that an index of an embedded document is only useful for queries that search for that entire document with the keys in the same order. 
+
+===Indexing Arrays===
+
+It's possible to index arrays by using dot notation. The only caveat is that an index of an array field will create a new index "field" for each one of the array elements. So if a post contains an array of comments, then each element of the array is given its own field in the index as if each comment were a separate key. This could lead to an index that's larger than expected. It's not possible to index an entire array as its own entity in the index. Each element of the array must always get their own field. 
