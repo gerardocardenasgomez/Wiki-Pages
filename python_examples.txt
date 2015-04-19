@@ -15,3 +15,42 @@ if not clean_string.isalnum():
 </code>
 
 The ''string.isalnum()'' method will return ''True'' if there are no special characters in the string. This is just a final check to make absolutely sure that there are no special characters in the string. One thing to note is the variable names that are used, such as ''dangerous_string'' and ''clean_string''. This is to ensure that there is no mistake made further down the program because it is clear when a string that hasn't been cleansed is being used.
+
+====Named Tuples====
+
+''namedtuples'' can be used to build classes of objects that have no custom methods, but instead act like a database record might. In this example, we create a card ''namedtuple'' and fetch attributes from it:
+
+<code>
+>>> import collections
+>>> Card = collections.namedtuple('Card', ['rank', 'suit'])
+>>> your_card = Card('7', 'Diamonds')
+>>> your_card
+Card(rank='7', suit='Diamonds')
+>>> your_card.rank
+'7'
+>>> your_card.suit
+'Diamonds'
+</code>
+
+''namedtuples'' are different from regular tuples in that regular tuples use indexes to access the different values:
+
+<code>
+>>> things = ('car','table','chair')
+>>> things[0]
+'car'
+</code>
+
+''namedtuples'' can use names for the different attributes, and this is a huge benefit because now there's no need for remembering the right index number. In this example, we use ''namedtuples'' as you might use a database field:
+
+<code>
+>>> Employee = collections.namedtuple('Employee', 'name title office')
+>>> bob = Employee(name='Bob', title='Marketing Director', office='110')
+>>> bob.name
+'Bob'
+>>> bob.title
+'Marketing Director'
+>>> bob.office
+'110'
+</code>
+
+Each attribute can be accessed using dot notation.
