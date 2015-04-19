@@ -54,3 +54,16 @@ Card(rank='7', suit='Diamonds')
 </code>
 
 Each attribute can be accessed using dot notation.
+
+====Generators====
+
+Generators can be used to process large amounts of data in an efficient manner. The only caveat is that generators are stateful. They create an iterator which is then used to access the data in the generator but it is not possible to choose specific elements in the generator. This is memory-efficient. Generators are especially useful when it's uncertain how much data will be processed, or for example when processing data coming from a network socket which may be infinite. In this example, a list is used to process the length of each line in a file and then a generator expression is used instead:
+
+<code>
+lines = [len(x) for x in open('data.txt')]
+
+iter = (len(x) for x in open('data.txt'))
+print iter    # <generator object <genexpr> at 0x101b81480>
+</code>
+
+The benefit of using a generator expression is not as huge when you're processing only small amounts of data. But they come in very useful when the file being processed reaches into the GBs in size.
