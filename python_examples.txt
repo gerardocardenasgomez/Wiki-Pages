@@ -67,3 +67,32 @@ print iter    # <generator object <genexpr> at 0x101b81480>
 </code>
 
 The benefit of using a generator expression is not as huge when you're processing only small amounts of data. But they come in very useful when the file being processed reaches into the GBs in size.
+
+===More on Generators===
+
+Generators do not do anything particularly unique. In away, generators are mostly only implementing a custom ''__iter__'' function and a custom ''next()'' function. Both of these can be done inside a class already. But with generators, you get both of those features for free. Here is an example:
+
+<code>
+>>> def countdown(num):
+...     while num > 0:
+...             yield n
+...             
+... 
+>>> 
+>>> def countdown(num):
+...     while num > 0:
+...             yield num
+...             num = num - 1
+... 
+>>> x = countdown(10)
+>>> x
+<generator object countdown at 0x1e7b500>
+>>> x.next()
+10
+>>> x.next()
+9
+>>> x.next()
+8
+</code>
+
+Although no iterator or next functions were defined for the ''countdown'' method, they came for free as a result of using generators.
