@@ -75,12 +75,6 @@ Generators do not do anything particularly unique. In away, generators are mostl
 <code>
 >>> def countdown(num):
 ...     while num > 0:
-...             yield n
-...             
-... 
->>> 
->>> def countdown(num):
-...     while num > 0:
 ...             yield num
 ...             num = num - 1
 ... 
