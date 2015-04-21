@@ -1,5 +1,24 @@
 ====Python Examples====
 
+====Simple Python Class====
+
+In this example, the ''Car()'' class will have two methods, and one class attribute. The class attribute is referenced using ''self'' (by convention) and other class methods are also referenced using ''self''. Variables that are passed to the class methods do not use ''self'' as they would be confused for class attributes.
+
+<code>
+>>> class Car():
+...     type = "sedan"
+...     def print_color(self, user_input):
+...             print "your {0} is {1}".format(self.type, user_input)
+...     def input_color(self, user_input):
+...             print "color accepted!"
+...             self.print_color(user_input)
+... 
+>>> thing = Car()
+>>> thing.input_color("blue")
+color accepted!
+your sedan is blue
+</code>
+
 ====Removing Special Characters====
 
 It is always useful to remove special characters from strings. In this example, there is input from an unknown user that must be cleansed of special chracters before the string can be processed further:
