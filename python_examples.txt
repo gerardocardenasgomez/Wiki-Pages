@@ -109,3 +109,17 @@ Generators do not do anything particularly unique. In away, generators are mostl
 </code>
 
 Although no iterator or next functions were defined for the ''countdown'' method, they came for free as a result of using generators.
+
+====Fetching Web Pages====
+
+Fetching web pages with ''urllib2'':
+
+<code>
+>>> import json
+>>> import urllib2
+>>> url = "http://data.server.org:9200/megacorp/employee/_search"
+>>> response = urllib2.urlopen(url)
+>>> data = response.read()
+</code>
+
+The ''data'' variable now contains the web page!
