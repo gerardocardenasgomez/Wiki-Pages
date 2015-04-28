@@ -59,6 +59,7 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 ^  Programming  ^^^^^
 | [[BASH Scripting]] | [[R (Language)]] | [[Perl]] | [[Ruby]] | [[Regular Expressions]] |
 | [[BASH Parameters]] | [[R Scripts]] | [[Perl Examples]] | [[Script Examples]] | [[RRDTool]] |
+| [[Command-Line Automation]] | [[Expect]] ||||
 
 ^  Python  ^^^
 | [[Python]] | [[OpenShift Commands]] | [[Flask]] |
