@@ -1,0 +1,63 @@
+=====Expect=====
+
+====Arguments====
+
+Get the arguments from the command-line with ''[lindex $argv 0]'' 
+
+====Variables====
+
+Set variables with the ''set'' command: ''set my_var 10''
+
+===Printing a Variable===
+
+Printing to the user: ''send_user''
+
+Printing to a command: ''send''
+
+====Examples====
+
+In this example, a custom Python script is written to simulate a program that takes in a username for an argument and then prompts for the password:
+
+<code>
+user random $: cat pass_input.py 
+#!/usr/bin/env python
+import getpass
+import sys
+
+user_name = sys.argv[1]
+
+first_user_response     =   getpass.getpass("Password: ")
+second_user_response    =   getpass.getpass("Password: ")
+
+if first_user_response == second_user_response:
+    with open("test.txt", "w") as f:
+        f.write(user_name + "\n")
+        f.write(first_user_response + "\n")
+    sys.exit(0)
+else:
+    print "Passwords do not match!"
+    sys.exit(1)
+
+spawn ./pass_input.py [lindex $argv 0]
+set password [lindex $argv 1]
+expect "Password:"
+send "$password\r"
+expect "Password:"
+send "$password\r"
+expect eof
+</code>
+
+Executing the ''expect'' script with the following command ''expect auto_pass.ex cat supersecret'' will yield the following results:
+
+<code>
+user random $: expect auto_pass.ex cat supersecret
+spawn ./pass_input.py cat
+Password: 
+Password: 
+
+user random $: cat test.txt 
+cat
+supersecret
+</code>
+
+In the "real world," this would be bad practice because the password is being saved in the user's Bash history.
