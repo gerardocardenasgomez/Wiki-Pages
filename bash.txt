@@ -55,7 +55,7 @@ The ''printf'' command can also be "overloaded":
 
 
 
-====Some useful BASH hacks:====
+====Some useful BASH hacks====
 
 The following code will print all lines in the file and give the name of the file at the beginning of every line:
 <code>$ grep . *.txt</code>
@@ -71,7 +71,7 @@ Using history expansion in an alias may result in some error codes. Using ''hist
 alias copy='echo $(history -p !!) | xclip -selection clipboard'
 </code>
 
-====Login Shell VS non-Login Shell:====
+====Login Shell VS non-Login Shell====
 
 You can tell if a shell is a login shell by running ''echo $0''; if the first character is a ''-'', then you're in a login shell. Checking for a login shell in a script:
 <code>
