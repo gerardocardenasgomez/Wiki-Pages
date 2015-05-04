@@ -1,6 +1,6 @@
-====History Expansion====
+=====History Expansion=====
 
-===Event Designators===
+====Event Designators====
 
 |! ||Start a history expansion|
 |!! ||Refers to previous command|
@@ -11,7 +11,7 @@
 |%%^string1^string2%% ||Repeat last command replacing string1 with string2|
 |!# ||The entire command line typed so far|
 
-===Word Designators===
+====Word Designators====
 
 |0 ||Zero'th word in a line|
 |n ||''n''th word in a line|
@@ -21,7 +21,7 @@
 |x-y ||Range of words from ''x'' to ''y'', ''-y'' is synonymous with ''0-y''|
 |x- ||Words from ''x'' to the second to last word|
 
-===Modifiers===
+====Modifiers====
 
 |h ||Remove trailing pathname, leaving the head|
 |r ||Removes trailing suffix of the form ''.xxx''|
@@ -30,3 +30,21 @@
 |p ||Prints resulting command but doesn't execute it|
 |g ||Quotes substituted word, escaping further substitutions|
 |s/string1/string2 ||Substitutes ''string1'' with ''string2''|
+
+=====Examples=====
+
+Using history expansion is fun! But it can get confusing. Here are some examples to help you learn the magic of history expansion.
+
+====Replace a String====
+
+Problem: You run a command, but you made a typo! This is really bad if it's a long command because now you have to go up into your Bash history, navigate to the typo, and fix it. Use history expansion instead!
+
+<code>
+user homework $: echo $OLDPD
+
+user homework $: !!:s/OLDPD/OLDPWD/
+echo $OLDPWD
+/home/user
+</code>
+
+The ''!!'' part of the command is the event designator. The colon '':'' is used to separate the event designator from the modifier. And here, ''s'' is used for substitution in the format of ''s/<old>/<new>/''.
