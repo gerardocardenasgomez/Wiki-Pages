@@ -1,4 +1,4 @@
-====Python====
+=====Python=====
 
 ====The Zen of Python====
 
@@ -57,4 +57,80 @@ try:
     val = int(num)
 except:
     print("That ain't no number I ever heard of")
+</code>
+
+=====Best Practices=====
+
+This section will outline some best practices for Python. Various different topics will be covered.
+
+Header format: ''[Topic]: [Descriptive Title]''
+
+====Functions: Raise an Exception Instead of Returning None====
+
+When writing functions, it is better to have them raise an exception instead of returning ''None''. The caller of the function should be expected to handle the exception instead of relying on a value of ''None'' that could be vague.
+
+Example:
+
+<code>
+>>> def divide(dividend, divisor):
+...     try:
+...             return dividend / divisor
+...     except ZeroDivisionError:
+...             return None
+... 
+>>> result = divide(10, 5)
+>>> print result
+2
+>>> if result is None:
+...     print "Invalid Input!"
+... 
+>>> result = divide(0, 5)
+>>> print result
+0
+>>> if result is None:
+...     print "Invalid Input!"
+... 
+>>> if not result:
+...     print "Invalid Input!"
+... 
+Invalid Input!
+</code>
+
+In the previous example, it is possible to call the ''divide()'' function in such a way that there will be a bug when the function returns a ''0''. A better way of writing the function would be to have it raise an error, and then have the caller handle that error.
+
+Example:
+
+<code>
+>>> def divide(dividend, divisor):
+...     try:
+...             return dividend / divisor
+...     except ZeroDivisionError:
+...             raise ValueError('Invalid Inputs')
+... 
+>>> try:
+...     result = divide(0, 5)
+... except ValueError:
+...     print('Invalid Inputs!')
+... else:
+...     print "Result is {0}".format(result)
+... 
+Result is 0
+>>> try:
+...     result = divide(5, 0)
+... except ValueError:
+...     print('Invalid Inputs!')
+... else:
+...     print "Result is {0}".format(result)
+... 
+Invalid Inputs!
+</code>
+
+This way, it is not only clear how the error is being handled because it's in the calling code, but now the ''None'' type is not overloaded with a special failure case when there's an attempt to divide by zero. Example:
+
+<code>
+>>> result = divide(5, 0)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 5, in divide
+ValueError: Invalid Inputs
 </code>
