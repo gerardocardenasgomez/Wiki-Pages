@@ -1,9 +1,12 @@
-===BASH FAQ===
-==What is the difference between ''su'' and ''su -''?==
+====BASH FAQ====
+
+[[History Expansion]]
+
+====What is the difference between ''su'' and ''su -''?====
 
 A: ''su'' by itself will not set the target user's environment, but it will still use the environment variables that belong to the user executing the command. ''su -'' will set the environment to that of the target user, in this case root. This can be a significant difference in the event that root does an ''su'' to another user, but keeps the root $PATH variables.
 
-===Environment Variables==
+====Environment Variables====
 
 ''printenv'' is used to print environment variables. It can list the value of a variable:
 
@@ -16,7 +19,7 @@ gerardo
 
 ''set'' will print both environment variables and shell variables. 
 
-===BASH Completion===
+====BASH Completion====
 
 $ for shell variable completion
 ~ for username completion
@@ -25,7 +28,7 @@ $ for shell variable completion
 
 Hostname completion takes the hostnames from the ''/etc/hosts'' file. :?: Find a way to script this to SSH known hosts?
 
-===echo===
+====echo====
 
 Printing with echo can be tricky at times. One of the gotchas is that echo will remove extra whitespace when the variable it is printing is not inside quotes. Consider the following example:
 
@@ -39,7 +42,7 @@ one two     three    four
 
 This applies to script, too. When the whitespace in the variable must be preserved, inset double quotes around the variable name when printing it out.
 
-===printf===
+====printf====
 
 ''printf'' is desirable over ''echo'' when you need more control over the output and also when you want cross-platform consistency as not all ''echo'' implementations are the same.
 
@@ -52,7 +55,7 @@ The ''printf'' command can also be "overloaded":
 
 
 
-===Some useful BASH hacks:===
+====Some useful BASH hacks:====
 
 The following code will print all lines in the file and give the name of the file at the beginning of every line:
 <code>$ grep . *.txt</code>
@@ -60,7 +63,7 @@ The following code will print all lines in the file and give the name of the fil
 It can be used to search through a list of files and to print out which file the line is in, e.g.:
 <code>$ grep . *.log | grep error</code>
 
-===History expansion in aliases===
+====History expansion in aliases====
 
 Using history expansion in an alias may result in some error codes. Using ''history -p'' is required in such cases:
 
@@ -68,7 +71,7 @@ Using history expansion in an alias may result in some error codes. Using ''hist
 alias copy='echo $(history -p !!) | xclip -selection clipboard'
 </code>
 
-===Login Shell VS non-Login Shell:===
+====Login Shell VS non-Login Shell:====
 
 You can tell if a shell is a login shell by running ''echo $0''; if the first character is a ''-'', then you're in a login shell. Checking for a login shell in a script:
 <code>
@@ -88,7 +91,7 @@ A non-login shell will use ''.bashrc'' when starting up.
 
 A login shell will go through the user's directory and look for: ''.bash_profile'', ''.bash_login'', and ''.profile''. It will stop at the first file found.
 
-===Grouping Output===
+====Grouping Output====
 
 Using ''{}'' and ''()'' to group output:
 <code>
@@ -98,7 +101,7 @@ $ (cmd1; cmd2; cmd3) > /tmp/all.out
 
 Using the parentheses spawns a subshell whereas using the curly braces just means grouping the commands; they are still executed in the current shell environment. Also, the last semicolon is required in the curly braces but not in the parentheses. 
 
-===Scripting a Password Change===
+====Scripting a Password Change====
 
 Type the password into the file so that it is not exposed as a command line argument:
 
