@@ -4,6 +4,8 @@
 
 ===Adding an Instance===
 
+Note gcutil is deprecated in favor of gcloud!
+
 <code>
 $ gcutil --project=webexample addinstance www1-example-com
 </code>
@@ -38,6 +40,12 @@ Select an image:
 14: projects/windows-cloud/global/images/windows-server-2008-r2-dc-v20150110
 </code>
 
+Using ''gcloud'':
+
+<code>
+$ gcloud compute instances create web-example-org --zone us-central1-a --machine-type g1-small --image centos-6
+</code>
+
 ===List images===
 <code>
 /gcloud compute instances list
@@ -47,9 +55,19 @@ management-learningunix-org us-central1-a f1-micro     10.240.32.13   ...       
 </code>
 
 ===SSH Into an Instance===
+
+Note gcutil is deprecated in favor of gcloud!
+
 <code>
 gcutil --project webexample ssh www1-learningunix-org
 </code>
+
+Using ''gcloud'':
+
+<code>
+$ gcloud compute ssh web-example-org
+</code>
+
 
 ====Google Cloud Storage====
 

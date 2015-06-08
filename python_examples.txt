@@ -123,3 +123,25 @@ Fetching web pages with ''urllib2'':
 </code>
 
 The ''data'' variable now contains the web page!
+
+====Feeding Data to an ElasticSearch Cluster with JSON====
+
+<code>
+>>> import urllib2
+>>> import json
+>>> data = json.dumps({"first_name" : "John", "last_name" : "Jackson"})
+>>> url = "http://localhost:9200/names/authors/2"
+>>> req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
+>>> f = urllib2.urlopen(req)
+>>> response = f.read()
+>>> print response
+{"_index":"names","_type":"authors","_id":"2","_version":1,"created":true}
+>>> f.close()
+</code>
+
+Ensuring that the data was properly inserted:
+
+<code>
+$ ./es_data.sh GET /names/authors 2
+{"_index":"names","_type":"authors","_id":"2","_version":1,"found":true,"_source":{"first_name": "John", "last_name": "Jackson"}}
+</code>

@@ -106,4 +106,3 @@ There are seven values provided by the ''statm'' file:
 Total program size Size of memory portions Num of shared pages Num of pages that are code Num of pages of data/stack Num of library pages Num of dirty pages
 62464              1484                    265                 89                         0                          57148                0
 </code>
-

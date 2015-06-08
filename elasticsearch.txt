@@ -3,7 +3,7 @@
 Related pages:
 [[jq]]\\
 
-==Search Queries==
+====Search Queries====
 
 <code>
 GET /megacorp/employee/_search?q=last_name:Smith
@@ -21,7 +21,7 @@ Using Domain Specific Language (DSL):
 }
 </code>
 
-==Curl and JSON==
+====Curl and JSON====
 
 ''curl'' can be used to make requests and to insert records:
 <code>
@@ -34,7 +34,58 @@ $ cat req
 }
 </code>
 
-==Common Issues:==
+====ES Administration====
+
+Getting node information: ''curl -XGET "http://localhost:9200/_nodes"''
+
+Getting cluster information: ''curl -XGET "http://localhost:9200/_cluster/health"''
+
+===Adding Another Node===
+
+All nodes in the cluster must have the same ''cluster.name'' set. The network must also support multicast in order for the discovery process to successfully resolve. Certain other issues can prevent the discovery process from completing successfully, such as a firewall.
+
+===Adding Another Node Manually===
+
+Adding a node manually can be done in the ''elasticsearch.yml'' file:
+
+<code>
+# 1. Disable multicast discovery (enabled by default):
+#
+discovery.zen.ping.multicast.enabled: false
+#
+# 2. Configure an initial list of master nodes in the cluster
+#    to perform discovery when new nodes (master or data) are started:
+#
+discovery.zen.ping.unicast.hosts: ["x.x.x.x", "y.y.y.y"]
+</code>
+
+First, the ''discovery.zen.ping.multicast.enabled'' setting is set to false. Next, the hosts are configured manually, with ''x.x.x.x'' 
+
+===Checking Index Status===
+
+<code>
+$ curl -XGET "http://localhost:9200/<index1>,<index2>/_stats"
+$ curl -XGET "http://localhost:9200/_stats"
+</code>
+
+====Cat API====
+
+===Getting Document Count===
+
+Getting the total document count from all indices:
+
+<code>
+[user@server bash]$ ./es_data.sh GET /_cat/count
+1432134773 15:12:53 4226 
+</code>
+
+Getting the document count from a specific index:
+
+<code>
+[user@server bash]$ ./es_data.sh GET /_cat/count/lists
+1432134797 15:13:17 4306 
+</code>
+====Common Issues:====
 
 Installing from the ''.deb'' package seems to move the configuration files from the ''bin/'' directory to ''/etc/elasticsearch''. A simple fix is to copy them from ''/etc/elasticsearch'' to ''/usr/share/elasticsearch/config'', that way the binary will load the config files.
 

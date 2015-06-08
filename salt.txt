@@ -1,3 +1,343 @@
+====Salt Configuration Management====
+
+===Basic Salt Architecture===
+
+Master and Slave configuration; Salt Master and Salt Minion. Minions connect to Master over a secure connection. "Salt States" define the state that Minions should maintain. Salt is built using Python and can be extended with Python but YAML can also be used. 
+
+====Salt Minion Configuration====
+
+Service: ''salt-minion [start|restart|stop]''
+
+File: ''/etc/salt/minion''
+
+Important variables:
+<code>
+# Set the location of the salt master server. If the master server cannot be
+# resolved, then the minion will fail to start.
+master: localhost
+
+# Explicitly declare the id for this minion to use, if left commented the id
+# will be the hostname as returned by the python call: socket.getfqdn()
+# Since salt uses detached ids it is possible to run multiple minions on the
+# same machine but with different ids, this can be useful for salt compute
+# clusters.
+id: management
+</code>
+
+====Salt Keys Management====
+
+''sudo salt-key'' shows accepted, unaccepted, and rejected keys:
+<code>
+[chicagolug@management-learningunix-org ~]$ sudo salt-key
+Accepted Keys:
+Unaccepted Keys:
+management
+Rejected Keys:
+</code>
+
+''sudo salt-key -f'' will show the fingerprint of a key:
+<code>
+[chicagolug@management-learningunix-org ~]$ sudo salt-key -f management
+Unaccepted Keys:
+management:  <key>
+</code>
+
+Accept keys with ''-a'':
+<code>
+ sudo salt-key -a management
+The following keys are going to be accepted:
+Unaccepted Keys:
+management
+Proceed? [n/Y] Y
+Key for minion management accepted.
+</code>
+
+''salt-key'' can use globbing:
+
+<code>
+ sudo salt-key -f www1*
+Accepted Keys:
+www1-learningunix-org.c.gerardoc253.internal:  37:1d:64:a9:31:8e:a9:bc...
+</code>
+
+====Salt Commands====
+
+===Anatomy of a Command===
+
+<code>
+sudo salt --help
+Usage: salt [options] '<target>' <function> [arguments]
+</code>
+
+Example: ''sudo salt --verbose '*' test.fib 20''
+
+  - Salt command: **salt**
+  - Options: **--verbose**
+  - Targets: **'\*'**
+  - Module and Function: **test.fib**
+  - Arguments for module and function: **20**
+
+===Master vs. Minion Commands===
+
+Commands that will run on the master use ''salt''. Commands that run only on the minion use ''salt-call''.
+
+In this code, the ''test.ping'' function is used on the master and also the minion. The difference is in the output: the master output shows the minion's ID whereas the minion displays "local" instead.
+
+<code>
+sudo salt '*' test.ping
+management:
+    True
+sudo salt-call test.ping
+local:
+    True
+</code>
+
+Operating entirely without a master requires using the ''--local'' flag. Else, the minion will attempt to communicate with a master.
+<code>
+sudo salt-call --local test.ping
+local:
+    True
+</code>
+
+===Getting Help for a Command===
+
+use ''sys.doc'' to list help for a function:
+
+<code>
+sudo salt '*' sys.doc test.version
+test.version:
+
+    Return the version of salt on the minion
+
+    CLI Example:
+
+        salt '*' test.version
+</code>
+
+Using only the module name, e.g. ''test'', displays help information on the entire module's function
+
+===Listing Available Commands===
+
+<code>
+sudo salt 'management' sys.list_functions test
+management:
+    - test.arg
+    - test.arg_repr
+    - test.arg_type
+    - test.collatz
+    - test.conf_test
+    - test.cross_test
+    - test.echo
+    - test.exception
+    - test.fib
+    - test.get_opts
+    - test.kwarg
+    - test.not_loaded
+    - test.opts_pkg
+    - test.outputter
+    - test.ping
+    - test.provider
+    - test.providers
+    - test.rand_sleep
+    - test.rand_str
+    - test.retcode
+    - test.sleep
+    - test.stack
+    - test.tty
+    - test.version
+    - test.versions_information
+    - test.versions_report
+</code>
+
+===Command Display Options===
+
+Using nested:
+<code>
+sudo salt --out=nested '*' test.version
+management:
+    2014.7.0
+</code>
+
+Using raw:
+<code>
+sudo salt --out=raw '*' test.version
+{'management': '2014.7.0'}
+</code>
+
+Using json:
+<code>
+sudo salt --out=json '*' test.version
+{
+    "management": "2014.7.0"
+}
+</code>
+
+Using yaml:
+<code>
+sudo salt --out=yaml '*' test.version
+management: 2014.7.0
+</code>
+
+====Salt Targeting====
+
+Commands can be made to target specific minions.
+
+===Glob matching===
+
+Works in much the same way as Linux's globbing:
+
+<code>
+# sudo salt '*' test.ping
+myminion:
+    True
+# sudo salt '' test.ping
+No minions matched the target.
+# sudo salt 'myminion' test.ping
+myminion:
+    True
+# sudo salt 'my*' test.ping
+myminion:
+    True
+# sudo salt 'my*mini*' test.ping
+myminion:
+    True
+# sudo salt 'larry' test.ping
+No minions matched the target.
+# sudo salt '*.txt' test.ping
+No minions matched the target.
+# sudo salt '??minion' test.ping
+myminion:
+    True
+# sudo salt '[a-m]yminion' test.ping
+myminion:
+    True
+</code>
+
+===Regular Expressions===
+
+Salt supports regular expressions through Python's ''re'' module, which provides Perl-Compatible Regular Expressions (PCRE). This requires using the ''-E'' or ''--pcre'' flags.
+
+<code>
+# sudo salt -E 'myminion' test.ping
+myminion:
+    True
+# sudo salt -E 'my' test.ping
+myminion:
+    True
+# sudo salt -E '.*' test.ping
+myminion:
+    True
+# sudo salt -E 'my.*n' test.ping
+myminion:
+    True
+# sudo salt -E 'foo.*' test.ping
+No minions matched the target.
+
+# sudo salt -E '^my$' test.ping
+No minions matched the target.
+# sudo salt -E '^myminion$' test.ping
+myminion:
+    True
+
+# sudo salt -E '((my)|(your))minion' test.ping
+myminion:
+    True
+
+# sudo salt -E 'myminion(s)?' test.ping
+myminion:
+    True
+# sudo salt -E '(my)?minion' test.ping
+myminion:
+    True
+</code>
+
+===List matching===
+
+Matching a list of minions is done using the ''-L'' or ''--list'' flags:
+
+<code>
+# sudo salt -L 'myminion,yourminion,theirminion' test.ping
+myminion:
+</code>
+
+===Grain and Pillar Matching===
+
+Matching based on Grains requires the ''-G'' or ''--grain'' flags:
+
+<code>
+# sudo salt --grain 'os_family:Debian' test.ping
+myminion:
+    True
+</code>
+
+Grain matching is not case sensitive and globbing can be used in conjunction with Grain matching.
+
+Matching based on Pillars required the ''-I'' or ''--pillar'' flags.
+
+===Compound Matching===
+
+Compound matching uses the ''and'', ''or'', and ''not'' operators. The ''@'' symbol specifies the type of match, but by default Globbing is used.
+
+<code>
+# sudo salt -C '*minion and G@os:Ubuntu and not L@yourminion,theirminion' test.ping
+myminion:
+    True
+</code>
+
+====Grains====
+
+Grains describe a minion. Grain information, even custom information, persists across reboots and shut-downs. Grain data is stored in ''/etc/salt/grains''.
+
+===List Grain Items===
+
+<code>
+# sudo salt '*' grains.items
+myminion:
+    ----------
+    cpu_model:
+        Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+    cpuarch:
+        x86_64
+    id:
+        myminion
+[...]
+</code>
+
+===Set Grains===
+
+Set a custom Grain value using ''grains.setval'':
+
+<code>
+# sudo salt '*' grains.setval foo bar
+salt myminion:
+    ----------
+    foo:
+        bar
+</code>
+
+JSON can be used for more complex structures.
+
+===Deleting Grains===
+
+The ''destructive=True'' argument removes the Grain entirely as opposed to just the value.
+
+<code>
+# sudo salt '*' grains.delval baz
+myminion:
+    None
+# sudo salt '*' grains.item baz
+myminion:
+    ----------
+    baz:
+        None
+# sudo salt '*' grains.delval baz destructive=True
+myminion:
+    None
+# sudo salt '*' grains.item baz
+myminion:
+    ----------
+</code>
+
 ====Salt States====
 
 By default, ''states'' are located in ''/srv/salt'' and files end with the ''sls'' extension. ''state'' files use ''YAML'' formatting. 

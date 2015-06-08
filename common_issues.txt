@@ -135,3 +135,11 @@ Go to the ''.git/config'' file, and change the ''url='' setting from ''url=%%htt
     fetch = +refs/heads/*:refs/remotes/origin/*
     url = https://<git user>@github.com/<git user>/<project>.git
 </code>
+
+====Run a command multiple times====
+
+Using a for loop to run a command 10 times:
+
+<code>
+for ((n=0; n<10; n++)); do <command>; done
+</code>
