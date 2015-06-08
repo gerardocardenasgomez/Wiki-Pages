@@ -1,0 +1,16 @@
+====Git Settings====
+
+<code>
+git config --global user.name "Gerardo Cardenas"
+git config --global user.email "gerardo@gerardobsd.com"
+sudo git config --system core.editor vim
+</code>
+
+====vim Settings====
+
+<code>
+syntax on                                                                                                                                                    
+set number                                                                                                                                                   
+set expandtab                                                                                                                                                
+set tabstop=4
+</code>

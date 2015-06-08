@@ -1,0 +1,16 @@
+=====Nagios=====
+
+====Nagios File Locations====
+
+===Nagios3====
+
+Commands file is located in ''/etc/nagios3/commands.cfg''.\\
+The configuration directory for services, hosts, etc. is ''/etc/nagios3/conf.d''.\\
+
+===Plugins====
+
+In CentOS6, the plugins are stored in ''/usr/lib64/nagios/plugins/'' for 64-bit systems. For 32-bit systems, replace ''lib64'' with ''lib''.
+
+====NRPE====
+
+In CentOS6, the NRPE configuration file is located in ''/etc/nagios/nrpe.cfg''.

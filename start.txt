@@ -1,9 +1,10 @@
-Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspiring system administrator. This page contains the notes I will be taking throughout my journey to system administration. Most of my notes are related to Linux in some way but I also enjoy studying statistics and astronomy.
+Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspiring system administrator. This page contains the notes I will be taking throughout my journey to system administration. Most of my notes are related to Linux in some way but I also enjoy studying statistics and astronomy!
 
 [[https://github.com/gerardocardenasgomez|My GitHub Page]] | [[https://gerardobsd.com/|My Blog]] | [[https://learningunix.org/|Daily Updates]]
 
 ----
 [[Reddit Project]]\\
+[[New System Initialization]]\\
 ----
 
 ====Documentation and Issues====
@@ -17,6 +18,8 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 ^  Database Topics  ^^
 | [[MongoDB]] | [[MySQL]] |
 | [[MongoDB for Python]] | [[ElasticSearch]] |
+
+[[Redis]]\\
 
 ----
 
@@ -46,6 +49,9 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 | [[Awk]] | [[Web Security]] | [[Common Issues]] | [[Service Management]] |
 | [[Curl]] | [[Web Hosting]] | [[Silly Mistakes]] | [[Network Management]] |
 | [[Rsync]] | [[Apache]] | [[File Systems]] | [[Linux Kernel]] |
+
+[[Linux Networking]]\\
+[[Nagios]]\\
 
 ^  Cloud Systems  ^^^
 | [[Chef]] | [[Google Compute Cloud]] | [[RabbitMQ]] |

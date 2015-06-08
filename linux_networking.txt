@@ -1,0 +1,11 @@
+====Linux Networking====
+
+====Tunable Kernel Parameters====
+
+===tcp_tw_reuse===
+
+The tcp_tw_reuse tunable allows a TIME-WAIT session to be reused when it appears safe to do so. This can allow higher rates of connections between two hosts, such as between a web server and a database, without hitting the 16-bit ephemeral port limit with sessions in TIME-WAIT.
+
+tcp_tw_recycle is another way to reuse TIME-WAIT sessions, although not as safe as tcp_tw_reuse.
+
+:!: This section is copy and pasted from "Systems Performance: Enterprise and the Cloud", please change.

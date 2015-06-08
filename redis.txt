@@ -1,0 +1,34 @@
+=====Redis=====
+
+=====Configuration=====
+
+====Changing Settings on an Active Redis Instance====
+
+<code>
+CONFIG SET SAVE "900 1 300 10"
+</code>
+
+=====Viewing Information About Redis=====
+
+====Number of Databases====
+
+<code>
+127.0.0.1:6379> CONFIG GET databases
+1) "databases"
+2) "16"
+</code>
+
+====Keyspace Information====
+
+<code>
+127.0.0.1:6379> INFO keyspace
+# Keyspace
+db0:keys=535615,expires=0,avg_ttl=0
+</code>
+
+=====Breaking Redis=====
+
+This section aims to break Redis in many different ways and then recovering.
+
+====Recovering From A File====
+
