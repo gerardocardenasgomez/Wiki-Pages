@@ -1,17 +1,19 @@
 Link to a long list of awk one-liners: http://www.pement.org/awk/awk1line.txt
 
-===Fun Linux Commands===
+====Fun Linux Commands====
+
+===find command with pruning and printf formatting===
 
 Find command that uses ''-mtime'', ''-not'', and ''-prune'' to filter results. ''-printf'' is used to format the output.
 <code>find / -not \( -path /sys -prune \) -not \( -path /var/lib -prune \) -not \( -path /var/cache -prune \) -type f -mtime -7 -printf "%Tj %M %n %u %g %8s %8Tx %.8TX %p\n" 2> /dev/null</code>
+
 ----
+
 Find command that searches for files that match the pattern ''*.txt'' OR ''.cfg'' using the ''-o'' option.
 <code>find / -type f \( -name *.txt \) -o \( -name *.cfg \)</code>
-----
-Top in batch mode executed once, using sed to print lines 7-17 to filter out the fluff from top and print the top 10 commands, sorted by CPU usage.
-<code>top -b -n 1 | sed -n '7,17p'</code>
-----
-RSync to another host, using SSH
+
+===RSync to another host using SSH===
+
 <code>rsync --rsh=ssh file1 file2 ... host:destination_dir</code>
 Setting the RSYNC_RSH environment variable to ssh will make it so that you no longer have to specify ''--rsh=ssh''
 ==NOTE==
@@ -71,19 +73,17 @@ For the result of:
  0.00,  9
 </code>
 
-----
+===Print a file without the first and last lines===
 
-==Print a file without the first and last lines==
-
-A simple ``sed`` command will accomplish this:
+A simple ''sed'' command will accomplish this:
 
 <code>
 sed '1d;$d' file.txt
 </code>
 
-The d part in the command is for deletion, the semi-colon is to separate commands, and the $ refers to the last line in the file. Thus, Line 1 delete; Last line dete. 
+The ''d'' part in the command is for deletion, the semi-colon is to separate commands, and the ''$'' refers to the last line in the file. Thus, Line 1 delete; Last line dete. 
 
-==Properly formatted date for backups==
+===Properly formatted date for backups===
 
 Using the ''date'' command:
 
@@ -97,3 +97,22 @@ Using the ''date'' command:
   * **%m** for month, e.g. 01..12
   * **%d** for day of month, e.g. 01..31
   * **%H** for hour of day, e.g. 01..23
+
+====Special Combinations====
+
+===Mass Searching with Filenames and Line Number Output===
+
+Using ''ls'' with two special flags: ''-d'' to print full paths, and ''-1'' to print one item per line.\\
+Using ''xargs'' to execute a command on each line that comes in from ''ls''\\
+Using a Perl one liner to search for text in the line of a file, and print the line number, file name, and line contents if there's a regular expression match.
+
+<code>
+ls -d -1 ./* /etc/* | xargs perl -ne 'while(<>){print "[$. $ARGV]: $_" if /server/; $.=0 if eof}'
+</code>
+
+In the Perl one-liner, a number of things are done. The diamond (''<>'') operator is the current file handle. ''$.'' is the current line number. ''$_'' contains the current contents of the line in the file. ''/server/'' is the regular expression that Perl will look for. ''$.=0 if eof'', ''eof'' in this case will return a ''1'' when the end of the file has been reached. Once the end of the file has been reached, it sets ''$.'' back to zero. This is necessary because Perl will otherwise continue to increment the number between files, rendering the output rather useless.
+
+===Getting the top 10 commands, sorted by CPU usage===
+
+''top'' in batch mode (''-b'') executed once (''-n 1''), using ''sed'' to print lines 7-17 (''%%'%%7,17p%%'%%'') to filter out the fluff from top and print the top 10 commands, sorted by CPU usage.
+<code>top -b -n 1 | sed -n '7,17p'</code>
