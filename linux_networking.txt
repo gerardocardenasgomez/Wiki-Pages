@@ -1,5 +1,37 @@
 ====Linux Networking====
 
+====tcpdump====
+
+Let's use ''tcpdump'' to solve some issues!
+
+Getting data from an interface:
+
+<code>
+tcpdump -n -i eth1:1
+</code>
+
+The ''-n'' flag is going to stop ''tcpdump'' from using DNS to resolve IP addresses. The ''-i'' flag allows the interface to be specified in the command line.
+
+It's possible to specify more than one criteria using logical operators like ''and'' and ''or'':
+
+<code>
+tcpdump -i eth1:1 port 80 and src 10.0.0.1
+</code>
+
+===Reading tcpdump files===
+
+You can use ''tcpdump'' itself to view a dump:
+
+<code>
+tcpdump -qns 0 -X -r bond-net-data.dump
+</code>
+
+Or you can use ''tshark'':
+
+<code>
+tshark -r net-data.dump -V | less
+</code>
+
 ====Tunable Kernel Parameters====
 
 ===tcp_tw_reuse===
