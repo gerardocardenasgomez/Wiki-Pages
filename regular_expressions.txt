@@ -301,3 +301,35 @@ Examples:
 ====Atomic Groups====
 
 When performance is absolutely crucial, it is possible to turn off backtracking for a group (and also entirely): ''(?<the)''
+
+====Lookarounds====
+
+Lookarounds help with finding text that is preceded and/or followed by other text. The adjacent text that matches the regular expression is not returned in the match; the regular expression engine just makes sure that text is there.
+
+
+===Positive Lookahead===
+
+The positive lookahead looks forward for any text that matches. In this example, we want the string 'ancient ' only if it is followed by an m or an M (case insensitivity is turned on).
+
+<code>
+[user@server perl]$ perl -ne 'print if /ancient (?=m)/i' rime.txt 
+THE RIME OF THE ANCIENT MARINER 
+It is an ancient Mariner,
+     And thus spake on that ancient man,
+     And thus spake on that ancient man,
+     "God save thee, ancient Mariner!
+     "I fear thee, ancient Mariner!
+     "I fear thee, ancient Mariner!"
+</code>
+
+===Negative Lookahead===
+
+The negative lookahead checks to see that a regular expression does not match the text that's ahead of the matching string:
+
+<code>
+[user@server perl]$ perl -ne 'print if /ancient (?!mariner)/i' rime.txt 
+     And thus spake on that ancient man,
+     And thus spake on that ancient man,
+</code>
+
+In this example, 'mariner' was the negative lookahead and so only the text 'man' matched.
