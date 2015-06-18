@@ -1,7 +1,9 @@
 ===grep, egrep, fgrep===
 
-One of the options is --color, which will enable colored output.\\ 
-:!: (Some systems might include --color into a grep alias by default.)
+One of the options is ''%%--%%color'', which will enable colored output.\\ 
+:!: (Some systems might include ''%%--%%color'' into a grep alias by default.)
+
+There is also ''grep %%--%%color=always "<search term>" <file>''
 
 Filtering for ranges:
 <code>grep [a-e] testfile --color</code>
