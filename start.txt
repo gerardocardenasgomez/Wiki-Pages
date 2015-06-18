@@ -15,11 +15,9 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 
 ====Databases====
 
-^  Database Topics  ^^
-| [[MongoDB]] | [[MySQL]] |
-| [[MongoDB for Python]] | [[ElasticSearch]] |
-
-[[Redis]]\\
+^  Database Topics  ^^^
+| [[MongoDB]] | [[MySQL]] | [[Redis]] |
+| [[MongoDB for Python]] | [[ElasticSearch]] | |
 
 ----
 
@@ -56,7 +54,7 @@ Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspirin
 ^  Cloud Systems  ^^^
 | [[Chef]] | [[Google Compute Cloud]] | [[RabbitMQ]] |
 | [[Nodes(Chef)]] | [[AWS]] | [[RabbitMQ Examples]] |
-| [[Attribute Precedence(Chef)]] | [[Salt]] | |
+| [[Attribute Precedence(Chef)]] | [[Salt]] | [[Ansible]] |
 
 ----
 
