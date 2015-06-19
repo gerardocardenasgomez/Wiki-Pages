@@ -42,3 +42,28 @@ so that the matched string is replaced by an empty string.
 ====The Empty Response from HTTPD Situation====
 
 An API call to the dev server was returning an empty response from Apache. The same call to the production server was retuning a 201 status code. Everything with the code seemed fine--nothing was being written to the Apache logs. The solution was to restart the Apache server because it encountered an issue and was not responding.
+
+====More idiocy related to Perl====
+
+I didn't notice that I was looking for ONE uppercase character between two commas:
+
+<code>
+user tmp $: perl -ne '/.*,[A-Z],.*/ and print' data.tzt 
+user tmp $: perl -ne '/.*[A-Z],.*/ and print' data.tzt 
+jack,IL,chicago
+anne,NV,las vegas
+user tmp $: perl -ne '/.*,[A-Z].*/ and print' data.tzt 
+jack,IL,chicago
+anne,NV,las vegas
+user tmp $: perl -ne '/,[A-Z]/ and print' data.tzt 
+jack,IL,chicago
+anne,NV,las vegas
+user tmp $: perl -ne '/[A-Z],/ and print' data.tzt 
+jack,IL,chicago
+anne,NV,las vegas
+user tmp $: perl -ne '/,[A-Z]{2},/ and print' data.tzt 
+jack,IL,chicago
+anne,NV,las vegas
+</code>
+
+When what I should have done is specify that I wanted TWO uppercase characters next to each other, flanked on both sides by commas. I thought having both commas there was ruining the regular expression.
