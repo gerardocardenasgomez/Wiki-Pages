@@ -1,4 +1,4 @@
-===grep, egrep, fgrep===
+====grep, egrep, fgrep====
 
 One of the options is ''%%--%%color'', which will enable colored output.\\ 
 :!: (Some systems might include ''%%--%%color'' into a grep alias by default.)
@@ -17,7 +17,7 @@ hello and world, but the words must come in the same order, hello first and worl
 hello or world
 <code>egrep 'hello|world' testf</code>
 
-===The match-only flag===
+====The match-only flag====
 
 Using the ''-o'' flag will only show text that matches the pattern:
 
@@ -26,4 +26,16 @@ Using the ''-o'' flag will only show text that matches the pattern:
 4cs, 6502acme, 6502kickass, 6502tasm, 68000devpac, abap, actionscript-french, actionscript, actionscript3, ada, algol68, apache, applescript, asm, asp, autoconf, autohotkey, autoit, avisynth, awk, bascomavr, bash, basic4gl, bf, bibtex, blitzbasic, bnf, boo, c, c_loadrunner, c_mac, caddcl, cadlisp, cfdg, cfm, chaiscript, cil, ...
 [server@www1-server-org ~]$ grep -o 'bash' syntax.txt
 bash
+</code>
+
+====Print only file-names====
+
+The '-l' flag is used to print only the file names that have a matching pattern:
+
+<code>
+user@server ~ $: grep -l 'server' *.txt
+ansible.txt
+apache.txt
+attributes.txt
+awk.txt
 </code>
