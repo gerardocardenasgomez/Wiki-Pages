@@ -6,7 +6,7 @@
 
 Sometimes it increases the readability of a program if you put a regular expression into a variable:
 
-<code>
+<code perl>
 #!/usr/bin/env perl
 
 $regex = '\s+';
@@ -21,7 +21,7 @@ In this example, using ''split(/ /, $line)'' instead might cause unexpected resu
 
 When using match variables, the parentheses must go inside the variable:
 
-<code>
+<code perl>
 #!/usr/bin/env perl
 #
 
@@ -46,7 +46,7 @@ That code would print a "The" on the first match. Using ''($phrase =~ ($wordmatc
 
 This example will use color text as well as the built-in variables for part of the string before a regular expression match, and post-match:
 
-<code>
+<code perl>
 #!/usr/bin/env perl
 use Term::ANSIColor;
 
@@ -181,3 +181,20 @@ blue is the color of the vehicle.
 </code>
 
 The logical ''or'' will only execute the second statement if the first one is false. Therefore, when ''$price'' is set with a switch, the second statement is not executed.
+
+=====Perl One-Liners=====
+
+Let's make some fun Perl one-liners!
+
+====Printing filenames that match a regex pattern====
+
+Use the ''$ARGV'' scalar which contains the name of the file that was most recently processed.
+
+<code>
+user ~ $: perl -ne '/system/ and print "$ARGV\n" and close ARGV;' *.txt
+apache.txt
+apt.txt
+centos.txt
+</code>
+
+''ARGV'' contains the file-handle for the currently open file. It must be closed so that Perl does not continue searching in the file; if it continued to search, and found another match, the same file name would be printed again.
