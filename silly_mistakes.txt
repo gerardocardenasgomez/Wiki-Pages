@@ -38,3 +38,7 @@ $string =~ s/\.txt//;
 </code>
 
 so that the matched string is replaced by an empty string.
+
+====The Empty Response from HTTPD Situation====
+
+An API call to the dev server was returning an empty response from Apache. The same call to the production server was retuning a 201 status code. Everything with the code seemed fine--nothing was being written to the Apache logs. The solution was to restart the Apache server because it encountered an issue and was not responding.
