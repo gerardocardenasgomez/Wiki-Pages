@@ -16,7 +16,7 @@ ro root=UUID=a433ac64-ac34-4783-b4ef-4826d3734ff8 rd_NO_LUKS  KEYBOARDTYPE=pc KE
 ''/proc/diskstats'' Provides a list of the disks or partitions on the system. This is used by utilities like ''sar'' to gather information:
 
 <code>
-[excom@wiki ~]$ cat /proc/diskstats
+[user@server ~]$ cat /proc/diskstats
    1       0 ram0 0 0 0 0 0 0 0 0 0 0 0
    1       1 ram1 0 0 0 0 0 0 0 0 0 0 0
    1       2 ram2 0 0 0 0 0 0 0 0 0 0 0
@@ -50,7 +50,7 @@ ro root=UUID=a433ac64-ac34-4783-b4ef-4826d3734ff8 rd_NO_LUKS  KEYBOARDTYPE=pc KE
 ''/proc/loadavg'' has the 1-min, 5-min, 15-min load averages; the number of read-to-run threads/total number of threads; and the PID of the most recently created thread:
 
 <code>
-[excom@wiki ~]$ cat /proc/loadavg
+[user@server ~]$ cat /proc/loadavg
 0.00 0.00 0.00 1/95 21759
 </code>
 

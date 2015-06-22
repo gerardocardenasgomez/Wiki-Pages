@@ -37,7 +37,7 @@ But you do not have to start with the 0th element: ''$shopping_list[4] = ##'##mi
 Getting the last element:
 
 <code>
-chicagolug learningperl $: cat arrays.pl
+user learningperl $: cat arrays.pl
 #!/usr/bin/env perl
 $shopping_cart[4] = 'milk';
 $last = $shopping_cart[$#shopping_cart];
@@ -47,7 +47,7 @@ print $last, "\n";
 $last_num = $#shopping_cart;
 
 print $last_num, "\n";
-chicagolug learningperl $: ./arrays.pl
+user learningperl $: ./arrays.pl
 milk
 4
 </code>

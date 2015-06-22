@@ -67,7 +67,7 @@ Total space accounted for: 31.0 M
 Listing package dependencies is done with the ''apt-cache depends'' command:
 
 <code>
-chicagolug apt $: apt-cache depends apache2
+user apt $: apt-cache depends apache2
 apache2
   Depends: lsb-base
   Depends: procps

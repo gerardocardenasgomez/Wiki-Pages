@@ -39,7 +39,7 @@ The histogram can be modified using breaks:
 
 <code>
 library(plyr)
-idahoFile <- read.table("/home/excom/data/idaho.csv", sep=",", header=TRUE)
+idahoFile <- read.table("/home/user/data/idaho.csv", sep=",", header=TRUE)
 count(idahoFile, vars="VAL")    # count function comes from the plyr package
 
    VAL freq
@@ -77,7 +77,7 @@ library(xlsx)
 
 > colIndex <- 7:15
 > rowIndex <- 18:23
-> gasData <- read.xlsx("/home/excom/data/gas.xlsx", sheetIndex=1,header=TRUE,colIndex=colIndex, rowIndex=rowIndex)
+> gasData <- read.xlsx("/home/user/data/gas.xlsx", sheetIndex=1,header=TRUE,colIndex=colIndex, rowIndex=rowIndex)
 > head(gasData)
     Zip CuCurrent PaCurrent PoCurrent      Contact Ext          Fax email Status
 1 74136         0         1         0 918-491-6998   0 918-491-6659    NA      1
@@ -92,7 +92,7 @@ sum(gasData$Zip*gasData$Ext,na.rm=T)
 ==Performing sum analysis on an XML dataset==
 
 <code>
-doc <- xmlTreeParse("/home/excom/data/restaurants.xml", useInternal=TRUE)
+doc <- xmlTreeParse("/home/user/data/restaurants.xml", useInternal=TRUE)
 rootNode <- xmlRoot(doc)
 data <- xpathSApply(rootNode,"//zipcode",xmlValue)    # Get the values for the "zipcode" data
 
