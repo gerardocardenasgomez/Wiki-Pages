@@ -57,6 +57,8 @@ I/O Fields:\\
 bi: Blocks in from disk\\
 bo: Blocks out to disk\\
 
+Swap metrics should generally be at zero. If these stats show up as nonzero for longer than a short period of time, then it means there is some paging to a swap device/file.
+
 ===Memory States===
 
 There are three different types of memory states: active, inactive dirty, inactive clean.
@@ -64,3 +66,8 @@ There are three different types of memory states: active, inactive dirty, inacti
   - Active: Memory has been used recently
   - Inactive Dirty: Memory has not been used recently and may be reclaimed--in order to be reclaimed, memory must be written to disk (called "laundering").
   - Inactive Clean: Once laundered, inactive dirty memory becomes inactive clean.
+
+====pmap====
+
+''pmap'' is used to list the memory mappings of a process. This can be used to check which parts of a process are taking up the most memory, including shared memory. It can be the case that the total memory in use for the shared memory column will be greater than the amount of memory on the system. This is because pmap does not take into account that shared memory is shared between processes, and so it will count some shared memory more than once.
+
