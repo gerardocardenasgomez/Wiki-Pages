@@ -198,3 +198,39 @@ centos.txt
 </code>
 
 ''ARGV'' contains the file-handle for the currently open file. It must be closed so that Perl does not continue searching in the file; if it continued to search, and found another match, the same file name would be printed again.
+
+====Embedded pattern-match modifiers====
+
+It is possible to include embedded patter-match modifiers. This is most useful when it's more work to include modifying options into scripts, as in this case:
+
+<code perl>
+# snip
+$regex = shift @ARGV;
+# snip
+if ($_ =~ $regex) {
+#snip
+}
+</code>
+
+When the user tries to insert modifiers, nothing is returned:
+
+<code bash>
+user@server:~/Scripts/lookup$ ./recursive-search.pl /advanced/i dict/ wiki/
+user@server:~/Scripts/lookup$
+</code>
+
+But with embedded modifiers:
+
+<code bash>
+user@server:~/Scripts/lookup$ ./recursive-search.pl '(?i)advanced' dict/ wiki/
+[wiki/apt.txt 1]: ====Advanced Package Tool (APT)====
+</code>
+
+The modifiers are in the form of ''(?<modifiers>)'' and many modifiers can be used such as 'm' and 'l'. Including a minus sign (''-'') will turn off the modifier.
+
+It's also possible to enable modifiers for a portion of the search: ''( (?i) pets) and more'':
+
+<code bash>
+user@server:~/Scripts/lookup$ ./recursive-search.pl '((?i)advanced package) Tool' dict/ wiki/
+[wiki/apt.txt 1]: ====Advanced Package Tool (APT)====
+</code>
