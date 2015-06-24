@@ -1,6 +1,6 @@
 Welcome to my personal wiki! My name is **Gerardo Cardenas** and I am an aspiring system administrator. This page contains the notes I will be taking throughout my journey to system administration. Most of my notes are related to Linux in some way but I also enjoy studying statistics and astronomy!
 
-[[https://github.com/gerardocardenasgomez|My GitHub Page]] | [[https://gerardobsd.com/|My Blog]] | [[https://learningunix.org/|Daily Updates]]
+[[https://github.com/gerardocardenasgomez|My GitHub Page]] | [[https://gerardobsd.com/|My Blog]]
 
 ----
 [[Reddit Project]]\\
