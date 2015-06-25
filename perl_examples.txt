@@ -234,3 +234,26 @@ It's also possible to enable modifiers for a portion of the search: ''( (?i) pet
 user@server:~/Scripts/lookup$ ./recursive-search.pl '((?i)advanced package) Tool' dict/ wiki/
 [wiki/apt.txt 1]: ====Advanced Package Tool (APT)====
 </code>
+
+====Search and replace with capture groups====
+
+Sometimes you want to modify a portion of a line if it fits a certain pattern, but otherwise you want to print it as it is. We will process the 'output.txt' file:
+
+<file output.txt>
+charles,IL,chicago
+jane,tx,austin
+mcael,NV,vegas
+stan,ca,los angeles
+</file>
+
+Our Perl one-liner is going to print the line if the state initials are already capitalized, otherwise it will change the initials to uppercase and then print the line.
+
+<code bash>
+user Scripts $: cat output.txt | perl -ne 'print if s/,([a-z]{2}),/,\U$1\E,/ || /,[A-Z]{2},/'
+charles,IL,chicago
+jane,TX,austin
+mcael,NV,vegas
+stan,CA,los angeles
+</code>
+
+We use the OR operator ''||'' to print the lines that are already formatted properly.
