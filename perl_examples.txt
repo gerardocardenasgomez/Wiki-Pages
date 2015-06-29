@@ -1,4 +1,4 @@
-====Perl Examples====
+=====Perl Examples=====
 
 ====Regular Expressions====
 
@@ -257,3 +257,58 @@ stan,CA,los angeles
 </code>
 
 We use the OR operator ''||'' to print the lines that are already formatted properly.
+
+====Using Perl to find and modify lines of text====
+
+In this example, we have a CSV file with a name and a number. There are a few things we want to do; the first is to filter out names that start with a certain letter; next, we want to modify how the data is going to be formatted; finally, we want accounts that have more than $1,000 in them.
+
+The ''names.txt'' file:
+
+<file names.txt>
+james,12314
+jones,09852
+jane,8045
+jasmine,918401
+carmen,1901
+tod,293401
+chad,123
+sophie,194
+saul,104
+sammy,5001
+</file>
+
+Next, we start using Perl to accomplish the tasks we need:
+
+<code perl>
+$: perl -ne 'if (/^(s)(\w+),(\d+)/) {print "\U$1\E$2 - \$$3\n";}' names.txt
+Sophie - $194
+Saul - $104
+Sammy - $5001
+</code>
+
+We first filter out only the names that start with the letter S. We use ''\U'' and ''\E'' to capitalize the first letter of the name because it was not capitalized in the file. Next, we separate the name from the dollar value and add a dollar sign to the number. This is all done using named groups--Perl by default will make the named groups accessible using the format ''$<num>''.
+
+Next, we use history expansion to search for names that start with the letter J:
+
+<code perl>
+$: !!:s/(s)/(j)/
+perl -ne 'if (/^(j)(\w+),(\d+)/) {print "\U$1\E$2 - \$$3\n";}' names.txt
+James - $12314
+Jones - $09852
+Jane - $8045
+Jasmine - $918401
+</code>
+
+Here, we notice a mistake in the data! One of the numbers has a leading zero. If we want to filter this out, we can:
+
+<code perl>
+$: perl -ne 'if (/^(j)(\w+),(\d+)/) {$name = "\U$1\E$2"; $money = $3; if ($money =~ /^(0+)([1-9]+)/) {$money=$2};print "$name - \$$money\n";}' names.txt
+James - $12314
+Jones - $9852
+Jane - $8045
+Jasmine - $918401
+</code>
+
+First, we assign the name and money to the ''$name'' and ''$money'' variables. This is done so that the second use of regular expressions does not overwrite these values when there is a match. Next, we use regular expressions again to catch numbers that begin with a zero. That part is placed into a capture group, and so is the next set of numbers. The proper set of numbers can now be extruded and placed into the ''$money'' variable. This pattern will not catch values that are only 0s.
+
+There are more things you can do to make the output easier to read. But at this point, it would be better to create a small script rather than do everything in one line.
