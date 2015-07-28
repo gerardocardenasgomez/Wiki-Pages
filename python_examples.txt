@@ -145,3 +145,16 @@ Ensuring that the data was properly inserted:
 $ ./es_data.sh GET /names/authors 2
 {"_index":"names","_type":"authors","_id":"2","_version":1,"found":true,"_source":{"first_name": "John", "last_name": "Jackson"}}
 </code>
+
+====Generating a Timestamp====
+
+Generating a timestamp can be done using the ''datetime'' module in Python:
+
+<code python>
+#!/usr/bin/env python
+import datetime
+
+timestamp = str(datetime.datetime.now())
+
+print timestamp # Generates something like 2015-07-28 15:52:57.530797
+</code>
