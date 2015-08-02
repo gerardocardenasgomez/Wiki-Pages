@@ -116,3 +116,26 @@ In the Perl one-liner, a number of things are done. The diamond (''<>'') operato
 
 ''top'' in batch mode (''-b'') executed once (''-n 1''), using ''sed'' to print lines 7-17 (''%%'%%7,17p%%'%%'') to filter out the fluff from top and print the top 10 commands, sorted by CPU usage.
 <code>top -b -n 1 | sed -n '7,17p'</code>
+
+===Print a list of usernames and their login shells===
+
+''awk'' with the '$NF' built-in variable, which returns the total number of columns in a line.
+
+<code>
+[user@server ~]$ cat /etc/passwd | awk -F: '{print $1 " : " $NF}'
+root : /bin/bash
+bin : /sbin/nologin
+daemon : /sbin/nologin
+</code>
+
+===Print disk usage by directory, and only if the directory is using 1+ Gb of space===
+
+A lot of directories only use a few Mb of space, and it's more useful to find out which ones are using more than a Gb.
+
+<code>
+[user@server ~]$ du -h --max-depth=3 / 2> /dev/null | perl -ne 'print if /^\d\.?\d?G/'
+1.3G	/var/lib/pgsql
+1.4G	/var/lib
+1.5G	/var
+3.1G	/
+</code>

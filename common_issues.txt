@@ -143,3 +143,21 @@ Using a for loop to run a command 10 times:
 <code>
 for ((n=0; n<10; n++)); do <command>; done
 </code>
+
+====Regular Expression for IP Addresses====
+
+An accurate regular expression for IP addresses:
+
+<code>
+(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
+</code>
+
+====Finding the beginning of sentences====
+
+This regular expression will find the beginning of sentences within paragraphs:
+
+<code>
+(\s[a-z]|[a-z]{2,})\.\s[A-Z]|[a-z]\s[A-Z]{1}\.\s[A-Z]{1}[a-z]+|\w[?!]\s[A-Z]|\w[?"!']?[!.?)][!.?"')]\s[A-Z]
+</code>
+
+It will work around abbreviations, titles (e.g. Dr. John Doe), and it will include sentences that end with periods followed by closing parentheses, e.g. ''and at this point he gave up (quit!). But he still had''
